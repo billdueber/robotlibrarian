@@ -1,0 +1,19 @@
+---
+layout: default
+permalink: /all_posts/
+---
+
+
+<div class="home">
+
+  <ul class="post-text">
+    {% for post in site.posts %}
+      <li>
+            <span style="display: block; float: left; width: 7em;">{{ post.date | date: "%b %-d, %Y" }}</span>
+            <a  href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+
+</div>
