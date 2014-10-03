@@ -1,6 +1,8 @@
 ---
 title: "Come work at the University of Michigan"
 date: 2013-04-18
+layout: post
+
 ---
 
 The Library has three UX positions available right now -- interface designer, interface developer, and a web content strategist.

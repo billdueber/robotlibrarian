@@ -2,11 +2,13 @@
 title: "Psst. We're not printing cards anymore"
 date: 2008-05-12
 tags: "code4lib, TALITAS"
+layout: post
+
 ---
 
 \[From a series I'm calling, "Things About The Library I Think Are Stoooopid", part one of about a zillion.\]
 
-I'm going to wallow in a little bit of hyperbole here, but only a little. 
+I'm going to wallow in a little bit of hyperbole here, but only a little.
 
 ### The problem
 
@@ -31,7 +33,7 @@ How about a person?
  * First name (string)
  * Email address (email)
 
-Okeedokee. That looks ok so far, but we've got problems. 
+Okeedokee. That looks ok so far, but we've got problems.
 
 First off, everyone knows that committee names change. And, everyone also knows that last names can change, preferred first names can change. email addresses change, etc. We need some sort of unique identifier to represent the *abstract ideal* of a particular committee or a specific individual. Let's be lazy and just throw in an integer ID that we'll be careful not to reuse, ever, for any reason.
 
@@ -105,7 +107,7 @@ Look, I understand that this is not a simple data modeling problem. I understand
 
 But anyone who, in the 21st century, approaches the large-scale creation of data without **first and foremost** worrying about machine-parsability, consistent data types with machine-checkable syntax (and even some semantics) and one-to-one mappings between unique objects (an author, an editor, a publishing house, a work) and something that uniquely identifies that object in any reification is....well, I don't know what they're smoking.
 
-We're not printing cards anymore, people. 
+We're not printing cards anymore, people.
 
  * If something is only understandable if a human is reading it, it's not understandable by any modern definition.
  * Punctuation doesn't belong in the description of an object. Ever. Punctuation is a rendering issue. If you're using punctuation, or well-formed strings, instead of descriptive attributes, *you're doing it wrong*.

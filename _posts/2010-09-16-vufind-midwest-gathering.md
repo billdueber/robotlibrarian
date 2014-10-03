@@ -1,6 +1,8 @@
 ---
 title: "VuFind Midwest gathering"
 date: 2010-09-16
+layout: post
+
 ---
 
 A couple weeks ago, representatives from UMich (that'd be me), Purdue, Notre Dame, UChicago, and our hosts at Western Michigan got together in lovely Kalamazoo to talk about our VuFind implementations.
@@ -13,11 +15,11 @@ So, in light of that meeting, here's what I'm thinking about VuFind of late:
 
 * A point that I made that was echoed by others is that we need to remember that these new discovery systems are all just thin wrappers over [Solr](http://lucene.apache.org/solr/). They basically have two jobs: to get a query and format it in a way that Solr can handle, and then to take the Solr results and display them. There's some sugar on top of that (exporting, tagging, etc) but that's really it. The heavy lifting is all done by your indexer ([Solrmarc](http://code.google.com/p/solrmarc/) for most, although watch this space for my announcement of my JRuby-based stuff today) and Solr itself. *It's not a hard problem*, although it is occasionally a messy one.
 
-* VuFind has, in my mind, fundamental architectural issues mostly based on the inability to easily separate local code from core code. A re-architecture to base everything on subclasses of the core code would help, but at some point you start to run up against fundamental limitations of PHP and Smarty to do things cleanly. Without the ability to update core code and know it won't affect your local code, there's no good way to keep on track with the trunk of the code and do upgrades; for the same reason, it's almost impossible to send changes back to trunk. 
+* VuFind has, in my mind, fundamental architectural issues mostly based on the inability to easily separate local code from core code. A re-architecture to base everything on subclasses of the core code would help, but at some point you start to run up against fundamental limitations of PHP and Smarty to do things cleanly. Without the ability to update core code and know it won't affect your local code, there's no good way to keep on track with the trunk of the code and do upgrades; for the same reason, it's almost impossible to send changes back to trunk.
 
-* Coupled tightly to the architectural issues is the lack of tests. The code is potentially very brittle; there's no good way to know if you're breaking anything until you notice it's broken. It's not at all clear how to write good tests for the code, because there's a lot of inter-dependencies. 
+* Coupled tightly to the architectural issues is the lack of tests. The code is potentially very brittle; there's no good way to know if you're breaking anything until you notice it's broken. It's not at all clear how to write good tests for the code, because there's a lot of inter-dependencies.
 
-* The second big problem is one of community; to wit, there isn't much of one. There are some active players, and there's what seems like a [great conference](http://vufind.org/schedule.php) going on right now, so this may change.  But -- especially because of the technical difficulties in contributing local changes back --VuFind could use a benevolent dictator, someone who has organizing and administrating VuFind *be a part of his/her job*. The last bit is important. 
+* The second big problem is one of community; to wit, there isn't much of one. There are some active players, and there's what seems like a [great conference](http://vufind.org/schedule.php) going on right now, so this may change.  But -- especially because of the technical difficulties in contributing local changes back --VuFind could use a benevolent dictator, someone who has organizing and administrating VuFind *be a part of his/her job*. The last bit is important.
 
 
 All of these are surmountable issues. The reason they're at the top of my head, of course, is that the Blacklight community has, in many ways, already taken care of most of them.

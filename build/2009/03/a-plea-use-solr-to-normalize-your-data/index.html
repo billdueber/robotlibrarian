@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>A plea: use Solr to normalize your data</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Only, of course, if you’re using Solr. Otherwise, that’d be dumb.]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">A plea: use Solr to normalize your data</h1>
+    <p class="post-meta">Mar 30, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Only, of course, if you’re using Solr. Otherwise, that’d be dumb.]</p>
 
 <p>We’ve been working on <a title="Mirlyn2-Beta Library Catalog at the University of Michigan University LIbrary" href="http://mirlyn2-beta.lib.umich.edu/">Mirlyn2-Beta</a>, our installation of VuFind for some time now (don’t let the fancy-pants name scare you off), and the further we get into it, the more obvious it is that I want to move as much data normalization into Solr itself as possible.</p>
 
@@ -73,11 +88,11 @@
    <span style="color:#777">&lt;!-- Simple type to normalize isbn/issn/other standard numbers --&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stdnum</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">sortMissingLast</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
-        <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+        <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
         <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LowerCaseFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
         <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TrimFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
         <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
-             <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^0*([\d\-\.]+[xX]?).*$</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">$1</span><span style="color:#710">&quot;</span></span> 
+             <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^0*([\d\-\.]+[xX]?).*$</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">$1</span><span style="color:#710">&quot;</span></span>
         <span style="color:#070;font-weight:bold">/&gt;</span>
         <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
              <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[\-\.]</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">replace</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">all</span><span style="color:#710">&quot;</span></span>
@@ -100,12 +115,43 @@
   <li>…followed by…well, we don’t care. Anything else.</li>
 </ol>
 
-<p>…and throw away all but the stuff in #2. Then take <em>that</em> and throw away all the dashes and dots, and you’re left with a string of numbers. </p>
+<p>…and throw away all but the stuff in #2. Then take <em>that</em> and throw away all the dashes and dots, and you’re left with a string of numbers.</p>
 
-<p>The beauty is that it happens both while the index is being made <em>and</em> during query time, so if your user types in “ 123-45-6-X  “ it will be normalized to 123456x, and then checked against your index. </p>
+<p>The beauty is that it happens both while the index is being made <em>and</em> during query time, so if your user types in “ 123-45-6-X  “ it will be normalized to 123456x, and then checked against your index.</p>
 
 <p>This is simple stuff, and probably doesn’t deserve the virtual ink I’m providing for it, but Vufind out of the box doesn’t do any of this sort of thing (likely because “the box” existed before it was super-easy to do this), and we all should be doing it.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/03/a-plea-use-solr-to-normalize-your-data/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -113,15 +159,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -157,8 +203,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

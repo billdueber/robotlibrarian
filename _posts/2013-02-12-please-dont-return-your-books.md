@@ -1,6 +1,9 @@
 ---
 title: "Please: don't return your books"
 date: 2013-02-12
+layout: post
+slug: please-dont-return-your-books
+
 ---
 
 So, I'm at [code4lib 2013](http://code4lib.org/conference/2013) right now, where side conversations and informal exchanges tend to be the most interesting part.

@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Using localparams in Solr (or, how to boost records that contain all terms) (SST #2)</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Note: this isn’t so much a <em>Stupid Solr Trick</em> as a <em>Thing You Should Probably Know</em>; consider it required reading for the next SST. If you’re just joining us, check out the <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a>]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Using localparams in Solr (or, how to boost records that contain all terms) (SST #2)</h1>
+    <p class="post-meta">Mar 6, 2012</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Note: this isn’t so much a <em>Stupid Solr Trick</em> as a <em>Thing You Should Probably Know</em>; consider it required reading for the next SST. If you’re just joining us, check out the <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a>]</p>
 
 <h3 id="what-the-heck-is-a-localparams-query">What the heck is a localparams query?</h3>
 
@@ -141,8 +156,8 @@ or
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">bq1</span><span style="color:#710">'</span></span>=&gt;<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">_query_:&quot;{!dismax qf=$f1 mm=</span><span style="color:#b0b">\'</span><span style="color:#D20">100%</span><span style="color:#b0b">\'</span><span style="color:#D20"> v=$q1 }&quot;^5</span><span style="color:#710">'</span></span>,
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">fl</span><span style="color:#710">'</span></span> =&gt;; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">score,*</span><span style="color:#710">'</span></span>
   }
-    
-    
+
+
 </pre></div>
 </div>
 </div>
@@ -178,12 +193,11 @@ or
 <p>You might want to take a look at the <code>localparams.json</code> file, which contains a set of documents in the new JSON update structure. The <a href="http://wiki.apache.org/solr/UpdateJSON">full Solr JSON Update structure</a> allows repeated keys. Apparently, so does the <a href="http://www.ietf.org/rfc/rfc4627">JSON RFC</a>:</p>
 
 <blockquote>
-  <p>2.2. Objects<br />
-An object structure is represented as a pair of curly brackets<br />
-surrounding zero or more name/value pairs (or members). A name is a<br />
-string. A single colon comes after each name, separating the name<br />
-from the value. A single comma separates a value from a following<br />
-name. <strong>The names within an object SHOULD be unique.</strong> <em>(emphasis mine)</em></p>
+  <p>2.2. Objects</p>
+</blockquote>
+
+<blockquote>
+  <p>An object structure is represented as a pair of curly brackets surrounding zero or more name/value pairs (or members). A name is a string. A single colon comes after each name, separating the name from the value. A single comma separates a value from a following name. <strong>The names within an object SHOULD be unique.</strong> <em>(emphasis mine)</em></p>
 </blockquote>
 
 <p>“SHOULD”. Not “MUST”. I don’t care if it’s legal. It still weirds me out.</p>
@@ -207,7 +221,7 @@ name. <strong>The names within an object SHOULD be unique.</strong> <em>(emphasi
 <p>But we can use it to put in our special query defaults that boosts when a document contains all the terms:</p>
 
 <div><div class="CodeRay">
-  <div class="code"><pre>  
+  <div class="code"><pre>
 
       10
       *,score
@@ -292,7 +306,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 <p>But we can use it to put in our special query defaults that boosts when a document contains all the terms:</p>
 
 <div><div class="CodeRay">
-  <div class="code"><pre>  
+  <div class="code"><pre>
 
       10
       *,score
@@ -379,7 +393,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 <p>But we can use it to put in our special query defaults that boosts when a document contains all the terms:</p>
 
 <div><div class="CodeRay">
-  <div class="code"><pre>  
+  <div class="code"><pre>
 
       10
       *,score
@@ -408,6 +422,37 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 <p>Next time we’ll use a local params query to get around something about dismax that drives me crazy: preventing (or penalizing) matches that go across a field’s multiple values.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2012
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2012/03/using-localparams-in-solr-sst-2/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -415,15 +460,15 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -459,8 +504,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

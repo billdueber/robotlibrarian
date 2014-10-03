@@ -1,6 +1,8 @@
 ---
 title: "Adding LibXML and Java STAX support to ruby-marc with pluggable XML parsers"
 date: 2009-10-07
+layout: post
+
 ---
 
 JRuby is my ruby platform of choice, mostly because I think its deployment options in my work environment are simpler (perhaps technically and certainly politically), but also because I have high, high hopes to use lots of super-optimized native java libraries. The [CPAN](http://cpan.perl.org/) is what keeps me tethered to Perl, and whether or not you like Java-the-language, boy, are there a lot of high-quality libraries out there.
@@ -19,24 +21,24 @@ Because. Because I wanted to screw around with the technologies. Because I wante
 
 ### What exactly did I do?
 
-For the [LibXML](http://libxml.rubyforge.org/) stuff, I copied my own code. For the java [stax](http://en.wikipedia.org/wiki/StAX) (javax.xml.stream.XMLInputFactory.StreamReader) parser, I stole just about everything from Ross's nokogiri code and put it into its own module, and then slimmed down the nokogiri module and the stax module to only include their differences. 
+For the [LibXML](http://libxml.rubyforge.org/) stuff, I copied my own code. For the java [stax](http://en.wikipedia.org/wiki/StAX) (javax.xml.stream.XMLInputFactory.StreamReader) parser, I stole just about everything from Ross's nokogiri code and put it into its own module, and then slimmed down the nokogiri module and the stax module to only include their differences.
 
 
 [The patch](http://rubyforge.org/tracker/index.php?func=detail&aid=27253&group_id=964&atid=3783) is at the [ruby-marc rubyforge site](http://rubyforge.org/projects/marc/) if you want to play along at home.
 
 
-Other than using the stax or libxml parser, everything else is the same -- MARC::Record objects and their components are created exactly as they are with the other parsers. It might be "fun" (for some twisted definition of "fun") to wrap the MARC::Record interface around [marc4j](http://marc4j.tigris.org/) at some point, but right now all that's changed is the parsing. 
+Other than using the stax or libxml parser, everything else is the same -- MARC::Record objects and their components are created exactly as they are with the other parsers. It might be "fun" (for some twisted definition of "fun") to wrap the MARC::Record interface around [marc4j](http://marc4j.tigris.org/) at some point, but right now all that's changed is the parsing.
 
 ### Do they work?
 
-Yes. Thanks for asking. At least all the tests pass when I type 'rake'. 
+Yes. Thanks for asking. At least all the tests pass when I type 'rake'.
 
 
 ### How fast is it?
 
 As always, the numbers are iffy. These were done on my desktop, with other stuff going on. I didn't bother to benchmark `rexml` because we know how slow *that* is.
 
-The test file is a nightly dump intended to go into our VuFind install. It was born as binary marc, and changed to marc-xml using `yaz-marcdump`, which is so fast that I thought maybe something had gone wrong. Holy cow, is `yaz-marcdump` fast. 
+The test file is a nightly dump intended to go into our VuFind install. It was born as binary marc, and changed to marc-xml using `yaz-marcdump`, which is so fast that I thought maybe something had gone wrong. Holy cow, is `yaz-marcdump` fast.
 
 The resulting XML is 219MB and contains 46,242 records.
 
@@ -64,13 +66,13 @@ MRI 1.8.7
 JRuby trunk
     jrexml     547    (539, 554)
     jstax      203    (201, 208, 201, 201, 204 )
-    
+
 Perl 5.10 w/MARC::File:XML
     perl       340    (340)
 
 ~~~~
-   
-    
+
+
 
 #### So...faster, right?
 

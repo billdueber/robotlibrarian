@@ -1,6 +1,8 @@
 ---
 title: "Solr: Forcing items with all query terms to the top of a Solr search"
 date: 2010-08-18
+layout: post
+
 ---
 
 [Note: I've since made a [better explanation of, and solution for, this problem](http://robotlibrarian.billdueber.com/using-localparams-in-solr-sst-2/).]

@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Indexing data into Solr via JRuby (with threads!)</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,15 +61,24 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Note: in this post I’m just going to focus on the “get stuff into Solr” part. My normal focus – MARC data – will<br />
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Indexing data into Solr via JRuby (with threads!)</h1>
+    <p class="post-meta">Feb 16, 2010</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Note: in this post I’m just going to focus on the “get stuff into Solr” part. My normal focus – MARC data – will<br />
 make an appearance in the next post when I talk about using this in addition to / instead of solrmarc.]</p>
 
 <h3 id="working-with-solr">Working with Solr</h3>
 
 <p>I love me the Solr. I love everything about it except that the best way to interact with it is via Java. I don’t so much love me the java.</p>
 
-<p>So…taking Erik Hatcher’s lead and advice, as I will do whenever he offers either, I wrote some code to work within JRuby to deal with Solr. </p>
+<p>So…taking Erik Hatcher’s lead and advice, as I will do whenever he offers either, I wrote some code to work within JRuby to deal with Solr.</p>
 
 <h3 id="getting-the-code">Getting the code</h3>
 
@@ -75,7 +90,7 @@ make an appearance in the next post when I talk about using this in addition to 
   <li><strong>marc4j4r</strong> (<a href="http://github.com/billdueber/marc4j4r">github</a>, <a href="http://rdoc.info/projects/billdueber/marc4j4r">rdoc.info</a>) Ruby syntax on top of the marc4j java library.</li>
 </ul>
 
-<p><em>WARNING</em>: None of these gems have a 1.0 version tag on them, and that means that the API may change a titch in <br />
+<p><em>WARNING</em>: None of these gems have a 1.0 version tag on them, and that means that the API may change a titch in<br />
   the future. Also, the fact that they’re released as gems means that it’s easy to release gems, not that I’m not<br />
   an idiot.</p>
 
@@ -91,11 +106,11 @@ make an appearance in the next post when I talk about using this in addition to 
   solrurl = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">http://your.solr.server:port/solr</span><span style="color:#710">'</span></span>
   sussqueuesize = <span style="color:#00D">24</span> <span style="color:#777"># how many items to buffer on their way to solr</span>
   sussthreads = <span style="color:#00D">1</span>   <span style="color:#777"># how many threads to use to send stuff to solr</span>
-  
+
   suss = <span style="color:#036;font-weight:bold">StreamingUpdateSolrServer</span>.new(solrurl,sussqueuesize,sussthreads)
-  
+
   <span style="color:#777"># Let's add a simple document via a hash: A title, three authors, and a year</span>
-  
+
   h = {
     <span style="color:#A60">:title</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Never been deader</span><span style="color:#710">&quot;</span></span>,
     <span style="color:#A60">:author</span> =&gt; [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Bill</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Mike</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Molly</span><span style="color:#710">'</span></span>],
@@ -103,45 +118,45 @@ make an appearance in the next post when I talk about using this in addition to 
   }
   suss &lt;&lt; h
   suss.commit
-  
-  <span style="color:#777"># YEA! You just added a document to solr and committed it. </span>
+
+  <span style="color:#777"># YEA! You just added a document to solr and committed it.</span>
   <span style="color:#777"># Have a cookie!</span>
-  
+
   <span style="color:#777"># We can also use a document object to do the same thing</span>
-  
+
   doc = <span style="color:#036;font-weight:bold">SolrInputDocument</span>.new
   <span style="color:#777"># Add the title</span>
   doc &lt;&lt; [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">title</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Never been deader</span><span style="color:#710">'</span></span>]
-  
+
   <span style="color:#777"># Add the first author</span>
   doc &lt;&lt; [<span style="color:#A60">:author</span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Bill</span><span style="color:#710">'</span></span>]
-  
+
   <span style="color:#777"># Add more. Re-used keys mean you're adding additional values</span>
   <span style="color:#777"># Note values can be scalars or arrays</span>
-  
+
   doc &lt;&lt; [<span style="color:#A60">:author</span>, [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Mike</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Molly</span><span style="color:#710">'</span></span>]]
-  
+
   <span style="color:#777"># Add the wrong year using [] syntax</span>
   doc[<span style="color:#A60">:year</span>] = <span style="color:#00D">2001</span>
-  
+
   <span style="color:#777"># Oops! fix it. []= overwrites existing value(s)</span>
-  
+
   doc[<span style="color:#A60">:year</span>] = <span style="color:#00D">2003</span>
-  
-  <span style="color:#777"># Finally, we can merge a hash (or anything else that responds to </span>
+
+  <span style="color:#777"># Finally, we can merge a hash (or anything else that responds to</span>
   <span style="color:#777"># 'each_pair' with key-value pairs) into an existing doc</span>
-  
+
   doc.merge! {<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">author</span><span style="color:#710">'</span></span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Ringo Starrre</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">publisher</span><span style="color:#710">'</span></span>=&gt;<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Vainity Books</span><span style="color:#710">'</span></span>}
-  
+
   <span style="color:#777"># Add it</span>
-  
+
   suss &lt;&lt; doc
 
   <span style="color:#777"># Commit and optimize if you'd like</span>
 
   suss.commit
   suss.optimize <span style="color:#777"># if you want</span>
-  
+
 
 </pre></div>
 </div>
@@ -170,9 +185,9 @@ of operations that are not threadsafe (e.g., reading a line from a file) but<br 
 once you’ve got a bunch of records to worth with, turning them into Solr<br />
 documents is usually thread-safe.</p>
 
-<p>My model is that there’s a producer (usually the method <code>#each</code>) from an <br />
+<p>My model is that there’s a producer (usually the method <code>#each</code>) from an<br />
 underlying data object. A thread takes whatever that method yields<br />
-and sticks the values into a java <br />
+and sticks the values into a java<br />
 BlockingQueue awaiting consumption. You then use <code>ProdcuerConsumer#threaded_each</code><br />
 (or <code>ProducerConsumer#threaded_each_with_index</code>) to pull items out of the queue and do something useful with them.</p>
 
@@ -190,44 +205,44 @@ there’s a lot of <code>#each</code>’s floating around. Keep them straight.</
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jruby_streaming_update_solr_server</span><span style="color:#710">'</span></span>
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jruby_producer_consumer</span><span style="color:#710">'</span></span>
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">marc4j4r</span><span style="color:#710">'</span></span>
-  
+
   solrurl = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">http://your.solr.server:port/solr</span><span style="color:#710">'</span></span>
   sussqueuesize = <span style="color:#00D">24</span> <span style="color:#777"># how many items to buffer on their way to solr</span>
   sussthreads = <span style="color:#00D">2</span>   <span style="color:#777"># how many threads to use to send stuff to solr</span>
-  
+
   suss = <span style="color:#036;font-weight:bold">StreamingUpdateSolrServer</span>.new(solrurl,sussqueuesize,sussthreads)
-  
+
   <span style="color:#777"># I'll go ahead and use a MARC file as my example, but won't talk about the</span>
   <span style="color:#777"># MARC parts of it. All you need to know is that the reader object</span>
   <span style="color:#777"># implements #each</span>
-  
+
   reader = <span style="color:#036;font-weight:bold">MARC4J4R</span>.reader(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">test.xml</span><span style="color:#710">'</span></span>, <span style="color:#A60">:marcxml</span>)
-  
+
   <span style="color:#777"># Get a producer/consumer object with the reader at its base, using</span>
   <span style="color:#777"># the default method #each to get stuff out of it, and with the assumption</span>
-  <span style="color:#777"># that we only need to keep the default 5 items in memory at a time to </span>
+  <span style="color:#777"># that we only need to keep the default 5 items in memory at a time to</span>
   <span style="color:#777"># keep up with consumption</span>
-  
+
   pc = <span style="color:#036;font-weight:bold">ProducerConsumer</span>.new(reader)
-  
-  <span style="color:#777"># Get three threads to actually consume the things, turn them into solr </span>
+
+  <span style="color:#777"># Get three threads to actually consume the things, turn them into solr</span>
   <span style="color:#777"># documents, and send them to solr (potentially out of order)</span>
-  
+
   numconsumerthreads = <span style="color:#00D">3</span>
   pc.threaded_each(numconsumerthreads).each <span style="color:#080;font-weight:bold">do</span> |r|
     suss &lt;&lt; turn_marc_record_into_a_hash_or_solrdoc(r)
   <span style="color:#080;font-weight:bold">end</span>
   suss.commit
-  
+
 
 </pre></div>
 </div>
 </div>
 
-<p>Again, not a lot happening here. </p>
+<p>Again, not a lot happening here.</p>
 
 <ul>
-  <li>The “producer” is always one thread, because so little is thread-safe at the ‘each’ level. In this case, there’s a single thread pulling data out of the file and turning it into MARC records, which are added to the internal BlockingQueue. I buffer 5 of these at a pop (the default) so the consumer threads don’t starve. I presume that producing items is cheaper than consuming them, or else this library won’t help you much. </li>
+  <li>The “producer” is always one thread, because so little is thread-safe at the ‘each’ level. In this case, there’s a single thread pulling data out of the file and turning it into MARC records, which are added to the internal BlockingQueue. I buffer 5 of these at a pop (the default) so the consumer threads don’t starve. I presume that producing items is cheaper than consuming them, or else this library won’t help you much.</li>
   <li><code>ProducerConsumer#threaded_each</code> calls the <code>#each</code> method of the underlying object. You can substitute anything that yields, though, as in this example where I call <code>#each_line</code> instead of the default <code>#each</code></li>
 </ul>
 
@@ -242,13 +257,44 @@ there’s a lot of <code>#each</code>’s floating around. Keep them straight.</
 
 <ul>
   <li>Keep track of your threads. In this last example, there is one thread getting MARC records and putting them into the PC buffer (no way to change that), three threads consuming those records and sticking them into the <code>suss</code> object, and another two pulling stuff <em>out</em> of the <code>suss</code> object and sending things to Sorl. And, of course, there’s other stuff running on the computer, too. Experiment and figure out what works best for your hardware.</li>
-  <li>See the docs for how to mess with what goes into a ProducerConsumer object. It’s entirely possible to use, say, <code>#each_slice</code>. There’s also a convenience method <code>#threaded_each_with_index</code>, but it does <em>not</em> call the underlying <code>#each_with_index</code>, it produces its own index as things are read. </li>
+  <li>See the docs for how to mess with what goes into a ProducerConsumer object. It’s entirely possible to use, say, <code>#each_slice</code>. There’s also a convenience method <code>#threaded_each_with_index</code>, but it does <em>not</em> call the underlying <code>#each_with_index</code>, it produces its own index as things are read.</li>
 </ul>
 
 <h3 id="feedback-not-only-welcome-but-necessary">Feedback not only welcome but necessary!</h3>
 
 <p>I’ve done a lot of messing around with Ruby in the last 10 days or so, but I’m still basically converting from Perl in my head. Any comments, bugs reports, or whatnot are definitely welcome!</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/02/indexing-data-into-solr-via-jruby-with-threads/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -256,15 +302,15 @@ there’s a lot of <code>#each</code>’s floating around. Keep them straight.</
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -300,8 +346,7 @@ there’s a lot of <code>#each</code>’s floating around. Keep them straight.</
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

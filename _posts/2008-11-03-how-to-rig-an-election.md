@@ -1,6 +1,8 @@
 ---
 title: "How to rig an election"
 date: 2008-11-03
+layout: post
+
 ---
 
 No matter where I've gone today and for the past few days, I keep running into people (on both sides) who are sure that if Their Guy Doesn't Win, it's going to be because of dirty tactics.

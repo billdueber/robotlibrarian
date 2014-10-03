@@ -1,6 +1,8 @@
 ---
 title: "Why bother with threading in jruby? Because it's easy."
 date: 2010-03-12
+layout: post
+
 ---
 
 [<strong>Edit 2011-July-1</strong>: I've written a jruby_specific threach that takes advantage of better underlying java libraries called <a href="http://robotlibrarian.billdueber.com/even-better-even-simpler-multithreading-with-jruby/">jruby_threach</a> that is a much better option if you're running jruby]
@@ -12,7 +14,7 @@ Well, it turns out I've been trying to figure out how to deal with threading in 
 
 ~~~ruby
 
-  enumerable_object.threach(number_of_threads, :which_iterator) do |i|    
+  enumerable_object.threach(number_of_threads, :which_iterator) do |i|
     do_something_threadsafe(i)
   end
 
@@ -29,21 +31,21 @@ Well, it turns out I've been trying to figure out how to deal with threading in 
   # Process with 2 threads. It assumes you want 'each'
   # as your iterator.
   (1..10).threach(2) {|i| puts i.to_s}  
-  
+
   # You can also specify the iterator
   File.open('mybigfile') do |f|
     f.threach(2, :each_line) do |line|
       processLine(line)
     end
   end
-  
+
   # threach does not care what the arity of your block is
   # as long as it matches the iterator you ask for
-  
+
   ('A'..'Z').threach(3, :each_with_index) do |letter, index|
     puts "#{index}: #{letter}"
   end
-  
+
   # Or with a hash
   h = {'a' => 1, 'b'=>2, 'c'=>3}
   h.threach(2) do |letter, i|
@@ -53,7 +55,7 @@ Well, it turns out I've been trying to figure out how to deal with threading in 
 ~~~
 
 _threach.rb_ adds to the Enumerable module to provide a threaded
-version of whatever enumerator you throw at it (`each` by default). 
+version of whatever enumerator you throw at it (`each` by default).
 
 ### How does it work?
 
@@ -77,7 +79,7 @@ How about I just put the source here. It's short.
             until (a = bq.pop) === :end_of_data
               blk.call(*a)
             end
-          end          
+          end
         end
 
         # The producer
@@ -87,7 +89,7 @@ How about I just put the source here. It's short.
           count += 1
         end
         # Now end it
-        threads.times do 
+        threads.times do
           bq << :end_of_data
         end
         # Do the join
@@ -95,7 +97,7 @@ How about I just put the source here. It's short.
       end
     end
   end
-  
+
 
 ~~~
 
@@ -120,7 +122,7 @@ You can always do something like:
   else
     numthreads = 0
   end
-  
+
   my_enumerable.threach(numthreads) {|i| ...}
 
 ~~~

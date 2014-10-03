@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Solr Field Type for numeric(ish) IDs (SST #1)</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[For the introduction to this series, take a quick gander at <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">the introduction</a>]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Solr Field Type for numeric(ish) IDs (SST #1)</h1>
+    <p class="post-meta">Mar 1, 2012</p>
+  </header>
+
+  <article class="post-content">
+    <p>[For the introduction to this series, take a quick gander at <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">the introduction</a>]</p>
 
 <p>Like everyone else in the library world, I’ve got a bunch of well-defined, well-controlled standard identifiers I need to keep track of and allow searching on.</p>
 
@@ -78,7 +93,7 @@
 
 <p>[Note: some of these may be a titch exaggerated]</p>
 
-<p>How does your system deal with these on index? How about on query? </p>
+<p>How does your system deal with these on index? How about on query?</p>
 
 <p>Here’s an idea of how to use a custom solr fieldtype to do the heavy lifting.</p>
 
@@ -99,12 +114,12 @@
 <p>Let’s take a look at the end product and then walk through it.</p>
 
 <div><div class="CodeRay">
-  <div class="code"><pre><span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">numericID</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> 
+  <div class="code"><pre><span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">numericID</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span>
            <span style="color:#b48">positionIncrementGap</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1000</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
-              <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$</span><span style="color:#710">&quot;</span></span> 
+              <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$</span><span style="color:#710">&quot;</span></span>
               <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">***$1</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
               <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^[^\*].*$</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
@@ -112,7 +127,7 @@
               <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^\*\*\*</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LowerCaseFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
-              <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[^\p{N}x]</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span> 
+              <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[^\p{N}x]</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>
               <span style="color:#b48">replace</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">all</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LengthFilterFactory</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">min</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">8</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">max</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">14</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
@@ -128,7 +143,7 @@
 
 <p><strong>NOTE: I really, really recommend taking a look at <a href="http://www.lucidimagination.com/content/scaling-lucene-and-solr">Scaling Lucene and Solr</a> by the good folks over at <a href="http://www.lucidimagination.com/">Lucid Imagination</a> for great, short explanations of <em>omitNorms</em>, term frequencies, etc.</strong></p>
 
-<p>Since this is the first post, I’ll go over some stuff that’s probably a little <br />
+<p>Since this is the first post, I’ll go over some stuff that’s probably a little<br />
 too basic for any audience that’s likely to show up here, but what the heck.</p>
 
 <ul>
@@ -154,7 +169,7 @@ too basic for any audience that’s likely to show up here, but what the heck.</
 
 <p>I primarily work in Ruby and Perl, which means the dramatic abuse of regular expressions is just part of my daily life.</p>
 
-<p>Line 5 is our first use of a regexp in the filter chain via <a href="http://wiki.apache.org/solr/AnalyzersTokenizersTokenFilters#solr.PatternReplaceFilterFactory">PatternReplaceFilterFactory</a>. </p>
+<p>Line 5 is our first use of a regexp in the filter chain via <a href="http://wiki.apache.org/solr/AnalyzersTokenizersTokenFilters#solr.PatternReplaceFilterFactory">PatternReplaceFilterFactory</a>.</p>
 
 <p>The idea is to:</p>
 
@@ -163,7 +178,7 @@ too basic for any audience that’s likely to show up here, but what the heck.</
   <li>If found, get rid of everything else, and throw a ‘***’ onto the beginning so later on I can tell if I matched or not.</li>
 </ol>
 
-<p>The second step is a little…odd…but necessary because I need a way to know if I found a candidate ID or not. If I did, well, there will be three asterisks on the front of the string from here on out. If not, there won’t. </p>
+<p>The second step is a little…odd…but necessary because I need a way to know if I found a candidate ID or not. If I did, well, there will be three asterisks on the front of the string from here on out. If not, there won’t.</p>
 
 <p>This is a little confusing as these things go, so I’ll break it down.</p>
 
@@ -179,7 +194,7 @@ too basic for any audience that’s likely to show up here, but what the heck.</
 
 <p>So…<em>[number][six numbers/dashes][optional X]</em></p>
 
-<p>At minimum, that’s seven digits/dashes. </p>
+<p>At minimum, that’s seven digits/dashes.</p>
 
 <p>Line 7: replacement</p>
 
@@ -275,7 +290,7 @@ too basic for any audience that’s likely to show up here, but what the heck.</
   <li>0012-0045 =&gt; 120045</li>
   <li>ISBN13: 1234567890123 =&gt; 1234567890123</li>
   <li>ISSN: 1234567X (1998-99) =&gt; 1234567x</li>
-  <li>ISSN (1998-99): 1234567X =&gt; <strong>199899</strong> </li>
+  <li>ISSN (1998-99): 1234567X =&gt; <strong>199899</strong></li>
   <li>1234567890 (hdk. 22 pgs) =&gt; 1234567890</li>
   <li>9 =&gt; [nothing]</li>
   <li>Behind the 3rd floor desk =&gt; [nothing]</li>
@@ -286,12 +301,43 @@ too basic for any audience that’s likely to show up here, but what the heck.</
 
 <h3 id="conclusions">Conclusions</h3>
 
-<p>Obviously, this is the tip of the iceberg with this sort of thing. And it can still be confused. </p>
+<p>Obviously, this is the tip of the iceberg with this sort of thing. And it can still be confused.</p>
 
-<p>But it <em>does</em> follow our goal of having the exact same behavior on index and query, moving the logic to solr, and being pretty flexible. </p>
+<p>But it <em>does</em> follow our goal of having the exact same behavior on index and query, moving the logic to solr, and being pretty flexible.</p>
 
 <p>Perfect? No. Useful? Yes.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2012
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2012/03/solr-field-type-for-numericish-ids/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -299,15 +345,15 @@ too basic for any audience that’s likely to show up here, but what the heck.</
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -343,8 +389,7 @@ too basic for any audience that’s likely to show up here, but what the heck.</
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

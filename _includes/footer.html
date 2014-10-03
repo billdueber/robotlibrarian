@@ -2,15 +2,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">{{ site.title }}</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>{{ site.title }}</li>
-          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+        <ul class="internal_links">
+          <li><a href="{{ "/feed.xml" | prepend: site.baseurl }}">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -46,7 +46,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">{{ site.description }}</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

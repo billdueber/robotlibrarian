@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Four things I hate about Ruby</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>Don’t get me wrong. I use ruby as my default language when possible. I love JRuby in a way that’s illegal in most states. </p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Four things I hate about Ruby</h1>
+    <p class="post-meta">Jan 13, 2011</p>
+  </header>
+
+  <article class="post-content">
+    <p>Don’t get me wrong. I use ruby as my default language when possible. I love JRuby in a way that’s illegal in most states.</p>
 
 <p>But there are…<em>issues</em>. There are with any language and the associated environment. These are the ones that bug the crap out of me.</p>
 
@@ -64,20 +79,51 @@
   <li><strong>Ruby is slow.</strong> Let’s get this one out of the way right away. Ruby (at least the MRI 1.8.x implementation) is, for many things, <em>slow</em>. Sometimes not much slower. Sometimes (e.g., numerics) a hell of a lot slower.</li>
 </ul>
 
-<p>Now, there’s nothing necessarily wrong with that. For what I do, MRI Ruby is usually fast enough, and JRuby is pretty much always fast enough. But the community response (“Buy more hardware! Programming time is more expensive than CPUs anyway! These are not the droids you’re looking for!”), esp. surrounding Rails, is simply annoying. If The Power That Be want to make a <em>decision</em> to not worry about improving the performance of the language, well, that’s fine then. But to pretend – or even <em>insist</em> – that it’s not at all in issue, well, that’s just disingenuous. </p>
+<p>Now, there’s nothing necessarily wrong with that. For what I do, MRI Ruby is usually fast enough, and JRuby is pretty much always fast enough. But the community response (“Buy more hardware! Programming time is more expensive than CPUs anyway! These are not the droids you’re looking for!”), esp. surrounding Rails, is simply annoying. If The Power That Be want to make a <em>decision</em> to not worry about improving the performance of the language, well, that’s fine then. But to pretend – or even <em>insist</em> – that it’s not at all in issue, well, that’s just disingenuous.</p>
 
 <ul>
   <li>
-    <p><strong>Version nonsense</strong>. Yes, yes, I understand the historical process that produced a version 1.9.x that’s <em>not backwards compatible</em> with 1.8.x. But it’s dumb. Gems don’t often seem much better (including, hypocritically, my own). Versioning – meaning assigning version numbers in such a way that the underlying semantics are transparent – doesn’t seem to be something The Ruby World (tm) is all that interested in. </p>
+    <p><strong>Version nonsense</strong>. Yes, yes, I understand the historical process that produced a version 1.9.x that’s <em>not backwards compatible</em> with 1.8.x. But it’s dumb. Gems don’t often seem much better (including, hypocritically, my own). Versioning – meaning assigning version numbers in such a way that the underlying semantics are transparent – doesn’t seem to be something The Ruby World (tm) is all that interested in.</p>
   </li>
   <li>
-    <p><strong>No relationship between gem names and the modules they contain.</strong> This drives me freakin’ crazy. The Perl community does a great job with this. One module per file, one file per module, filenames follow the module names. I know <em>exactly</em> what to put after <code>use</code> in Perl. In Ruby, what comes after <code>require</code> is anybody’s guess. </p>
+    <p><strong>No relationship between gem names and the modules they contain.</strong> This drives me freakin’ crazy. The Perl community does a great job with this. One module per file, one file per module, filenames follow the module names. I know <em>exactly</em> what to put after <code>use</code> in Perl. In Ruby, what comes after <code>require</code> is anybody’s guess.</p>
   </li>
   <li>
     <p><strong>Lack of thread-safety</strong>. Look, I get it that the MRI doesn’t have real threads. And so maybe there’s not a huge incentive on the part of the core folks to make things thread-safe in general. But at least one language construct – <a href="http://jira.codehaus.org/browse/JRUBY-3194">autoload</a> – is just plain broken under real threads, with seemingly little interest in getting it fixed.</p>
   </li>
 </ul>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2011
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2011/01/four-things-i-hate-about-ruby/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -85,15 +131,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -129,8 +175,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Adding LibXML and Java STAX support to ruby-marc with pluggable XML parsers</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>JRuby is my ruby platform of choice, mostly because I think its deployment options in my work environment are simpler (perhaps technically and certainly politically), but also because I have high, high hopes to use lots of super-optimized native java libraries. The <a href="http://cpan.perl.org/">CPAN</a> is what keeps me tethered to Perl, and whether or not you like Java-the-language, boy, are there a lot of high-quality libraries out there.</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Adding LibXML and Java STAX support to ruby-marc with pluggable XML parsers</h1>
+    <p class="post-meta">Oct 7, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>JRuby is my ruby platform of choice, mostly because I think its deployment options in my work environment are simpler (perhaps technically and certainly politically), but also because I have high, high hopes to use lots of super-optimized native java libraries. The <a href="http://cpan.perl.org/">CPAN</a> is what keeps me tethered to Perl, and whether or not you like Java-the-language, boy, are there a lot of high-quality libraries out there.</p>
 
 <p>Since I’ve been messing around with MARC-XML parsing of late, and since Ross Singer added <a href="http://groups.google.com/group/blacklight-development/browse_thread/thread/b6f7e064c0cf0bbd/9cd076ca7eeb1293?hl=en&amp;lnk=gst&amp;q=a+few+rubymarc+announcements#9cd076ca7eeb1293">pluggable xml-parser awesomeness</a> to the ruby-marc project, I thought I’d see what I could do with native Java methods when parsing MARC-XML.</p>
 
@@ -70,21 +85,21 @@
 
 <h3 id="what-exactly-did-i-do">What exactly did I do?</h3>
 
-<p>For the <a href="http://libxml.rubyforge.org/">LibXML</a> stuff, I copied my own code. For the java <a href="http://en.wikipedia.org/wiki/StAX">stax</a> (javax.xml.stream.XMLInputFactory.StreamReader) parser, I stole just about everything from Ross’s nokogiri code and put it into its own module, and then slimmed down the nokogiri module and the stax module to only include their differences. </p>
+<p>For the <a href="http://libxml.rubyforge.org/">LibXML</a> stuff, I copied my own code. For the java <a href="http://en.wikipedia.org/wiki/StAX">stax</a> (javax.xml.stream.XMLInputFactory.StreamReader) parser, I stole just about everything from Ross’s nokogiri code and put it into its own module, and then slimmed down the nokogiri module and the stax module to only include their differences.</p>
 
 <p><a href="http://rubyforge.org/tracker/index.php?func=detail&amp;aid=27253&amp;group_id=964&amp;atid=3783">The patch</a> is at the <a href="http://rubyforge.org/projects/marc/">ruby-marc rubyforge site</a> if you want to play along at home.</p>
 
-<p>Other than using the stax or libxml parser, everything else is the same – MARC::Record objects and their components are created exactly as they are with the other parsers. It might be “fun” (for some twisted definition of “fun”) to wrap the MARC::Record interface around <a href="http://marc4j.tigris.org/">marc4j</a> at some point, but right now all that’s changed is the parsing. </p>
+<p>Other than using the stax or libxml parser, everything else is the same – MARC::Record objects and their components are created exactly as they are with the other parsers. It might be “fun” (for some twisted definition of “fun”) to wrap the MARC::Record interface around <a href="http://marc4j.tigris.org/">marc4j</a> at some point, but right now all that’s changed is the parsing.</p>
 
 <h3 id="do-they-work">Do they work?</h3>
 
-<p>Yes. Thanks for asking. At least all the tests pass when I type ‘rake’. </p>
+<p>Yes. Thanks for asking. At least all the tests pass when I type ‘rake’.</p>
 
 <h3 id="how-fast-is-it">How fast is it?</h3>
 
 <p>As always, the numbers are iffy. These were done on my desktop, with other stuff going on. I didn’t bother to benchmark <code>rexml</code> because we know how slow <em>that</em> is.</p>
 
-<p>The test file is a nightly dump intended to go into our VuFind install. It was born as binary marc, and changed to marc-xml using <code>yaz-marcdump</code>, which is so fast that I thought maybe something had gone wrong. Holy cow, is <code>yaz-marcdump</code> fast. </p>
+<p>The test file is a nightly dump intended to go into our VuFind install. It was born as binary marc, and changed to marc-xml using <code>yaz-marcdump</code>, which is so fast that I thought maybe something had gone wrong. Holy cow, is <code>yaz-marcdump</code> fast.</p>
 
 <p>The resulting XML is 219MB and contains 46,242 records.</p>
 
@@ -111,7 +126,7 @@ MRI 1.8.7
 JRuby trunk
     jrexml     547    (539, 554)
     jstax      203    (201, 208, 201, 201, 204 )
-    
+
 Perl 5.10 w/MARC::File:XML
     perl       340    (340)
 
@@ -140,6 +155,37 @@ rexml:    10.11 (estimated; 3.5x nokogiri's speed)
 
 <p>And it means that if I (a) can get folks around here to use Ruby, and (b) can get them to use MARC-XML instead of binary MARC (which we can’t use anyway because of the record-length limitations), I can be sure that any bottlenecks aren’t going to be the result of those choices.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/10/adding-libxml-and-java-stax-support-to-ruby-marc-with-pluggable-xml-parsers-2/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -147,15 +193,15 @@ rexml:    10.11 (estimated; 3.5x nokogiri's speed)
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -191,8 +237,7 @@ rexml:    10.11 (estimated; 3.5x nokogiri's speed)
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

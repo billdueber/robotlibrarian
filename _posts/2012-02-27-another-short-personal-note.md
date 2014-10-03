@@ -2,6 +2,8 @@
 title: "Another short personal note"
 date: 2012-02-27
 tags: "personal"
+layout: post
+
 ---
 
 The baby spent all last week in the hospital. Nothing life-threatening (so long as he was in the hospital and could get O2 when needed); it was just annoying.

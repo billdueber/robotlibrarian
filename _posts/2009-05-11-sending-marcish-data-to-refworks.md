@@ -1,6 +1,8 @@
 ---
 title: "Sending MARC(ish) data to Refworks"
 date: 2009-05-11
+layout: post
+
 ---
 
 Refworks has some <a href="http://www.refworks.com/DirectExport.htm">okish documentation</a> about how to deal with its callback import procedure, but I thought I'd put down how I'm doing it for our <a href="http://vufind.org/">vufind</a> install (<a href="http://mirlyn2-beta.lib.umich.edu/">mirlyn2-beta.lib.umich.edu</a>) in case other folks are interested.
@@ -39,13 +41,13 @@ LEADER
 
 Control Field
   : [three-digit control tag] [four spaces] [data text]
-  
-  
+
+
 Data Field
   : [three-digit data tag] [one space] [ind1] [ind2] [one space] [value of subfield a] [other subfield constructs]
 
 
-...where [other subfield constructs] look like 
+...where [other subfield constructs] look like
 
 ~~~
   [pipe characeter][subfield code][subfield value]
@@ -63,7 +65,7 @@ Some easy PHP code to produce such a format is as follows. Note that I'm sending
       header('Content-type: text/plain; charset=UTF-8');
 
       echo 'LEADER ', $m->getLeader(), "\n";
-      
+
       foreach ($m->getFields() as $tag => $val) {
         echo $tag;
         if ($val instanceof File_MARC_Control_FIELD) {
@@ -79,7 +81,7 @@ Some easy PHP code to produce such a format is as follows. Note that I'm sending
             $subs[] = $line . $subdata->getData();
           }
           echo implode(' ', $subs), "\n";
-        }        
+        }
       }
 
 

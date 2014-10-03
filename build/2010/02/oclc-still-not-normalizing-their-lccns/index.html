@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>OCLC still not (NO! They are!) normalizing their LCCNs</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <blockquote>NOTE 2: It turns out that I did find a minor bug in the system, but that in general LCCN normalization is working correctly. I just happened to hit a weirdness with a bad LCCN and a little bug in the parser on their end. Which is getting fixed. So...good news all around, and huge kudos to 
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">OCLC still not (NO! They are!) normalizing their LCCNs</h1>
+    <p class="post-meta">Feb 18, 2010</p>
+  </header>
+
+  <article class="post-content">
+    <blockquote>NOTE 2: It turns out that I did find a minor bug in the system, but that in general LCCN normalization is working correctly. I just happened to hit a weirdness with a bad LCCN and a little bug in the parser on their end. Which is getting fixed. So...good news all around, and huge kudos to
 Xiaoming Liu for his quick response!
 </blockquote>
 
@@ -64,15 +79,15 @@ Xiaoming Liu for his quick response!
 
 <hr />
 
-<p>A <a href="http://bibwild.wordpress.com/2009/03/11/normalize-your-lccns/">long time ago</a>, Jonathan Rochkind noted that the OCLC doesn’t correctly <a href="http://www.loc.gov/marc/lccn-namespace.html">normalize their LCCNs</a>. </p>
+<p>A <a href="http://bibwild.wordpress.com/2009/03/11/normalize-your-lccns/">long time ago</a>, Jonathan Rochkind noted that the OCLC doesn’t correctly <a href="http://www.loc.gov/marc/lccn-namespace.html">normalize their LCCNs</a>.</p>
 
-<p>Well, it’s not fixed. </p>
+<p>Well, it’s not fixed.</p>
 
 <p>I could really, <em>really</em> use the xlccn service right about now – a great web service they provide that, much like xisbn and xissn and the other xXXXX (heh!) services, purports to allow you to put in an lccn and get data back on the item you’re interested in.</p>
 
-<p>Except they “normalize” their LCCNs in a way that is not only incorrect, but causes namespace collisions. As near as I can tell, they throw out any leading non-digits and only keep up to the next non-digit. </p>
+<p>Except they “normalize” their LCCNs in a way that is not only incorrect, but causes namespace collisions. As near as I can tell, they throw out any leading non-digits and only keep up to the next non-digit.</p>
 
-<p><em>The xLCCN service will silently provide no data or <strong>incorrect data</strong> for many LCCN requests!</em> </p>
+<p><em>The xLCCN service will silently provide no data or <strong>incorrect data</strong> for many LCCN requests!</em></p>
 
 <p>An example:</p>
 
@@ -89,7 +104,7 @@ Xiaoming Liu for his quick response!
   <li>(D) is associated with OCLC# 12505148. That’s <em>not the same record</em>.</li>
 </ul>
 
-<p>So, how do the OCLC services respond? </p>
+<p>So, how do the OCLC services respond?</p>
 
 <ul>
   <li>(F) Worldcat search finds correct (probably just doing a string match); xid finds nothing</li>
@@ -100,6 +115,37 @@ Xiaoming Liu for his quick response!
 <p>So, what am I supposed to do? Only use the service on LCCNs where the original<br />
 and normalized versions are the same and include only digits? Frustrating.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/02/oclc-still-not-normalizing-their-lccns/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -107,15 +153,15 @@ and normalized versions are the same and include only digits? Frustrating.</p>
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -151,8 +197,7 @@ and normalized versions are the same and include only digits? Frustrating.</p>
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

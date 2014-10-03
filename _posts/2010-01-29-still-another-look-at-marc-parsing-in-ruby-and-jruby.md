@@ -1,6 +1,8 @@
 ---
 title: "Still another look at MARC parsing in ruby and jruby"
 date: 2010-01-29
+layout: post
+
 ---
 
 I've been looking at making a jruby-based solr indexer for MARC documents, and started off wanting to make sure I could determine if anything I did would be faster than our existing (solrmarc-based) setup.
@@ -18,25 +20,25 @@ I'll just post the results without a lot of commentary. I warmed stuff up in all
 * <em>The machines</em> are my desktop OSX machine and the beefy linux server where we usually do this stuff
 * <em>The platforms</em> are jruby 1.4 --server and MRI ruby 1.87
 * <em>The libraries</em> are marc4j and ruby-marc 0.3.3
-* <em>The parsers</em> are 
+* <em>The parsers</em> are
 
     * The standard binary parsers all around
     * A home-grown AlephSequential format reader for the 'seq' type. AlephSequential is a MARC representation that uses one line for each field. We use it because it doesn't have length limitations and, not surprisingly, Aleph can spit it out pretty quickly compared to MARC-XML.
     * Whatever marc4j uses internally for MARC-XML
     * ruby-marc's 'jstax' xml parser under jruby (which I wrote and apparently needs some love, see below)
     * ruby-marc's 'libxml' xml parser under MRI ruby
-  
+
 * <em>Seconds</em> is the average of two rounds, with measurements taken after a warmup run in each case.
 
 The test files were 18,881 records in marc-xml, marc-binary, and AlephSequential formats.
 
 ~~~
 
-MACHINE  PLATFORM LIBRARY     PARSER    SECONDS    REC/SECOND                      
+MACHINE  PLATFORM LIBRARY     PARSER    SECONDS    REC/SECOND
 desktop  jruby    marc4j      binary      4.06       4650
 desktop  jruby    marc4j      xml         5.55       3401
 desktop  jruby    ruby-marc   binary     17.35       1088
-desktop  jruby    ruby-marc   jstax      80.11        236 
+desktop  jruby    ruby-marc   jstax      80.11        236
 
 desktop  ruby     ruby-marc   binary     33.54        562
 desktop  ruby     ruby-marc   libxml     46.87        402
@@ -55,8 +57,8 @@ The quick takeaways, with all the obvious caveats:
 
 * jruby with ruby-marc is twice as fast at binary and twice as slow at xml compared with MRI
 * marc4j is four times as fast for binary and about an order of magnitutde faster for xml compared with ruby-marc.
-* The server is fast. 
+* The server is fast.
 
-We know from previous experience that libxml is the fastest of the current MRI-based marc-xml readers and that jstax is the best of the current jruby-based marc-xml readers. And, finally, we know that many of us can't use marc-binary format because our records are too big. 
+We know from previous experience that libxml is the fastest of the current MRI-based marc-xml readers and that jstax is the best of the current jruby-based marc-xml readers. And, finally, we know that many of us can't use marc-binary format because our records are too big.
 
 If I'm gonna use jruby (which I think I am due to wanting to use the StreamingUpdateSolrServer) I'm gonna need to use marc4j and just wrap it up in some nicer syntax.

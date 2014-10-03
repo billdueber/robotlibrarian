@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Easy Solr types for library data</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,12 +61,21 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Yet another bit in a series about our Vufind installation]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Easy Solr types for library data</h1>
+    <p class="post-meta">Aug 19, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Yet another bit in a series about our Vufind installation]</p>
 
 <p>While I’m no longer shocked at the terrible state of our data <em>every single day</em>, I’m still shocked pretty often. We figured out pretty quickly that anything we could do to normalize data as it went into the Solr index (and, in fact, as queries were produced) would be a huge win.</p>
 
-<p>There’s a continuum of attitudes about how much “business logic” belongs in the database layer of any application. Some folks – including super-high throughput sites, but mostly people who have never used anything by MySQL – tend to put <em>no</em> logic into the database. I’ve always edged over the middle to the other side of that debate, preferring to let the database do type-checking and conversions and track foreign keys and the like. </p>
+<p>There’s a continuum of attitudes about how much “business logic” belongs in the database layer of any application. Some folks – including super-high throughput sites, but mostly people who have never used anything by MySQL – tend to put <em>no</em> logic into the database. I’ve always edged over the middle to the other side of that debate, preferring to let the database do type-checking and conversions and track foreign keys and the like.</p>
 
 <p>Solr, while not a traditional RDBMS, offers this type of functionality in its text filters. One can pipe data through a few standard filters, or write a custom one in Java if need be. The nice part is that it applies at index <em>and query</em> time. One obvious application, which I somehow haven’t bothered to write yet, is to convert all ISBNs to 13-characters new-style ISBNs upon both index and query. That way, you don’t care if your original records had the short or long form; all the data gets converted no matter how it comes in.</p>
 
@@ -75,19 +90,19 @@
   <li>RemoveDuplicates to do what it says</li>
 </ul>
 
-<p>And because it happens on index and on query, everything works out. </p>
+<p>And because it happens on index and on query, everything works out.</p>
 
 <p>We’re running Solr basically from trunk – whenever we need to change something, I pull down a fresh svn copy, put in our local changes to make sure it all works, and then deploy – so I have access to stuff slated for Solr 1.4, including most importantly Trie fields and the  PatternReplaceFilterFactory.</p>
 
 <h2 id="the-stdnum-type">The stdnum type</h2>
 
-<p>One of the first things we defined was a “stdnum” type, to deal with supposedly-unique identifiers, possibly with embedded dashes and dots and leading/trailing nonsense. Here’s a variant. </p>
+<p>One of the first things we defined was a “stdnum” type, to deal with supposedly-unique identifiers, possibly with embedded dashes and dots and leading/trailing nonsense. Here’s a variant.</p>
 
 <div><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stdnum</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">sortMissingLast</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
-      <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+      <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LowerCaseFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TrimFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
@@ -100,7 +115,7 @@
            <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^0+</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">replace</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">all</span><span style="color:#710">&quot;</span></span>
       <span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;/analyzer&gt;</span>
-  <span style="color:#070;font-weight:bold">&lt;/fieldType&gt;</span> 
+  <span style="color:#070;font-weight:bold">&lt;/fieldType&gt;</span>
 
 </pre></div>
 </div>
@@ -109,18 +124,18 @@
 <p>Let’s walk through it. It could probably be done in one go, but solr is not our bottleneck at this point…</p>
 
 <ul>
-  <li>We start by defining it as a <em>TextField</em> because it’s the only type that can take filters. </li>
-  <li>We then declare that instead of the standard tokenizer, we’re using the <em>KeywordTokenizer</em>. Confusingly, the KeywordTokenizer doesn’t tokenize in the traditional sense – it just returns the whole input <em>as a single token</em>. </li>
+  <li>We start by defining it as a <em>TextField</em> because it’s the only type that can take filters.</li>
+  <li>We then declare that instead of the standard tokenizer, we’re using the <em>KeywordTokenizer</em>. Confusingly, the KeywordTokenizer doesn’t tokenize in the traditional sense – it just returns the whole input <em>as a single token</em>.</li>
   <li>Lowercase it.</li>
   <li>Trim spaces off both ends</li>
   <li>Skip any leading non-digts, find a string of numbers, dashes, and dots, with optional x at the end, and skip everything after it.</li>
   <li>Remove anything left that isn’t a digit or an ‘x’.</li>
-  <li>Remove leading zeros, if you’ve got ‘em. </li>
+  <li>Remove leading zeros, if you’ve got ‘em.</li>
 </ul>
 
-<p>The net effect is a trimmed string that has only digits (with an optional trailing ‘x’) and removes any leading zeros. </p>
+<p>The net effect is a trimmed string that has only digits (with an optional trailing ‘x’) and removes any leading zeros.</p>
 
-<p>We use this “stdnum” field for ISBNs and ISSNs (and I think OCLC numbers) and it should work for any messy numerics you might have lying around. If you wanted to, you could change the regexp to enforce a minimum string of digits so it doesn’t get confused by any leading nonsense, e.g, “ISSN2: 1234567X (online)”. But if your data are that bad, you may have bigger problems to worry about. </p>
+<p>We use this “stdnum” field for ISBNs and ISSNs (and I think OCLC numbers) and it should work for any messy numerics you might have lying around. If you wanted to, you could change the regexp to enforce a minimum string of digits so it doesn’t get confused by any leading nonsense, e.g, “ISSN2: 1234567X (online)”. But if your data are that bad, you may have bigger problems to worry about.</p>
 
 <h2 id="textproper-type">textProper type</h2>
 <p>We define a <em>textProper</em> type that is exactly the same as the default text type, but without the stemming and synonyms. In the presence of stemming, exact matches and stemmed matches count the same toward relevancy (e.g. <em>row</em> and <em>rowing</em>). We had plenty of examples where exact results were getting overridden by the stemmed results, and this is confusing.</p>
@@ -136,7 +151,7 @@
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">exactmatcher</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
-      <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+      <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">schema.UnicodeNormalizationFilterFactory</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">version</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">icu4j</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">composed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">remove_diacritics</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">remove_modifiers</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">fold</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LowerCaseFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TrimFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
@@ -150,9 +165,9 @@
 </div>
 </div>
 
-<p>That’s it. Lowercase it, normalize the unicode, and pull out everything that’s not a (unicode) letter or number. </p>
+<p>That’s it. Lowercase it, normalize the unicode, and pull out everything that’s not a (unicode) letter or number.</p>
 
-<p>Note that we’re still using <em>KeywordTokenizerFactory</em> – we’re getting exactly <em>one</em> token out of this thing. That means that the query input either matches (as one string) or it doesn’t. </p>
+<p>Note that we’re still using <em>KeywordTokenizerFactory</em> – we’re getting exactly <em>one</em> token out of this thing. That means that the query input either matches (as one string) or it doesn’t.</p>
 
 <p>Here’s how we use it:</p>
 
@@ -165,11 +180,42 @@
 <h2 id="wildcard-searching">wildcard searching</h2>
 <p>One downside of using all these filters is that <strong>Solr ignores filters when doing wildcard searches</strong>. There is a patch floating around that will using an analyzing query parser for wildcard searches, but I haven’t had time to fiddle around with it.</p>
 
-<p>One thing you can do is to do the <em>exact same normalization</em> in your calling code and then throw a ‘*’ on the end of it. The data are in the index, after all – you just have to do the filtering yourself. For example, for a cheap and easy “Title starts with” search, you can do the same normalization in PHP or Ruby or whatever as we do in the Solr exactmatcher type, drop a ‘*’ on the end of it, and query against the <em>exactmatcher</em> version of your title. Voila. </p>
+<p>One thing you can do is to do the <em>exact same normalization</em> in your calling code and then throw a ‘*’ on the end of it. The data are in the index, after all – you just have to do the filtering yourself. For example, for a cheap and easy “Title starts with” search, you can do the same normalization in PHP or Ruby or whatever as we do in the Solr exactmatcher type, drop a ‘*’ on the end of it, and query against the <em>exactmatcher</em> version of your title. Voila.</p>
 
 <h2 id="custom-filters">Custom filters</h2>
 <p>Regular expressions can get you ridiculously far, but for a couple cases it’d be nice to have custom code running. I’ve already mentioned that we should by upcasting all our ISBNs to the 13-character variant. The other two areas where I do this are to <a href="http://www.loc.gov/marc/lccn-namespace.html#syntax">normalize LCCNs</a> and to badly normalize LC CallNumbers. I’ll talk about both soon.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/08/easy-solr-types-for-library-data/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -177,15 +223,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -221,8 +267,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

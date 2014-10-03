@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Boosting on Exactish (anchored) phrase matching in Solr: (SST #4)</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,14 +61,23 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <blockquote>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Boosting on Exactish (anchored) phrase matching in Solr: (SST #4)</h1>
+    <p class="post-meta">Mar 19, 2012</p>
+  </header>
+
+  <article class="post-content">
+    <blockquote>
   <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p>
 </blockquote>
 
 <p><em>Exact</em> matching in Solr is easy. Use the default <em>string</em> type: all it does is, essentially, exact phrase matching. <em>string</em> is a great type for faceted values, where the only way we expect to search the index is via text pulled from the index itself. Query the index to get a value: use that value to re-query the index. Simple and self-contained.</p>
 
-<p>But much of the time, we don’t want exact matching. We want <em>exactish</em> matching. You know, where things are exactly the same <em>except</em>. Except for case, or punctuation, or how much whitespace is between tokens. Maybe do some unicode folding, or stemming. </p>
+<p>But much of the time, we don’t want exact matching. We want <em>exactish</em> matching. You know, where things are exactly the same <em>except</em>. Except for case, or punctuation, or how much whitespace is between tokens. Maybe do some unicode folding, or stemming.</p>
 
 <p>Essentially, we want to reward users (via high relevancy) for getting <em>really close</em>. If someone types in a full title, but misses a colon, well, let’s go  ahead and assume they want that particular item.</p>
 
@@ -103,7 +118,7 @@ java -jar start.jar &amp;
 
 <h3 id="step-1-get-a-decent-text-type">Step 1: get a decent text type</h3>
 
-<p>The recent-nighty of Solr 3.x we’re using has a great tokenizer in ICUTokenizerFactory, which does “the right thing” across a whole host of languages. </p>
+<p>The recent-nighty of Solr 3.x we’re using has a great tokenizer in ICUTokenizerFactory, which does “the right thing” across a whole host of languages.</p>
 
 <div><div class="CodeRay">
   <div class="code"><pre>
@@ -111,13 +126,13 @@ java -jar start.jar &amp;
   <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.ICUTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.ICUFoldingFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
-      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.SynonymFilterFactory</span><span style="color:#710">&quot;</span></span> 
+      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.SynonymFilterFactory</span><span style="color:#710">&quot;</span></span>
               <span style="color:#b48">synonyms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">syn.txt</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">ignoreCase</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">expand</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
-<span style="color:#777">&lt;!-- &lt;filter class=&quot;solr.WordDelimiterFilterFactory&quot; 
-             generateWordParts=&quot;1&quot; generateNumberParts=&quot;1&quot; 
+<span style="color:#777">&lt;!-- &lt;filter class=&quot;solr.WordDelimiterFilterFactory&quot;
+             generateWordParts=&quot;1&quot; generateNumberParts=&quot;1&quot;
              catenateWords=&quot;1&quot; catenateNumbers=&quot;1&quot; catenateAll=&quot;0&quot;/&gt; --&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.CJKWidthFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
-      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.CJKBigramFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.CJKBigramFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;/analyzer&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;/fieldtype&gt;</span>
 
@@ -131,7 +146,7 @@ java -jar start.jar &amp;
   <li>Obviously, start with the <code>ICUTokenizer</code> with a large positionIncrementGap so we can do some of the tricks we talked about <a href="http://robotlibrarian.billdueber.com/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/">last time</a></li>
   <li>Next, we get one-stop shopping with the <code>ICUFoldingFilterFactory</code>. It provides all of the following:
     <ul>
-      <li>NFKC normalization (precomosing), </li>
+      <li>NFKC normalization (precomosing),</li>
       <li>Unicode case folding (i.e., lowercasing)</li>
       <li>search term folding (removing accents, etc).</li>
     </ul>
@@ -143,7 +158,7 @@ java -jar start.jar &amp;
 
 <h3 id="step-2-set-up-parallel-text-types-that-anchor-phrase-matches-to-one-or-both-ends">Step 2: Set up parallel text types that anchor phrase matches to one or both ends</h3>
 
-<p>We’re going to use something new: a <code>charFilter</code>. This differs from a normal filter in that it affects the input string before tokenization. </p>
+<p>We’re going to use something new: a <code>charFilter</code>. This differs from a normal filter in that it affects the input string before tokenization.</p>
 
 <p>Here’s the trick. We’re going to add anchoring text (I chose just ‘AAAA’ at the front and ‘ZZZZ’ at the end) to the normal text type, just by adding a simple charfilter.</p>
 
@@ -152,17 +167,17 @@ java -jar start.jar &amp;
 <span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text_lr</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">positionIncrementGap</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1000</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;charFilter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceCharFilterFactory</span><span style="color:#710">&quot;</span></span>
-      <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^(.*)$</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">AAAA $1 ZZZZ</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>       
+      <span style="color:#b48">pattern</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^(.*)$</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">replacement</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">AAAA $1 ZZZZ</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.ICUTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.ICUFoldingFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
-      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.SynonymFilterFactory</span><span style="color:#710">&quot;</span></span> 
-              <span style="color:#b48">synonyms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">syn.txt</span><span style="color:#710">&quot;</span></span> 
+      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.SynonymFilterFactory</span><span style="color:#710">&quot;</span></span>
+              <span style="color:#b48">synonyms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">syn.txt</span><span style="color:#710">&quot;</span></span>
               <span style="color:#b48">ignoreCase</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">expand</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.CJKWidthFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
-      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.CJKBigramFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.CJKBigramFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;/analyzer&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;/fieldtype&gt;</span>
-  
+
 
 </pre></div>
 </div>
@@ -170,7 +185,7 @@ java -jar start.jar &amp;
 
 <p>Note that this charFilter actually adds two new tokens (‘AAAA’ and ‘ZZZZ’) to your token stream on both index and query. How does this help us?</p>
 
-<p>Let’s look at indexing <code>Mister Blue Sky</code> in a normal text field. A normal solr phrase query <code>q="Blue Sky"</code> will match on that value, because the query phrase is fully contained in the indexed phrase. </p>
+<p>Let’s look at indexing <code>Mister Blue Sky</code> in a normal text field. A normal solr phrase query <code>q="Blue Sky"</code> will match on that value, because the query phrase is fully contained in the indexed phrase.</p>
 
 <p>But what happens if we index into a <code>text_lr</code> field?</p>
 
@@ -180,9 +195,9 @@ java -jar start.jar &amp;
   <li>Phrase searching will then compare the two transformed values using normal Solr rules, <em>find the the latter is not fully contained in the former as a phrase</em>, and give up.</li>
 </ul>
 
-<p>Be careful, though. That ‘aaaa’ and ‘zzzz’ are there just as if you’d typed them in. Thus every indexed value has the tokens ‘aaaa’ and ‘zzzz’, and every query will, in effect, include a query for ‘aaaa’ or ‘zzzz’ (depending on your <code>mm</code> settings). </p>
+<p>Be careful, though. That ‘aaaa’ and ‘zzzz’ are there just as if you’d typed them in. Thus every indexed value has the tokens ‘aaaa’ and ‘zzzz’, and every query will, in effect, include a query for ‘aaaa’ or ‘zzzz’ (depending on your <code>mm</code> settings).</p>
 
-<p>That means that <strong>any non-phrase query will match every field that uses this fieldtype</strong>, and it will also mess with token counts with respect to your <code>mm</code> parameter. For those reasons, <em>only ever use anchored fieldtypes for phrase queries when you want exactish matches</em>. </p>
+<p>That means that <strong>any non-phrase query will match every field that uses this fieldtype</strong>, and it will also mess with token counts with respect to your <code>mm</code> parameter. For those reasons, <em>only ever use anchored fieldtypes for phrase queries when you want exactish matches</em>.</p>
 
 <p>By adding only one of ‘AAAA’ or ‘ZZZZ’, we can have left-anchored and right-anchored searches as well. See <a href="https://github.com/billdueber/solr_stupid_tricks/blob/SST4/solr/conf/schema.xml">the schema.xml</a> for these definitions.</p>
 
@@ -231,7 +246,7 @@ java -jar start.jar &amp;
 <div><div class="CodeRay">
   <div class="code"><pre>
 cd exampledocs
- ./reset_and_index_json.sh exactish.json 
+ ./reset_and_index_json.sh exactish.json
 
 </pre></div>
 </div>
@@ -250,7 +265,7 @@ cd exampledocs
 <div><div class="CodeRay">
   <div class="code"><pre>
 cd ruby
-ruby browse.rb exactish_query.rb 
+ruby browse.rb exactish_query.rb
 # or ruby browse.rb exactish_query.rb json|xml|csv to get different output type
 
 </pre></div>
@@ -271,6 +286,37 @@ ruby browse.rb exactish_query.rb
   <li>You now have a set of tools (field types, copyField directives, phrase search) that can be used to provide higher boosts to exactish matches and left-anchored exactish phrase matches.</li>
 </ul>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2012
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -278,15 +324,15 @@ ruby browse.rb exactish_query.rb
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -322,8 +368,7 @@ ruby browse.rb exactish_query.rb
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

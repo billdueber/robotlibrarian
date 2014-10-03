@@ -2,9 +2,11 @@
 title: "A short ruby diversion: cost of flow control under Ruby"
 date: 2011-05-03
 tags: "ruby"
+layout: post
+
 ---
 
-A couple days ago I decided to finally get back to working on [`threach`](https://github.com/billdueber/threach) to try to deal with problems it had -- essentially, it didn't deal well with non-local exits due to calls to `break` or even something simple like a `NoMethodError`. 
+A couple days ago I decided to finally get back to working on [`threach`](https://github.com/billdueber/threach) to try to deal with problems it had -- essentially, it didn't deal well with non-local exits due to calls to `break` or even something simple like a `NoMethodError`.
 
 [BTW, I think I managed it. As near as I can tell, `threach` version 0.4 won't deadlock anymore]
 
@@ -21,17 +23,17 @@ Let's look at four simple blocks that exercise four different block exit strateg
   <tr>
     <td>
       <pre lang="ruby">
-range.each do |i|      
-  break          
-end              
+range.each do |i|
+  break
+end
       </pre>
     </td>
     <td>
       <pre lang="ruby">
 catch(:benchmarking) do  
- range.each do |i|      
-   throw(:benchmarking) 
- end                    
+ range.each do |i|
+   throw(:benchmarking)
+ end
 end
       </pre>
     </td>
@@ -42,22 +44,22 @@ end
   <tr>
     <td>
       <pre lang="ruby">
- begin                  
-   range.each do |i|    
+ begin
+   range.each do |i|
      raise StandardError
-   end                  
- rescue                 
-  # do nothing                
- end                          
+   end
+ rescue
+  # do nothing
+ end
      </pre>
     </td>
     <td>
       <pre lang="ruby">
-begin                  
+begin
   range.each do |i|
     raise StandardError, :hi, nil
   end
-rescue 
+rescue
  # do nothing
 end
       </pre>
@@ -81,7 +83,7 @@ So....let's run them each 100K times and see what happens, shall we? Times are i
   <tr><th>raise (3 arg)</th><td>1.85</td><td>2.13</td><td>0.45</td> <td>0.45</td></tr>
 </table>
 
-The first thing to note is that this is 100K iterations. Three of the strategies are fast enough that you'd have to work really, really hard to notice them. 
+The first thing to note is that this is 100K iterations. Three of the strategies are fast enough that you'd have to work really, really hard to notice them.
 
 In terms of speed, `raise (3 args)`, `catch/throw`, and `break` are fast enough that you shouldn't bother worrying about them (although you *should* choose the method that makes your code easy to understand).
 
@@ -91,6 +93,6 @@ The second things to note is *Holy Camoli!* JRuby is slow there!
 
 Three things worth saying here:
 
-* If you're using `raise/rescue` for flow control, *you're already doing it wrong.* Reserve exceptions for, well, exceptional conditions that are only going to be raised once or twice, not all the time. 
-* If you're writing code that, for some ungodly reason, is planning on raising a crapload of exceptions, use the three-arg version. I'm looking at you, gem authors. 
+* If you're using `raise/rescue` for flow control, *you're already doing it wrong.* Reserve exceptions for, well, exceptional conditions that are only going to be raised once or twice, not all the time.
+* If you're writing code that, for some ungodly reason, is planning on raising a crapload of exceptions, use the three-arg version. I'm looking at you, gem authors.
 * If you're writing your code without worrying about how it will work under multiple threads, well, please don't do that. Everyone has multi-core systems these days, and it's silly to not be able to use them. Plus, counting on Matz to never move to a VM with real threads is a big gamble.

@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>JSON, JSON everywhere</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>Via Ajaxian, just saw an announcement for <a href="http://sitepen.com/labs/persevere.php">Persevere</a>, a network-centric, <br />
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">JSON, JSON everywhere</h1>
+    <p class="post-meta">May 13, 2008</p>
+  </header>
+
+  <article class="post-content">
+    <p>Via Ajaxian, just saw an announcement for <a href="http://sitepen.com/labs/persevere.php">Persevere</a>, a network-centric,<br />
 JSON-based generic storage engine. It features:</p>
 
 <ul>
@@ -67,17 +82,48 @@ JSON-based generic storage engine. It features:</p>
   <li>Seemingly buzzword compliant across the board</li>
 </ul>
 
-<p>I’ve been thinking about these sorts of servers a lot lately (<a href="http://incubator.apache.org/couchdb/">couchdb</a> and <a href="http://strokedb.com/">strokedb</a> are two others) in the context of the “not-the-catalog” data we track here at the library. </p>
+<p>I’ve been thinking about these sorts of servers a lot lately (<a href="http://incubator.apache.org/couchdb/">couchdb</a> and <a href="http://strokedb.com/">strokedb</a> are two others) in the context of the “not-the-catalog” data we track here at the library.</p>
 
 <p>For some stuff, clearly we need the power and speed of a real database. That power and speed isn’t free, though – you have to set up the tables, map relationships, build an interface on top of it, etc. While it’s not rocket science by any stretch of the imagination, it’s a lot of screwing around and involves a few levels of security and has a friendly red sign on the door that reads “Programmers only, please.”</p>
 
-<p>For other data, though, a structured or semi-structured data store based on a plain text format like JSON would be great. <br />
+<p>For other data, though, a structured or semi-structured data store based on a plain text format like JSON would be great.<br />
 Since everything is a URL, we can handle security at the HTTP-auth/authz level. Library hours, lists of databases we subscribe to, staff directory data – these are data that could, if we wanted, be moved into a generic store like this.</p>
 
 <p>The exciting stuff comes when you stop thinking about traditional database applications and think more in terms of having a data storage endpoint that pretty much anyone with a modicum of knowledge and authorization could throw stuff into. Want to build your own tagging system? Your own “My Shelf?” How about a comment form that straddles the edge between “email me the results” and “ask someone to hook me up to a database”? Or a javascript library that automatically takes survey submissions and sticks them into a system like this?</p>
 
 <p>This is the flip-side of my <a href="http://robotlibrarian.billdueber.com/psst-were-not-printing-cards-anymore/">last post</a>. We’re not talking about hard-core, multiply-linked, core-business metadata. For that, we need ridiculously smart people figuring out how to best leverage the, say, 8 million MARC records we’ve got lying around. But for other stuff…this seems really, really cool.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2008
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2008/05/json-json-everywhere/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -85,15 +131,15 @@ Since everything is a URL, we can handle security at the HTTP-auth/authz level. 
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -129,8 +175,7 @@ Since everything is a URL, we can handle security at the HTTP-auth/authz level. 
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

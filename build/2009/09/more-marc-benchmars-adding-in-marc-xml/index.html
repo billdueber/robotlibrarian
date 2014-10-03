@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>More Ruby MARC Benchmarks: Adding in MARC-XML</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,14 +61,23 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>It turns out that UVA’s reluctance to use the raw MARC data on the search results screen is driven more by processing time than parsing time. Even if they were to start with a fully-parsed MARC object, they’re doing enough screwing around with that data that the bottleneck on their end appears to be all the regex and string processing, not the parsing. Their specs for what gets displayed are complex enough that they want to do the work up-front. </p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
 
-<p>But I remain interested, at least partially because of the reason UVA is using MARC-XML: they have MARC records too big for binary MARC format to handle. We do, too, and we’ve just been talking about what to do with them. So I’m thinking that </p>
+  <header class="post-header">
+    <h1 class="post-title">More Ruby MARC Benchmarks: Adding in MARC-XML</h1>
+    <p class="post-meta">Sep 18, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>It turns out that UVA’s reluctance to use the raw MARC data on the search results screen is driven more by processing time than parsing time. Even if they were to start with a fully-parsed MARC object, they’re doing enough screwing around with that data that the bottleneck on their end appears to be all the regex and string processing, not the parsing. Their specs for what gets displayed are complex enough that they want to do the work up-front.</p>
+
+<p>But I remain interested, at least partially because of the reason UVA is using MARC-XML: they have MARC records too big for binary MARC format to handle. We do, too, and we’ve just been talking about what to do with them. So I’m thinking that</p>
 
 <p>First, I spent some time dusting off my first attempt at ruby programming: modifying ruby-marc to use libxml if it’s available. It’s not super-well tested, but I’m pretty sure it works. And the speed increases are … well, see below.</p>
 
-<p>Anyone who wants to mess with my <a href="http://github.com/billdueber/BillDueber-ruby-marc">attempt at libxml-enabled ruby-marc</a> is welcome to do so. This is a <em>very</em> forgiving parser – it trusts that whatever ended up in the XML should, in fact, have been there. If you say ‘XXE’ is a control field, well, I’ll treat it as a control field. </p>
+<p>Anyone who wants to mess with my <a href="http://github.com/billdueber/BillDueber-ruby-marc">attempt at libxml-enabled ruby-marc</a> is welcome to do so. This is a <em>very</em> forgiving parser – it trusts that whatever ended up in the XML should, in fact, have been there. If you say ‘XXE’ is a control field, well, I’ll treat it as a control field.</p>
 
 <p>But back to the data. A few points are obvious:</p>
 
@@ -74,13 +89,13 @@
 
 <h3 id="full-results">Full results</h3>
 
-<p>As with last time, the <em>total</em> numbers below show how long it took to process all 40 sets of 50 records. The unadorned numbers are the <em>average time it took to process a set of 50 records</em>. </p>
+<p>As with last time, the <em>total</em> numbers below show how long it took to process all 40 sets of 50 records. The unadorned numbers are the <em>average time it took to process a set of 50 records</em>.</p>
 
 <h4 id="call-up-solr-with-a-null-search-get-2000-records-back-in-batches-of-50-with-wtruby-eval-it-and-stick-it-into-arrays">Call up solr with a null search, get 2000 records back in batches of 50 with wt=ruby, eval it, and stick it into arrays</h4>
 
 <pre><code>jruby-Get/Eval data              0.143550
 mri-Get/Eval data                0.106550
-                                      
+
 jruby-Get/Eval data (total)      5.742000
 mri-Get/Eval data (total)        4.262017
 </code></pre>
@@ -89,7 +104,7 @@ mri-Get/Eval data (total)        4.262017
 <pre><code>jruby-marc4j-multistring         0.026575
 jruby-marc-multistring           0.037175
 mri-marc-multistring             0.073396
-                                         
+
 jruby-marc4j-multistring (total) 1.063000
 jruby-marc-multistring (total)   1.487000
 mri-marc-multistring (total)     2.935842
@@ -99,7 +114,7 @@ mri-marc-multistring (total)     2.935842
 <pre><code>mri-marc-LibXML                  0.091332
 jruby-marc-REXML                 0.799500
 mri-marc-REXML                   0.948549
-                                         
+
 mri-marc-LibXML (total)          3.653276
 jruby-marc-REXML (total)        31.980000
 mri-marc-REXML (total)          37.941975
@@ -109,6 +124,37 @@ mri-marc-REXML (total)          37.941975
 
 <p>I’m not sure exactly where this leaves me, other than knowing that marc-xml is probably a viable alternative if you can use libxml. Getting a version of that code which uses native Java XML libraries when run under jruby  might be a useful exercise.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/09/more-marc-benchmars-adding-in-marc-xml/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -116,15 +162,15 @@ mri-marc-REXML (total)          37.941975
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -160,8 +206,7 @@ mri-marc-REXML (total)          37.941975
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

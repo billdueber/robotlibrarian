@@ -1,6 +1,8 @@
 ---
 title: "Simple Ruby gem for dealing with ISBN/ISSN/LCCN"
 date: 2010-09-13
+layout: post
+
 ---
 
 I needed some code to deal with ISBN10->ISBN13 conversion, so I put in a few other functions and wrapped it all up in a [gem called library_stdnums](http://rubygems.org/gems/library_stdnums).

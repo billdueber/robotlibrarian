@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Beta version of the HathiTrust Volumes API available</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <h2 id="span-stylecolor-redmajor-changespan"><span style="color: red">MAJOR CHANGE</span></h2>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Beta version of the HathiTrust Volumes API available</h1>
+    <p class="post-meta">Dec 15, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <h2 id="span-stylecolor-redmajor-changespan"><span style="color: red">MAJOR CHANGE</span></h2>
 
 <p>So, initially, this post listed that the way to separate multiple simultaneous requests was with a nice, URL-like slash (/) character.</p>
 
@@ -150,16 +165,16 @@ Return: a set of matched records and a sorted list of the items available in the
 
 <p>This is a request for data on two separate items, identified on the calling end as simply ‘1’ and ‘2’ (id:1 and id:2). The first item is searched for using both an oclc number and an lccn; the second supplies only an isbn.</p>
 
-<p>Note that </p>
+<p>Note that</p>
 
 <ul>
   <li>The output format (json) has moved to appear right after the ‘/volumes/’</li>
   <li>There’s an arbitrary ‘id’ field. This will be used to index the return values, so use something meaningful on your end.</li>
   <li>keys and values are separated by colons. Key-Value pairs are separated by semi-colons.</li>
   <li>Separate requests are separated by ‘/’ in the URL, allowing you to request data for an arbitrary number of items with a single call.</li>
-  <li>Return values are </li>
+  <li>Return values are</li>
   <li>Matches follow the “#3” option on <a href="http://robotlibrarian.billdueber.com/thinking-through-a-simple-api-for-hathitrust-item-metadata/">the old post</a>, the<br />
-   “Must match if present” option – basically, if you supply an identifier and a record has one of those identifiers, they must match. </li>
+   “Must match if present” option – basically, if you supply an identifier and a record has one of those identifiers, they must match.</li>
 </ul>
 
 <p>So, in the example, the first request has both an oclc number and an lccn. Matches are as follows:</p>
@@ -250,6 +265,37 @@ Return: a set of matched records and a sorted list of the items available in the
 
 <p><a href="http://catalog.hathitrust.org/api/volumes/json/id:1;oclc:45678;lccn:70628581\|id:2;isbn:1591581613&amp;callback=myfunc">http://catalog.hathitrust.org/api/volumes/json/id:1;oclc:45678;lccn:70628581|id:2;isbn:1591581613&amp;callback=myfunc</a></p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/12/beta-version-of-the-hathitrust-volumes-api-available/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -257,15 +303,15 @@ Return: a set of matched records and a sorted list of the items available in the
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -301,8 +347,7 @@ Return: a set of matched records and a sorted list of the items available in the
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

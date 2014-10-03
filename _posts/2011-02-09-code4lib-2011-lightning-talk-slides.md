@@ -1,6 +1,8 @@
 ---
 title: "[RETRACTED] Code4Lib 2011 Lightning Talk Slides"
 date: 2011-02-09
+layout: post
+
 ---
 
 <blockquote><strong>DANGER!</strong>

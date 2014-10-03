@@ -1,6 +1,8 @@
 ---
 title: "A plea: use Solr to normalize your data"
 date: 2009-03-30
+layout: post
+
 ---
 
 [Only, of course, if you're using Solr. Otherwise, that'd be dumb.]
@@ -21,11 +23,11 @@ If you're using a Solr nightly (and, really, you should be -- faceting is <em>so
    <!-- Simple type to normalize isbn/issn/other standard numbers -->
     <fieldType name="stdnum" class="solr.TextField" sortMissingLast="true" omitNorms="true" >
       <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/> 
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.TrimFilterFactory"/>
         <filter class="solr.PatternReplaceFilterFactory"
-             pattern="^0*([\d\-\.]+[xX]?).*$" replacement="$1" 
+             pattern="^0*([\d\-\.]+[xX]?).*$" replacement="$1"
         />
         <filter class="solr.PatternReplaceFilterFactory"
              pattern="[\-\.]" replacement=""  replace="all"
@@ -44,8 +46,8 @@ For those of you that don't read regexp, we then match anything that looks like:
 2. ...followed by any number of digits, dashes, or periods and an optional 'X'
 3. ...followed by...well, we don't care. Anything else.
 
-...and throw away all but the stuff in #2. Then take <em>that</em> and throw away all the dashes and dots, and you're left with a string of numbers. 
+...and throw away all but the stuff in #2. Then take <em>that</em> and throw away all the dashes and dots, and you're left with a string of numbers.
 
-The beauty is that it happens both while the index is being made <em>and</em> during query time, so if your user types in " 123-45-6-X  " it will be normalized to 123456x, and then checked against your index. 
+The beauty is that it happens both while the index is being made <em>and</em> during query time, so if your user types in " 123-45-6-X  " it will be normalized to 123456x, and then checked against your index.
 
 This is simple stuff, and probably doesn't deserve the virtual ink I'm providing for it, but Vufind out of the box doesn't do any of this sort of thing (likely because "the box" existed before it was super-easy to do this), and we all should be doing it.

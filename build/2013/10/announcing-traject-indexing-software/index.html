@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Announcing "traject" indexing software</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Over the next few days I’ll be writing a series of posts that highlight a new indexing solution by Jonathan Rochkind and myself called <code>traject</code> that we’re using to index MARC data into Solr. This is the introduction.]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Announcing "traject" indexing software</h1>
+    <p class="post-meta">Oct 14, 2013</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Over the next few days I’ll be writing a series of posts that highlight a new indexing solution by Jonathan Rochkind and myself called <code>traject</code> that we’re using to index MARC data into Solr. This is the introduction.]</p>
 
 <p>Wow. Six months since I posted here. What have I been doing?</p>
 
@@ -95,11 +110,11 @@ to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color
 <span style="color:#777"># Now the other data</span>
 to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">title</span><span style="color:#710">&quot;</span></span>, extract_marc(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">245</span><span style="color:#710">'</span></span>)
 to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">author</span><span style="color:#710">&quot;</span></span>, extract_marc(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">100abcd:110abcd:111abc</span><span style="color:#710">'</span></span>)
-  
 
-<span style="color:#777"># You'd run this as: </span>
+
+<span style="color:#777"># You'd run this as:</span>
 <span style="color:#777">#    traject -c sample.rb myfile.mrc</span>
-  
+
 
 </pre></div>
 </div>
@@ -109,7 +124,7 @@ to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color
 
 <h3 id="why-use-or-move-to-traject">Why use (or move to) traject?</h3>
 
-<p>First off, you can and should look at <a href="http://bibwild.wordpress.com/2013/10/14/traject-marc-solr-indexer-release/">the annoucement</a> and/or <a href="https://github.com/traject-project/traject/">the README</a> for a longer answer, but I’ll tell you why <em>I</em> use <code>traject</code> in one word: </p>
+<p>First off, you can and should look at <a href="http://bibwild.wordpress.com/2013/10/14/traject-marc-solr-indexer-release/">the annoucement</a> and/or <a href="https://github.com/traject-project/traject/">the README</a> for a longer answer, but I’ll tell you why <em>I</em> use <code>traject</code> in one word:</p>
 
 <p>Flexibility.</p>
 
@@ -129,12 +144,43 @@ to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color
 
 <p><strong>Transforming Macros</strong>: A traject indexing step is just a well-formed ruby block (or lambda), which makes writing macros ridiculously easy. Traject ships with most of what you’d commonly need to deal with MARC: extracting data based on tag/subfield/indicators (or substring of a fixed field), dealing with non-filing characters, automatically dealing with 880 linked fields. Mucking with publication dates. Dealing with languages, formats, etc. And, of course, doing it all with multiple threads, because who wants to see all those lovely cores go to waste?</p>
 
-<p><strong>Writers</strong>: Of course, you can write to solr, using the excellent <code>solrj</code> java library. And you can do it in multiple threads, to keep things fast. But there’s also the <code>DebugWriter</code> to spit stuff out in a human-readable format, and the <code>JsonWriter</code> mentioned above to spit stuff out in a <em>machine</em>-readable format. And building your own writer is literally just a couple methods. </p>
+<p><strong>Writers</strong>: Of course, you can write to solr, using the excellent <code>solrj</code> java library. And you can do it in multiple threads, to keep things fast. But there’s also the <code>DebugWriter</code> to spit stuff out in a human-readable format, and the <code>JsonWriter</code> mentioned above to spit stuff out in a <em>machine</em>-readable format. And building your own writer is literally just a couple methods.</p>
 
 <h3 id="how-do-i-get-a-taste">How do I get a taste?</h3>
 
 <p>Like I said, clone and play with <a href="https://github.com/traject-project/traject_sample">the sample project</a>. And ask me questions, either here or via email. After years of being the only person running my indexing software, I’m anxious to try to build up a community around <code>traject</code>.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2013
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2013/10/announcing-traject-indexing-software/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -142,15 +188,15 @@ to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -186,8 +232,7 @@ to_field <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

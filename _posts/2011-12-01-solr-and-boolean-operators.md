@@ -1,6 +1,8 @@
 ---
 title: "Solr and boolean operators"
 date: 2011-12-01
+layout: post
+
 ---
 
 [Summary: **ALWAYS ALWAYS ALWAYS USE PARENTHESES TO GROUP BOOLEANS IN SOLR!!!**]
@@ -14,7 +16,7 @@ What does Solr do, given the following query?
 
 
 I'll give you three guesses, but you'll get the first two wrong
-and won't have any idea how to generate a third, so don't spend too much time on it. 
+and won't have any idea how to generate a third, so don't spend too much time on it.
 
 ### Boolean algebra and operator precedence
 
@@ -64,51 +66,51 @@ Hopefully, they don't know any boolean algebra. If they do, hopefully they use p
 
 ### It gets weirder
 
-I populated a fresh solr (3.5) index with all possible subsets of the strings "curly", "larry", "moe", and "shemp" (not Joe. Don't talk to me about Joe). There are 15 of them, from the one-item 'curly' to all four at once. 
+I populated a fresh solr (3.5) index with all possible subsets of the strings "curly", "larry", "moe", and "shemp" (not Joe. Don't talk to me about Joe). There are 15 of them, from the one-item 'curly' to all four at once.
 
 I wrote a script to run a set of queries against the index under both lucene and edismax to see what I would get. In all cases the default lucene operator is 'AND' and the edismax mm parameter is set to 100% (equivalent to "all required").
 
 
 ~~~
 
-        Lucene                    EDismax                  
+        Lucene                    EDismax
   -------------------------------------------------------
-  
+
   1. curly AND larry
-        curly larry               curly larry              
-        curly larry moe           curly larry moe          
-        curly larry shemp         curly larry shemp        
-        curly larry moe shemp     curly larry moe shemp    
+        curly larry               curly larry
+        curly larry moe           curly larry moe
+        curly larry shemp         curly larry shemp
+        curly larry moe shemp     curly larry moe shemp
 
   2. curly AND larry OR moe
-        curly                     curly larry              
-        curly larry               curly larry moe          
-        curly moe                 curly larry shemp        
-        curly shemp               curly larry moe shemp    
-        curly larry moe                                    
-        curly larry shemp                                  
-        curly moe shemp                                    
-        curly larry moe shemp                              
+        curly                     curly larry
+        curly larry               curly larry moe
+        curly moe                 curly larry shemp
+        curly shemp               curly larry moe shemp
+        curly larry moe
+        curly larry shemp
+        curly moe shemp
+        curly larry moe shemp
 
   3. curly OR larry AND moe
-        larry moe                 larry moe                
-        curly larry moe           curly larry moe          
-        larry moe shemp           larry moe shemp          
-        curly larry moe shemp     curly larry moe shemp    
+        larry moe                 larry moe
+        curly larry moe           curly larry moe
+        larry moe shemp           larry moe shemp
+        curly larry moe shemp     curly larry moe shemp
 
   4. curly AND larry OR moe AND shemp
-        curly moe shemp           curly larry moe shemp    
-        curly larry moe shemp                              
+        curly moe shemp           curly larry moe shemp
+        curly larry moe shemp
 
   5. moe AND shemp OR curly AND larry
-        curly larry moe           curly larry moe shemp    
+        curly larry moe           curly larry moe shemp
         curly larry moe shemp
-        
+
 
 ~~~~
 
 
-Query 1 is as expected. Query 2 apparently reduces to just 'curly' under the lucene parser and 'curly AND larry' under edismax (and query 3 similarly reduces to the two AND'd words). Queries 4 and 5 are...well, you can look at the debugQuery output to see what it gets, but not **why**. And then tell me how to explain it to a user. 
+Query 1 is as expected. Query 2 apparently reduces to just 'curly' under the lucene parser and 'curly AND larry' under edismax (and query 3 similarly reduces to the two AND'd words). Queries 4 and 5 are...well, you can look at the debugQuery output to see what it gets, but not **why**. And then tell me how to explain it to a user.
 
 ### Where does this leave us?
 

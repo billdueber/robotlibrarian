@@ -1,6 +1,8 @@
 ---
 title: "Does anyone use those prev/next/back-to-search links?"
 date: 2010-11-03
+layout: post
+
 ---
 
 There's a common problem among developers of websites that paginate, including OPACs: how do you provide a single item view that can have links that go back to the search (or to the prev/next item) without making your URLs look ugly?

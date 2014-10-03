@@ -1,6 +1,8 @@
 ---
 title: "MARC-HASH control field, now with less structure"
 date: 2009-04-15
+layout: post
+
 ---
 
 Why do I ever, ever think that MARC might not rely on order? I don't know.

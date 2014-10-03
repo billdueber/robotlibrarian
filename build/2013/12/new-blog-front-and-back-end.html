@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>New blog front- and back-end</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,19 +61,59 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>A while back, <a href="http://dreamhost.com/">Dreamhost</a> had some problems and my blog and assorted other websites I help keep track of went down.</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">New blog front- and back-end</h1>
+    <p class="post-meta">Dec 17, 2013</p>
+  </header>
+
+  <article class="post-content">
+    <p>A while back, <a href="http://dreamhost.com/">Dreamhost</a> had some problems and my blog and assorted other websites I help keep track of went down.</p>
 
 <p>For more than two weeks.</p>
 
-<p>Now, I understand that crap happens. And I understand that sometimes lots of things happen at once. But fundamentally, their infrastructure is such that they could lose everything on a machine and be unable to get it back for more than two weeks. I’m not a mathematician, but that’s not “five-nine” service. </p>
+<p>Now, I understand that crap happens. And I understand that sometimes lots of things happen at once. But fundamentally, their infrastructure is such that they could lose everything on a machine and be unable to get it back for more than two weeks. I’m not a mathematician, but that’s not “five-nine” service.</p>
 
 <p>So, I decided to start hunting around for another provider. And then I got distracted by the idea that maybe having my blog in <a href="http://wordpress.org">Wordpress</a> was more trouble than it was worth. There’s something to be said for simplicity, especially since all I really wanted to do is throw up posts written in markdown with code samples.</p>
 
-<p>I got a few pointers toward using <a href="http://middlemanapp.com/">middleman</a>, a pre-processor that takes in almost anything and produces regular css/html. Between that and <a href="http://disqus.com/">Disqus</a> for the comments, well, this just seems easier. And now that I’ve put in the effort, it’ll be easier to actually get blog posts up, most importantly, move it over when I find a new hosting provider. </p>
+<p>I got a few pointers toward using <a href="http://middlemanapp.com/">middleman</a>, a pre-processor that takes in almost anything and produces regular css/html. Between that and <a href="http://disqus.com/">Disqus</a> for the comments, well, this just seems easier. And now that I’ve put in the effort, it’ll be easier to actually get blog posts up, most importantly, move it over when I find a new hosting provider.</p>
 
-<p>Feel free to tell me how ugly it is and suggest improvements. I have the design skills of a one-eyed poodle. </p>
+<p>Feel free to tell me how ugly it is and suggest improvements. I have the design skills of a one-eyed poodle.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2013
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end.html/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -75,15 +121,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -119,8 +165,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

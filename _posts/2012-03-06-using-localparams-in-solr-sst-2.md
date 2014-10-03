@@ -2,6 +2,8 @@
 title: "Using localparams in Solr (or, how to boost records that contain all terms) (SST #2)"
 date: 2012-03-06
 tags: "solr, Stupid Solr Tricks"
+layout: post
+
 ---
 
 [Note: this isn't so much a _Stupid Solr Trick_ as a _Thing You Should Probably Know_; consider it required reading for the next SST. If you're just joining us, check out the [introduction to the Stupid Solr Tricks series](http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/)]
@@ -92,10 +94,10 @@ To accomplish this, we're going to have two localparams queries: one to be the m
   'bq1'=>'_query_:"{!dismax qf=$f1 mm=\'100%\' v=$q1 }"^5',
   'fl' =>; 'score,*'
   }
-    
-    
+
+
 ~~~
-    
+
 What's nice about this is that I'm reusing the search terms (for the main query and the boost query) and field list (for the query field and the phrase fields) so I don't have to repeat them.
 
 ### Try along at home
@@ -122,12 +124,10 @@ We'll want to empty out the index and put in some documents to work with. I'm pr
 
 You might want to take a look at the `localparams.json` file, which contains a set of documents in the new JSON update structure. The [full Solr JSON Update structure](http://wiki.apache.org/solr/UpdateJSON) allows repeated keys. Apparently, so does the [JSON RFC](http://www.ietf.org/rfc/rfc4627):
 
-> 2.2. Objects
-> An object structure is represented as a pair of curly brackets
-> surrounding zero or more name/value pairs (or members). A name is a
-> string. A single colon comes after each name, separating the name
-> from the value. A single comma separates a value from a following
-> name. **The names within an object SHOULD be unique.** _(emphasis mine)_
+
+>2.2. Objects
+
+>An object structure is represented as a pair of curly brackets surrounding zero or more name/value pairs (or members). A name is a string. A single colon comes after each name, separating the name from the value. A single comma separates a value from a following name. **The names within an object SHOULD be unique.** _(emphasis mine)_
 
 "SHOULD". Not "MUST". I don't care if it's legal. It still weirds me out.
 
@@ -148,7 +148,7 @@ The Solr configuration file `solrconfig.xml` is where you can configure custom s
 But we can use it to put in our special query defaults that boosts when a document contains all the terms:
 
 ~~~xml
-  
+
 
       10
       *,score
@@ -225,7 +225,7 @@ The Solr configuration file `solrconfig.xml` is where you can configure custom s
 But we can use it to put in our special query defaults that boosts when a document contains all the terms:
 
 ~~~xml
-  
+
 
       10
       *,score
@@ -304,7 +304,7 @@ The Solr configuration file `solrconfig.xml` is where you can configure custom s
 But we can use it to put in our special query defaults that boosts when a document contains all the terms:
 
 ~~~xml
-  
+
 
       10
       *,score

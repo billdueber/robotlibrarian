@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Dead-easy (but extreme) AJAX logging in our VuFind install</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,16 +61,25 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>One of the advantages of having complete control over the OPAC is that I change things pretty easily. The downside of that is that we need to know <em>what</em> to change. </p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
 
-<p>Many of you that work in libraries may have noticed that data are not necessarily the primary tool in decision-making. Or, say, even a part of the process. Or even thought about hard. Or even considered. </p>
+  <header class="post-header">
+    <h1 class="post-title">Dead-easy (but extreme) AJAX logging in our VuFind install</h1>
+    <p class="post-meta">Sep 25, 2009</p>
+  </header>
 
-<p>For many decisions I see going on in the library world, the primary motivator is the <em>anecdote</em>. In fact, to be honest, the primary driver is the <em>faculty anecdote</em>. Those cliched three curmudgeonly old faculty members invariably have huge influence over systems and interfaces that will be used by 40K undergraduates. The tiny percentage of weirdos that actually talk to reference librarians end up wielding enormous power compared to the untold masses that don’t. </p>
+  <article class="post-content">
+    <p>One of the advantages of having complete control over the OPAC is that I change things pretty easily. The downside of that is that we need to know <em>what</em> to change.</p>
+
+<p>Many of you that work in libraries may have noticed that data are not necessarily the primary tool in decision-making. Or, say, even a part of the process. Or even thought about hard. Or even considered.</p>
+
+<p>For many decisions I see going on in the library world, the primary motivator is the <em>anecdote</em>. In fact, to be honest, the primary driver is the <em>faculty anecdote</em>. Those cliched three curmudgeonly old faculty members invariably have huge influence over systems and interfaces that will be used by 40K undergraduates. The tiny percentage of weirdos that actually talk to reference librarians end up wielding enormous power compared to the untold masses that don’t.</p>
 
 <h3 id="enter-the-dragonerlog">Enter the dragon…er…log.</h3>
 
-<p>So…I’m logging everything. EVERYTHING. Everything I can think of, anyway, and that doesn’t slow things down too far. </p>
+<p>So…I’m logging everything. EVERYTHING. Everything I can think of, anyway, and that doesn’t slow things down too far.</p>
 
 <p>I’ve got a simple database table set up with the following columns:</p>
 
@@ -119,7 +134,7 @@
   <li>Stuff it into the database with appropriate timestamps.</li>
 </ol>
 
-<p>And that’s it. </p>
+<p>And that’s it.</p>
 
 <h3 id="whats-the-client-need-to-do">What’s the client need to do?</h3>
 
@@ -132,21 +147,21 @@
   <li>I must must must have pretty, bookmarkable URLs.</li>
 </ol>
 
-<p>Truth be told, some of the “client” stuff can be (and is) done on the server. When someone is, say, sending a record or set of records to RefWorks, the server knows everything it needs to know and I can just take care of logging as part of the regular request fulfillment. </p>
+<p>Truth be told, some of the “client” stuff can be (and is) done on the server. When someone is, say, sending a record or set of records to RefWorks, the server knows everything it needs to know and I can just take care of logging as part of the regular request fulfillment.</p>
 
 <p>But some stuff – like the search result number, say – are best taken care of from the browser. Easy enough, for the most part, esp. with form submissions and such.</p>
 
-<p>The potentially-non-obvious part comes in with rule #3 – I want pretty URLs. That means that the full display of record 123456789 is always going to be at <code>/Record/123456789</code> no matter what the user clicked on. Ditto with adding/removing facets and such – the URL contains the resulting search, not the resulting search <em>plus which facet was removed or added</em>. </p>
+<p>The potentially-non-obvious part comes in with rule #3 – I want pretty URLs. That means that the full display of record 123456789 is always going to be at <code>/Record/123456789</code> no matter what the user clicked on. Ditto with adding/removing facets and such – the URL contains the resulting search, not the resulting search <em>plus which facet was removed or added</em>.</p>
 
-<p>But – see #1 – I want to log damn near everything. </p>
+<p>But – see #1 – I want to log damn near everything.</p>
 
 <p>My solution – and I know lots of people are doing this; this isn’t rocket science – is to fire off an AJAX post for the click events that I’m interested in, sending log data off to my server and then <em>not waiting for a return</em>. Just send the data and follow the link as if nothing had intervened. It degrades gracefully (although the rest of my VuFind doesn’t, so that doesn’t matter much) and it dead-easy to implement.  </p>
 
 <h3 id="the-actual-javascript-implementation">The actual javascript implementation</h3>
 
-<p>I long ago switched our VuFind stuff over to use jQueryuery, just because I like it and know it. </p>
+<p>I long ago switched our VuFind stuff over to use jQueryuery, just because I like it and know it.</p>
 
-<p>First thing is to use the templates to modify the links to have a particular class (<code>logit</code>) and a well-structured <em>ref</em> (pipe-delimited values). </p>
+<p>First thing is to use the templates to modify the links to have a particular class (<code>logit</code>) and a well-structured <em>ref</em> (pipe-delimited values).</p>
 
 <p>So, a link from the title of a work on the search-results page to the individual record will look like this:</p>
 
@@ -159,16 +174,16 @@
 
 <div><div class="CodeRay">
   <div class="code"><pre>
-  
-  
+
+
   <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">logit</span>(a, args) {
     a = jQuery(a);
-    
+
     <span style="color:#777">// Allow the caller to pass in args, or get them from the ref attribute</span>
     <span style="color:#080;font-weight:bold">if</span> (!args) {
       args = a.attr(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">ref</span><span style="color:#710">'</span></span>).split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">|</span><span style="color:#710">'</span></span>);
     }
-    
+
     jQuery.post(
       url_to_the_logging_method,
       {
@@ -190,20 +205,51 @@
 </div>
 </div>
 
-<p>The <code>logit</code> function just does a brain-dead post of the data in the <em>ref</em> attribute. We then bind that function to all anchors with the appropriate class, and we’re done. </p>
+<p>The <code>logit</code> function just does a brain-dead post of the data in the <em>ref</em> attribute. We then bind that function to all anchors with the appropriate class, and we’re done.</p>
 
 <p>[Note the use of the jQuery <code>live</code> event – this makes sure the event will be bound to stuff that comes in via AJAX after page load. Our links to Google Books, for example, come in like this.]</p>
 
-<p>Since I’m not returning <code>false</code> from the logit function, the default action (actually follow the link) will fire – without even waiting for the AJAX call to come back. Delay to the user is, hopefully, unnoticeable. </p>
+<p>Since I’m not returning <code>false</code> from the logit function, the default action (actually follow the link) will fire – without even waiting for the AJAX call to come back. Delay to the user is, hopefully, unnoticeable.</p>
 
 <h3 id="final-words">Final words</h3>
 
-<p>This isn’t all that smart. I should be doing more data-integrity stuff than I am, and of course someone could spoof my numbers if they wanted. But someone could spoof my stats just by hitting my normal catalog pages programatically, too, so there’s no more risk involved, and I <em>do</em> log IPs. </p>
+<p>This isn’t all that smart. I should be doing more data-integrity stuff than I am, and of course someone could spoof my numbers if they wanted. But someone could spoof my stats just by hitting my normal catalog pages programatically, too, so there’s no more risk involved, and I <em>do</em> log IPs.</p>
 
-<p>And, of course, I get my pretty URLs, and most users (i.e., those not running firebug) will never notice anything. </p>
+<p>And, of course, I get my pretty URLs, and most users (i.e., those not running firebug) will never notice anything.</p>
 
 <p>I don’t know that this would work for everyone, but so far it’s working pretty well for us. I’ll let you know if that continues in a post in a few weeks.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/09/dead-easy-but-extreme-ajax-logging-in-our-vufind-install/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -211,15 +257,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -255,8 +301,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

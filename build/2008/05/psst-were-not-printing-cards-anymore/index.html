@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Psst. We're not printing cards anymore</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,10 +61,19 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[From a series I’m calling, “Things About The Library I Think Are Stoooopid”, part one of about a zillion.]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
 
-<p>I’m going to wallow in a little bit of hyperbole here, but only a little. </p>
+  <header class="post-header">
+    <h1 class="post-title">Psst. We're not printing cards anymore</h1>
+    <p class="post-meta">May 12, 2008</p>
+  </header>
+
+  <article class="post-content">
+    <p>[From a series I’m calling, “Things About The Library I Think Are Stoooopid”, part one of about a zillion.]</p>
+
+<p>I’m going to wallow in a little bit of hyperbole here, but only a little.</p>
 
 <h3 id="the-problem">The problem</h3>
 
@@ -87,7 +102,7 @@
   <li>Email address (email)</li>
 </ul>
 
-<p>Okeedokee. That looks ok so far, but we’ve got problems. </p>
+<p>Okeedokee. That looks ok so far, but we’ve got problems.</p>
 
 <p>First off, everyone knows that committee names change. And, everyone also knows that last names can change, preferred first names can change. email addresses change, etc. We need some sort of unique identifier to represent the <em>abstract ideal</em> of a particular committee or a specific individual. Let’s be lazy and just throw in an integer ID that we’ll be careful not to reuse, ever, for any reason.</p>
 
@@ -171,7 +186,7 @@
 
 <p>But anyone who, in the 21st century, approaches the large-scale creation of data without <strong>first and foremost</strong> worrying about machine-parsability, consistent data types with machine-checkable syntax (and even some semantics) and one-to-one mappings between unique objects (an author, an editor, a publishing house, a work) and something that uniquely identifies that object in any reification is….well, I don’t know what they’re smoking.</p>
 
-<p>We’re not printing cards anymore, people. </p>
+<p>We’re not printing cards anymore, people.</p>
 
 <ul>
   <li>If something is only understandable if a human is reading it, it’s not understandable by any modern definition.</li>
@@ -183,6 +198,37 @@
 
 <p>OK. Rant off.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2008
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2008/05/psst-were-not-printing-cards-anymore/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -190,15 +236,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -234,8 +280,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

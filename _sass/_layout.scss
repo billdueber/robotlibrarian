@@ -156,6 +156,29 @@
     }
 }
 
+/**
+ * Two-column layout
+ */
+
+$content_cols: 9;
+$sidebar_cols: 12 - $content_cols;
+
+.wrapper     {
+      @include outer-container;
+
+}
+#main {
+    @include span_columns($content_cols);
+}
+
+#sidebar {
+  @include span_columns($sidebar_cols);
+  margin-top: 3em;
+}
+
+.site-footer {
+  @include span_columns(12);
+}
 
 
 /**

@@ -8,7 +8,9 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
-    <title>Yet Another Lc Callnumber Parser.html</title>
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Help me test yet another LC Callnumber parser</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
 
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,22 +61,61 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>Those who have followed this blog and my code for a while know that I have a <a href="http://robotlibrarian.billdueber.com/normalizing-loc-call-numbers-for-sorting/">long</a>, slightly <a href="http://robotlibrarian.billdueber.com/enough-with-the-freakin-lc-call-number-normalization/">sad</a>, and borderline <a href="https://github.com/billdueber/lib.umich.edu-solr-stuff">abusive</a> relationship with Library of Congress call numbers. </p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Help me test yet another LC Callnumber parser</h1>
+    <p class="post-meta">Jan 30, 2014</p>
+  </header>
+
+  <article class="post-content">
+    <p>Those who have followed this blog and my code for a while know that I have a <a href="http://robotlibrarian.billdueber.com/normalizing-loc-call-numbers-for-sorting/">long</a>, slightly <a href="http://robotlibrarian.billdueber.com/enough-with-the-freakin-lc-call-number-normalization/">sad</a>, and borderline <a href="https://github.com/billdueber/lib.umich.edu-solr-stuff">abusive</a> relationship with Library of Congress call numbers.</p>
 
 <p>They’re a freakin’ nightmare. They just are.</p>
 
 <p>But, based on the premise that Sisyphus was a quitter, I took another stab at it, this time writing a real (PEG-) parser instead of trying to futz with extended regular expressions.</p>
 
-<p>The results, so far, aren’t too bad. </p>
+<p>The results, so far, aren’t too bad.</p>
 
 <p>The gem is called <a href="https://github.com/billdueber/lc_callnumber">lc_callnumber</a>, but more importantly, I’ve put together a little heroku app to let you play with it, and then correct any incorrect parses (or tell me that it worked correctly) to build up a test suite.</p>
 
-<p>So…<a href="https://lccparser.herokuapp.com/">Please try to break my LC Callnumber parser</a>! </p>
+<p>So…<a href="https://lccparser.herokuapp.com/">Please try to break my LC Callnumber parser</a>!</p>
 
 <p>[Code for the app itself is <a href="https://github.com/billdueber/lccparser">on github</a>; pull requests for both the app and the gem joyously received]</p>
 
+  </article>
 
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2014
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2014/01/yet-another-lc-callnumber-parser.html/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -78,15 +123,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -122,8 +167,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

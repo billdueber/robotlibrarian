@@ -1,6 +1,8 @@
 ---
 title: "Corrected Code4Lib slides are up"
 date: 2011-02-15
+layout: post
+
 ---
 
 ...at <a href="http://robotlibrarian.billdueber.com/wp-content/uploads/2011/02/dueber_lightning_c4l11.ppt">the same URL</a>.

@@ -2,6 +2,8 @@
 title: "Requiring/Preferring searches that don't span multiple values (SST #3)"
 date: 2012-03-09
 tags: "phrase slop, solr, Stupid Solr Tricks"
+layout: post
+
 ---
 
 > Check out [introduction to the Stupid Solr Tricks series](http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/) if you're just joining us.]
@@ -12,9 +14,9 @@ Here's another thing you need to understand about Solr: it doesn't really have f
 
 "But Bill," you're saying, "sure it does. I mean, hell, it even has a 'multiValued' parameter."
 
-First off: watch your language. 
+First off: watch your language.
 
-Second off: are you *sure*? 
+Second off: are you *sure*?
 
 Let's do a quick test. Look at the following documents
 
@@ -25,7 +27,7 @@ exampledocs/names.json
   {
     "id": "1",
     "title": "The Monkees",
-    "name_text": ["Peter Tork", "Mike Nesmith", 
+    "name_text": ["Peter Tork", "Mike Nesmith",
                   "Micky Dolenz", "Davy Thomas Jones"]
   },
   {
@@ -47,7 +49,7 @@ ruby/names_query.rb
   'defType' => 'dismax',
   'wt' => 'csv',
   'qf' => 'name_text',
-  'q' => 'davy jones'   # Poor guy just died. So young. So short. 
+  'q' => 'davy jones'   # Poor guy just died. So young. So short.
 }
 
 ~~~
@@ -99,11 +101,11 @@ In this case, while both document have both query terms, the field in the second
 
 Solr doesn't automatically give more weight to the recently-dead Monkee because internally it doesn't care that you're thinking of those values as four separate names. It just concatenates them together and indexes them.
 
-This is **not**, for most people, expected behavior. 
+This is **not**, for most people, expected behavior.
 
 ### Phrase slop
 
-Part of what's going on here is that we haven't told Solr that it should care how close together the terms are. 
+Part of what's going on here is that we haven't told Solr that it should care how close together the terms are.
 
 One way to do that is to use a phrase query by throwing quotes around the terms
 
@@ -114,7 +116,7 @@ Put double-quotes around it to make it a phrase query
 
 ~~~
 
-...but that won't find anything, because _Davy_ and _Jones_ aren't right next to each other in our document. 
+...but that won't find anything, because _Davy_ and _Jones_ aren't right next to each other in our document.
 
 Solr does allow a phrase query to be "sloppy", though -- basically saying that instead of being right next to each other, the terms need to be within a certain number of tokens of each other.
 
@@ -148,11 +150,11 @@ That gets us something more expected.
 
 ### Enter `positionIncrementGap`
 
-OK. Now that we have the concept of "slop", one of those mystery `fieldtype` parameters makes sense: `positionIncrementGap`. Basically, a `positionIncrementGap` of 1000 means _When computing slop, pretend there are 1000 tokens between the entries in a multValued field_. 
+OK. Now that we have the concept of "slop", one of those mystery `fieldtype` parameters makes sense: `positionIncrementGap`. Basically, a `positionIncrementGap` of 1000 means _When computing slop, pretend there are 1000 tokens between the entries in a multValued field_.
 
 A sloppy phrase search, then, will only find (and thus boost) the phrase if (a) the tokens are in the same entry for a multiValued field, and (b) your slop value is less than your `positionIncrementGap`.
 
-All you have to do is use the `pf` and `ps` parameters and you're set. 
+All you have to do is use the `pf` and `ps` parameters and you're set.
 
 Note that this should be telling you two things:
 
@@ -167,7 +169,7 @@ Slop is great when you want it. But I don't always want to use slop. Slop of 4 m
 
 [_Forshadowing_: We'll talk about exact-ish matches in a few days.]
 
-OK, so we can't just appropriate the `pf`/`ps` parameters and and push the slop value up all the time -- that cripples our ability to create the query boost structure we want. 
+OK, so we can't just appropriate the `pf`/`ps` parameters and and push the slop value up all the time -- that cripples our ability to create the query boost structure we want.
 
 ### Query slop
 
@@ -214,17 +216,17 @@ We're going to extend our `edismaxplus` requestHandler from [last time](http://r
     <str name="fl">*,score</str>
     <str name="echoParams">explicit</str>
     <str name="q">
-      _query_:"{!edismax qf=$fields mm=$mymm 
+      _query_:"{!edismax qf=$fields mm=$mymm
                           v=$qwords bq=$boostForAll}"</str>
     <str name='mymm'>0%</str>
     <str name="qwordsphrase">"JunkThatWillNEverShowUpInAMillionFreakinYears"</str>
     <str name='boostForAll'>
-      _query_:"{!edismax qf=$fields 
-                         mm='100%' 
+      _query_:"{!edismax qf=$fields
+                         mm='100%'
                          v=$qwords }"^5 OR
-      _query_:"{!dismax  qf=$fields 
-                         mm='100%' 
-                         v=$qwordsphrase 
+      _query_:"{!dismax  qf=$fields
+                         mm='100%'
+                         v=$qwordsphrase
                          qs='999'}"^5
     </str>
   </lst>
@@ -235,9 +237,9 @@ We're going to extend our `edismaxplus` requestHandler from [last time](http://r
 We now do a few new things:
 
 * (_Line 15_) Add a second clause to the boost query that use the same fields provided for the regular query (note the boolean OR between the two localparams queries that comprise this boost query)
-* (_Line 17_) Ask for another user-provided value: `qwordsphrase` which your application-level stuff should set to the set of all the regular query ters, but as a single phrase. Basically, strip out all the double-quotes, then put the whole thing in double quotes. In ruby: `qwordsphrase = '"' + qwords.gsub(/"/, '"') + '"'` 
+* (_Line 17_) Ask for another user-provided value: `qwordsphrase` which your application-level stuff should set to the set of all the regular query ters, but as a single phrase. Basically, strip out all the double-quotes, then put the whole thing in double quotes. In ruby: `qwordsphrase = '"' + qwords.gsub(/"/, '"') + '"'`
 * (_Line 10_) Provide a default value for the new `qwordsphrase` that won't ever show up in a real query (empty string won't work; I tried it and it throws an error). So, if the application doesn't provide `qwordsphrase`, no harm is done -- the search regresses to what we had last time.
-* (_Line 18_) Use a `qs` (query slop) of 999 in the new boost clause acting against `qwordsphrase`. That value is one less than the `positionIncrementGap` of 1000, making sure that we don't cross multiValue boundaries. 
+* (_Line 18_) Use a `qs` (query slop) of 999 in the new boost clause acting against `qwordsphrase`. That value is one less than the `positionIncrementGap` of 1000, making sure that we don't cross multiValue boundaries.
 
 **Note**: If you wanted to, you could make this a filter query (`fq`) instead of a boost query to _only_ allow documents that meet this criterion.
 
@@ -259,9 +261,9 @@ The Monkees are again on top! Party like it's 1967!
 
 ### Where it breaks down
 
-If you actually have a phrase as one of your query terms, it will no longer be treated as a phrase during the boost because we're getting rid of all the double-quotes. 
+If you actually have a phrase as one of your query terms, it will no longer be treated as a phrase during the boost because we're getting rid of all the double-quotes.
 
-And, of course, if you've got gobs of full-text and include your fulltext field, setting  query slop to 999 isn't just a cute trick, it's a cute trick that will melt your servers to slag and still not do what you want it to do. 
+And, of course, if you've got gobs of full-text and include your fulltext field, setting  query slop to 999 isn't just a cute trick, it's a cute trick that will melt your servers to slag and still not do what you want it to do.
 
 ### What have we learned?
 

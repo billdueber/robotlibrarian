@@ -10,6 +10,7 @@ github_username:  billdueber
 
 
 permalink: /:year/:month/:title/
+excerpt_separator: "||||||||"
 defaults:
   -
     scope:

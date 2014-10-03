@@ -1,11 +1,13 @@
 ---
 title: "Building a solr text filter for normalizing data"
 date: 2009-08-20
+layout: post
+
 ---
 
 [Kind of part of a continuing series on our VUFind implementation; more of a sidebar, really.]
 
-In my [last post](http://robotlibrarian.billdueber.com/easy-solr-types-for-library-data/) I made the case that you should put as much data normalization into Solr as possible. The built-in text filters will get you a long, long way, but sometimes you want to have specialized code, and then you need to build your own filter. 
+In my [last post](http://robotlibrarian.billdueber.com/easy-solr-types-for-library-data/) I made the case that you should put as much data normalization into Solr as possible. The built-in text filters will get you a long, long way, but sometimes you want to have specialized code, and then you need to build your own filter.
 
 **Huge Disclaimer**: _I'm putting this up not because I'm the best person to do so, but because it doesn't look as if anyone else has. I don't know what I'm doing. I don't know why the code I'm showing below is the way it is, and if anyone would like to make it better, that'd be great. This is basically just a lot of pattern-matching on my part._
 
@@ -18,8 +20,8 @@ Last time, I said I didn't know why I hadn't put together an ISBN longifier yet.
 This is a lot easier than most things in that I'm assuming we're going to be getting exactly one token
 to work with (via the _KeywordTokenizer_) and can just work on it with impunity.
 
-If you'd like to follow along, get the [solr source via svn](http://svn.apache.org/repos/asf/lucene/solr/trunk) on a machine 
-with java and ant. And junit, I think. 
+If you'd like to follow along, get the [solr source via svn](http://svn.apache.org/repos/asf/lucene/solr/trunk) on a machine
+with java and ant. And junit, I think.
 
 ##Where to put stuff
 
@@ -36,8 +38,8 @@ For the record, the directory in solr/config/umichnormalizers (where I put this 
 
 ~~~
 
-./target/ 
-./build.xml    
+./target/
+./build.xml
 
 ./src/main/java/edu/umich/lib/normalizers/ISBNLongifier.java
 ./src/test/java/edu/umich/lib/normalizers/ISBNLongifier.java
@@ -70,7 +72,7 @@ public class ISBNLongifier {
 
   // dashes and dots are acceptable delimiters. Should we add spaces??
   private static String  ISBNDelimiiterPattern = "[\-\.]";
-  
+
   // Look for a string of nine digits followed by another digit or an X
   private static Pattern ISBNPattern = Pattern.compile("^.*?(\d{9})[\dXx].*$");
 
@@ -140,7 +142,7 @@ public class ISBNLongifierFilterFactory extends BaseTokenFilterFactory {
     return new ISBNLongifierFilter(input);
   }
 }
-  
+
 
 ~~~
 
@@ -185,7 +187,7 @@ public final class ISBNLongifierFilter extends org.apache.lucene.analysis.TokenF
       t.setTermBuffer(ISBNLongifier.longify(val));
       return t;
     } catch (IllegalArgumentException e) {
-       // pass it through unchanged 
+       // pass it through unchanged
       return t;
     }
   }
@@ -202,13 +204,13 @@ Assuming you've managed to get it built into Solr and then deployed, just define
 
   <fieldType name="isbnlongifier" class="solr.TextField"  omitNorms="true">
     <analyzer>
-      <tokenizer class="solr.KeywordTokenizerFactory"/> 
-      <filter class="edu.umich.lib.solr.analysis.ISBNLongifierFilterFactory"/> 
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="edu.umich.lib.solr.analysis.ISBNLongifierFilterFactory"/>
     </analyzer>
   </fieldType>
-  
+
   # and later...
-  
+
   <field name="isbn" type="isbnlongifier" indexed="true" stored="false" multiValued="true"/>
 
 ~~~

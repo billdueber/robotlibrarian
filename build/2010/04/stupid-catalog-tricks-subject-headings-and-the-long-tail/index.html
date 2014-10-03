@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Stupid catalog tricks: Subject Headings and the Long Tail</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,18 +61,27 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>Library of Congress Subject Headings (LCSH) in particular.</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
 
-<p>I’ve always been down on LCSH because I don’t understand them. They kinda look like a hierarchy, but they’re not really. Things get modifiers. Geography is inline and …weird. </p>
+  <header class="post-header">
+    <h1 class="post-title">Stupid catalog tricks: Subject Headings and the Long Tail</h1>
+    <p class="post-meta">Apr 13, 2010</p>
+  </header>
 
-<p>And, of course, in our faceting catalog when you click on a linked LCSH to do an automatic search, you often get nothing but the record you started from. Which is super-annoying. </p>
+  <article class="post-content">
+    <p>Library of Congress Subject Headings (LCSH) in particular.</p>
 
-<p>So, just for kicks, I ran some numbers. </p>
+<p>I’ve always been down on LCSH because I don’t understand them. They kinda look like a hierarchy, but they’re not really. Things get modifiers. Geography is inline and …weird.</p>
+
+<p>And, of course, in our faceting catalog when you click on a linked LCSH to do an automatic search, you often get nothing but the record you started from. Which is super-annoying.</p>
+
+<p>So, just for kicks, I ran some numbers.</p>
 
 <h3 id="the-process">The process</h3>
 
-<p>I extracted all the field 650, indicator2=”0” from our catalog, threw away the subfield 6’s, and threw away any trailing punctuation in any of the subfields.  I called the concatenation of what was left a unique LCSH. </p>
+<p>I extracted all the field 650, indicator2=”0” from our catalog, threw away the subfield 6’s, and threw away any trailing punctuation in any of the subfields.  I called the concatenation of what was left a unique LCSH.</p>
 
 <p>Then I printed them out and put them all onto index cards, using tick-marks to indicate…</p>
 
@@ -74,7 +89,7 @@
 
 <h3 id="counts-of-lcsh">Counts of LCSH</h3>
 
-<p>…in round numbers. </p>
+<p>…in round numbers.</p>
 
 <p>In our catalog, there are:</p>
 
@@ -84,7 +99,7 @@
   <li>…66% of which (1.23M) appear exactly once</li>
 </ul>
 
-<p>We only have to go out to 30K subjects to account for half of all subject entries. The top 1000 most-used subjects account for 14.5% of all 8.5M subject entries. </p>
+<p>We only have to go out to 30K subjects to account for half of all subject entries. The top 1000 most-used subjects account for 14.5% of all 8.5M subject entries.</p>
 
 <p>The top ten subjects by count are:</p>
 
@@ -113,16 +128,47 @@
   <li>2.6M records with zero subjects</li>
 </ul>
 
-<p>The records with the most subject headings tend to be collections of stuff (theses, photos, etc). Our local standout is the <a href="http://mirlyn.lib.umich.edu/Record/004078801">Dept. of Medicine and Surgery (University of Michigan) theses, 1851-1878</a> with 208 subject entries. 14 records have at least 30 subject entries. </p>
+<p>The records with the most subject headings tend to be collections of stuff (theses, photos, etc). Our local standout is the <a href="http://mirlyn.lib.umich.edu/Record/004078801">Dept. of Medicine and Surgery (University of Michigan) theses, 1851-1878</a> with 208 subject entries. 14 records have at least 30 subject entries.</p>
 
 <h3 id="what-it-means">What it means</h3>
 
 <p>Gee, lady, I don’t know.</p>
 
-<p>One way to look at it: suppose you’re considering defining subjects in this way, and making them “hot” in the catalog interface. For our data, 2/3 of records would have either no subjects or a subject that found only the record you’re at. So…think again. </p>
+<p>One way to look at it: suppose you’re considering defining subjects in this way, and making them “hot” in the catalog interface. For our data, 2/3 of records would have either no subjects or a subject that found only the record you’re at. So…think again.</p>
 
 <p>In real life, we index lots of possible subject fields, and we additionally index the $$a as well as the whole string, so ours are a little bit more useful. A little.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/04/stupid-catalog-tricks-subject-headings-and-the-long-tail/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -130,15 +176,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -174,8 +220,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

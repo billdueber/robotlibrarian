@@ -1,6 +1,8 @@
 ---
 title: "Announcing \"traject\" indexing software"
 date: 2013-10-14
+layout: post
+
 ---
 
 [Over the next few days I'll be writing a series of posts that highlight a new indexing solution by Jonathan Rochkind and myself called `traject` that we're using to index MARC data into Solr. This is the introduction.]
@@ -45,11 +47,11 @@ to_field "id", extract_marc(idfield, :first => true)
 # Now the other data
 to_field "title", extract_marc('245')
 to_field "author", extract_marc('100abcd:110abcd:111abc')
-  
 
-# You'd run this as: 
+
+# You'd run this as:
 #    traject -c sample.rb myfile.mrc
-  
+
 
 ~~~
 
@@ -57,7 +59,7 @@ That's simplistic, of course, but it should drive home the point that we strove 
 
 ### Why use (or move to) traject?
 
-First off, you can and should look at [the annoucement](http://bibwild.wordpress.com/2013/10/14/traject-marc-solr-indexer-release/) and/or [the README](https://github.com/traject-project/traject/) for a longer answer, but I'll tell you why _I_ use `traject` in one word: 
+First off, you can and should look at [the annoucement](http://bibwild.wordpress.com/2013/10/14/traject-marc-solr-indexer-release/) and/or [the README](https://github.com/traject-project/traject/) for a longer answer, but I'll tell you why _I_ use `traject` in one word:
 
 Flexibility.
 
@@ -77,7 +79,7 @@ But Jonathan and I are, mostly, stuck dealing with MARC data and Solr. So here's
 
 **Transforming Macros**: A traject indexing step is just a well-formed ruby block (or lambda), which makes writing macros ridiculously easy. Traject ships with most of what you'd commonly need to deal with MARC: extracting data based on tag/subfield/indicators (or substring of a fixed field), dealing with non-filing characters, automatically dealing with 880 linked fields. Mucking with publication dates. Dealing with languages, formats, etc. And, of course, doing it all with multiple threads, because who wants to see all those lovely cores go to waste?
 
-**Writers**: Of course, you can write to solr, using the excellent `solrj` java library. And you can do it in multiple threads, to keep things fast. But there's also the `DebugWriter` to spit stuff out in a human-readable format, and the `JsonWriter` mentioned above to spit stuff out in a _machine_-readable format. And building your own writer is literally just a couple methods. 
+**Writers**: Of course, you can write to solr, using the excellent `solrj` java library. And you can do it in multiple threads, to keep things fast. But there's also the `DebugWriter` to spit stuff out in a human-readable format, and the `JsonWriter` mentioned above to spit stuff out in a _machine_-readable format. And building your own writer is literally just a couple methods.
 
 ### How do I get a taste?
 

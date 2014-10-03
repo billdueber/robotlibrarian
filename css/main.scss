@@ -14,8 +14,8 @@ $base-line-height: 1.5;
 $spacing-unit:     30px;
 
 $text-color:       #111;
-$background-color: #fdfdfd;
-$brand-color:      #2a7ae2;
+$background-color: #2a7ae2;
+$brand-color:      #b39941;
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
@@ -24,7 +24,12 @@ $grey-color-dark:  darken($grey-color, 25%);
 $on-palm:          600px;
 $on-laptop:        800px;
 
+$code-color:       #ffeeb5;
+$callout_color: #305275;
+$border-color: $callout_color;
 
+$bg_color: #849cb5;
+$content-bg-color: #fffefb;
 
 // Using media queries with like this:
 // @include media-query($palm) {
@@ -39,6 +44,10 @@ $on-laptop:        800px;
     }
 }
 
+// Import the framework
+@import "bourbon/bourbon";
+@import "bitters/bitters";
+@import "neat/neat";
 
 
 // Import partials from `sass_dir` (defaults to `_sass`)
@@ -48,9 +57,6 @@ $on-laptop:        800px;
         "syntax-highlighting"
 ;
 
-@import "bourbon/bourbon";
-@import "bitters/bitters";
-@import "neat/neat";
 
 $content_cols: 9;
 $sidebar_cols: 12 - $content_cols;
@@ -63,34 +69,26 @@ $sidebar_cols: 12 - $content_cols;
 //$border_color:     #001166;
 //$sidebar_text:     #001166;
 
-$bg_color: #fff;
-$text_color: #585858;
-$border_color: darken(#118C4E, 15%);
-$bold_color: $border_color;
-$bg_callout_color: $bold_color;
-
-$code_bg_color: #eee;
-$sidebar_text: $text_color;
-// $article_title_text: $bg_color;
-$article_title_text: $border_color;
 
 // $link_color: darken(#4A96AD, 15%);
 $link_color: darken($border_color, 5%);
 
 body {
   background-color: $bg_color;
+  font-family: 'Pontano Sans', Verdana, Helvetica, sans-serif;
+  font-size: 110%;
+}
+a {
+  font-weight: bold;
 }
 
 header.site-header {
-  border: 1pt solid green;
   @include span_columns(12);
-  background-image: url("/images/robot_alpha.png");
-  height: 140px;
-  background-repeat: no-repeat;
-  background-position: top 0em left 2em;
-  padding-top: 1.5em;
+  background-color: #fff;
 
   .site-title {
+    padding-top: 25px;
+
     font-family: 'Rammetto One', sans-serif;
     font-size: 40px;
     font-weight: bold;
@@ -105,5 +103,69 @@ header.site-header {
 
 
 header.post-header h1 {
-  padding-top: 4em;
+  padding-top: 1em;
+}
+
+
+#sidebar {
+  color: white;
+  background-color: #305275;
+  border-radius: 1.5em;
+  padding: 1em;
+
+}
+
+.site-footer {
+  background-color: $content-bg-color;
+}
+
+.post-text {
+  border-radius: 1em;
+
+  background-color: $content-bg-color;
+  padding: 0em 2em 2em 2em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+
+.post-list {
+
+
+  ul {
+    margin-left: 2em;
+
+    li {
+      list-style-type: disc;
+    }
+  }
+
+
+
+  .post-title {
+    font-size: 150%;
+    color: #000;
+  }
+  .post-link {
+    color: #000;
+  }
+  h2.post-title {
+    padding-top: 1em;
+    padding-bottom: 0em;
+    a.post-link {
+      color: $callout_color;
+    }
+  }
+  h2,h3,h4 {
+    font-weight: bold;
+    margin-top: 2em;
+
+  }
+  h2 {
+    font-size: 110%;
+  }
+
+  h3 {
+    font-size: 100%;
+  }
 }

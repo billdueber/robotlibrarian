@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>An exercise in Solr and DataImportHandler: HathiTrust data</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,28 +61,37 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>Many of the folks who read this blog (hi, both of you! Mom, say hello to Dad!) are aware, at least tangentially, of the <a href="http://www.hathitrust.org/">HathiTrust</a>. Currently hosted by us at the <a href="http://www.lib.umich.edu/">University of Michigan</a>, the most public interface to its data is a <a href="http://www.vufind.org/">VuFind</a> installation you can access at <a href="http://catalog.hathitrust.org">catalog.hathitrust.org</a> (or, for you smart-phone types, at <a href="http://m.catalog.hathitrust.org/">m.catalog.hathitrust.org</a>). Once you do a metadata search, you get links into the actual page images or a chance to search the fulltext of the selected item (depending on its copyright status).</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
 
-<p>It’s awesome. Seriously. Even in the absence of fulltext, being able to search within an item can be incredibly useful. Give it a shot if you haven’t. </p>
+  <header class="post-header">
+    <h1 class="post-title">An exercise in Solr and DataImportHandler: HathiTrust data</h1>
+    <p class="post-meta">Sep 28, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>Many of the folks who read this blog (hi, both of you! Mom, say hello to Dad!) are aware, at least tangentially, of the <a href="http://www.hathitrust.org/">HathiTrust</a>. Currently hosted by us at the <a href="http://www.lib.umich.edu/">University of Michigan</a>, the most public interface to its data is a <a href="http://www.vufind.org/">VuFind</a> installation you can access at <a href="http://catalog.hathitrust.org">catalog.hathitrust.org</a> (or, for you smart-phone types, at <a href="http://m.catalog.hathitrust.org/">m.catalog.hathitrust.org</a>). Once you do a metadata search, you get links into the actual page images or a chance to search the fulltext of the selected item (depending on its copyright status).</p>
+
+<p>It’s awesome. Seriously. Even in the absence of fulltext, being able to search within an item can be incredibly useful. Give it a shot if you haven’t.</p>
 
 <h3 id="you-dont-always-need-an-opac">You don’t always need an OPAC</h3>
 
 <p>But there are plenty of folks who don’t want or need a full-flown interface into all the metadata. They’ve already got one of those. What they’re interested in, mostly, is figuring out how to easily put links in their <em>own</em> OPAC (or whatnot or whoseits) to the HathiTrust if page images or searching are available. See, for example, <a href="http://lens.lib.uchicago.edu/?itemid=library/marc/uc\|835086">a typical record from Tod Olson’s stuff at U-Chicago</a> – he sniffs for HathiTrust and Google Books availability via embedded javascript.</p>
 
-<p>To this end, the HathiTrust folks provide a set of <a href="http://www.hathitrust.org/hathifiles">simple, tab-delimited files</a> – a full extract on the first of every month, and nightly updates every …er…night. </p>
+<p>To this end, the HathiTrust folks provide a set of <a href="http://www.hathitrust.org/hathifiles">simple, tab-delimited files</a> – a full extract on the first of every month, and nightly updates every …er…night.</p>
 
 <p>You can see from the <a href="http://www.hathitrust.org/hathifiles_metadata/">description of the file</a> that it’s very simple. Tab-delimited fields of the HathiTrust ID, right information, and all the golden-oldie standard identifiers – some of which (ISSNs, ISBNs, etc.) are further comma-delimited in cases where multiple values are available and a field repeats. And a title and <em>enumcron</em> (description of an individual volume, e.g., “Sept 2007, vol. 33, issue 4”), so you have something useful to display if you need to, and that’s 98% of what most folks want.</p>
 
 <h3 id="the-smart-way-to-do-it-rdbms">The smart way to do it: RDBMS</h3>
 
-<p>If you want to query this data quickly and easily, the obvious thing to do is to dump it into a database. One main table for the non-repeated values, and either a few key=&gt;value tables (or, if you’re lazy, a single key =&gt; type/value) for the repeated ISBNs/ISSNs/whatnot. A quick mod-perl script to set up some data normalization going in and out and persist the prepared SQL queries and you’re set. </p>
+<p>If you want to query this data quickly and easily, the obvious thing to do is to dump it into a database. One main table for the non-repeated values, and either a few key=&gt;value tables (or, if you’re lazy, a single key =&gt; type/value) for the repeated ISBNs/ISSNs/whatnot. A quick mod-perl script to set up some data normalization going in and out and persist the prepared SQL queries and you’re set.</p>
 
 <p>It’s hard to make an argument <em>against</em> using a database for these data. I mean, c’mon. We’ve got a well-defined structure. An obvious foreign-key. No full-text searching needed. This is practically <em>designed</em> for a good old-fashioned RDBMS. Plus, I’ve done this approximately a zillion times before, so I’m good and fast at it. Case closed.</p>
 
 <h3 id="how-im-gonna-do-it">How I’m gonna do it</h3>
 
-<p>Screw that. What I really wanted to do was start messing around with the <a href="http://wiki.apache.org/solr/DataImportHandler">DataImportHandler</a>(DIH) in Solr. </p>
+<p>Screw that. What I really wanted to do was start messing around with the <a href="http://wiki.apache.org/solr/DataImportHandler">DataImportHandler</a>(DIH) in Solr.</p>
 
 <p>I can make a weak argument for including the data in a Solr instance. To wit, it’ll certainly be fast enough for anything I’m gonna throw at it, and (more important to me) it’s easy to set up datastore-level indexing and querying filters with <a href="http://robotlibrarian.billdueber.com/easy-solr-types-for-library-data/">built-in facilities</a> and/or <a href="http://robotlibrarian.billdueber.com/building-a-solr-text-filter-for-normalizing-data/">custom code</a>. This allows me to build clients that call it without having to worry about manipulating the input much, if at all.</p>
 
@@ -89,17 +104,17 @@
 <p>We’ll start with the assumption that I’ve already managed to load a full dump from some date (run with me here; I’ll explain how to do it later). Then what we want to do is the following:</p>
 
 <ol>
-  <li>Every night, download the nightly additions/changes file and gunzip it. </li>
+  <li>Every night, download the nightly additions/changes file and gunzip it.</li>
   <li>Hit the DIH handle to import all files that (a) have a filename of the right format, and (b) have a created date after the last time the DIH handle was run.</li>
 </ol>
 
-<p>And that’s it. Get the new stuff, have DIH figure out what’s new, and import it. </p>
+<p>And that’s it. Get the new stuff, have DIH figure out what’s new, and import it.</p>
 
-<p>The first part is easy enough to do with perl/python/ruby/whatever. I’ll leave it as an exercise for all you diligent students. </p>
+<p>The first part is easy enough to do with perl/python/ruby/whatever. I’ll leave it as an exercise for all you diligent students.</p>
 
 <h4 id="setting-up-solrconfigxml">Setting up solrconfig.xml</h4>
 
-<p>This is the easy part. Set up the handler, give it a semi-meaningful name, and <br />
+<p>This is the easy part. Set up the handler, give it a semi-meaningful name, and<br />
 call out to a config file.</p>
 
 <div><div class="CodeRay">
@@ -116,7 +131,7 @@ call out to a config file.</p>
 
 <h4 id="define-some-useful-data-types-in-schemaxml">Define some useful data types in <code>schema.xml</code></h4>
 
-<p>I left pretty much all of the boilerplate in <code>schema.xml</code> and just added a few types to deal with identifiers. </p>
+<p>I left pretty much all of the boilerplate in <code>schema.xml</code> and just added a few types to deal with identifiers.</p>
 
 <ul>
   <li><em>lowercase</em>: return a single token that’s been lowercased. Don’t muck with it otherwise.</li>
@@ -152,7 +167,7 @@ call out to a config file.</p>
   <span style="color:#777">&lt;!-- standard number normalizer - extract sequence of digits, strip leading zeroes --&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">numeric</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">sortMissingLast</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">&gt;</span>
  <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
-   <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+   <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
    <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LowerCaseFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
    <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TrimFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
    <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.PatternReplaceFilterFactory</span><span style="color:#710">&quot;</span></span>
@@ -183,17 +198,17 @@ call out to a config file.</p>
 <span style="color:#777">&lt;!-- LCCN normalization on both index and query --&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccnnormalizer</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
-    <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+    <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.LowerCaseFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TrimFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
-    <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">edu.umich.lib.solr.analysis.LCCNNormalizerFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+    <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">edu.umich.lib.solr.analysis.LCCNNormalizerFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;/analyzer&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;/fieldType&gt;</span>
 
 <span style="color:#777">&lt;!-- since fields of this type are by default not stored or indexed,
-     any data added to them will be ignored outright.  --&gt;</span> 
-<span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ignored</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.StrField</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span> 
-   
+     any data added to them will be ignored outright.  --&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ignored</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.StrField</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
+
 <span style="color:#070;font-weight:bold">&lt;/types&gt;</span>
 
 </pre></div>
@@ -216,7 +231,7 @@ call out to a config file.</p>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">source</span><span style="color:#710">&quot;</span></span>       <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lowercase</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sourceid</span><span style="color:#710">&quot;</span></span>     <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">genericID</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
 
-<span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccn</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccnnormalizer</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span> 
+<span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccn</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccnnormalizer</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">oclc</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">numeric</span><span style="color:#710">&quot;</span></span>        <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">isbn</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stdnum</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">issn</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stdnum</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
@@ -239,7 +254,7 @@ call out to a config file.</p>
 
 <h4 id="hathi-data-configxml----define-how-dih-is-going-to-work">hathi-data-config.xml – define how DIH is going to work.</h4>
 
-<p>This, of course, is the meat of the heart of the center of the matter. </p>
+<p>This, of course, is the meat of the heart of the center of the matter.</p>
 
 <p>I’m going to make use of four DIH technologies:</p>
 
@@ -247,7 +262,7 @@ call out to a config file.</p>
   <li><strong>FileDataSource</strong>: In DIH, you declare a data source from which you’ll be sucking the raw data for manipulation and massaging. I’m just using a file, so this is for me. You can, as you might expect, pull in from a URL or (as mentioned) a database via JDBC.</li>
   <li><strong>FileListEntityProcessor</strong>: Given a directory and a set of criteria for a file, this will return a list of filenames that match those criteria. The criteria we’ll be using are (a) a regexp the filename must match, and (b) a creation date after the last time we ran the process.</li>
   <li><strong>LineEntityProcessor</strong>: Once you’ve got a data source, you need to stream it in somehow. There are Processors for XML and other formats, but this one just pulls in lines one at a time. The documentation all talks about <code>LineEntityProcessor</code> basically only being useful for pulling in, say, a list of filenames, but since my data is all line-by-line, this is what I’m using as my primary record-fetcher. It populates a single field called <code>rawLine</code> for later processing.</li>
-  <li><strong>RegexTransformer</strong>: Allows you to take a field pulled from the datasource (or already derived from previous processing) and do regexp substitutions, group extraction, or splitting. </li>
+  <li><strong>RegexTransformer</strong>: Allows you to take a field pulled from the datasource (or already derived from previous processing) and do regexp substitutions, group extraction, or splitting.</li>
 </ul>
 
 <p>SO…I’m going to:</p>
@@ -297,7 +312,7 @@ call out to a config file.</p>
           <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">column</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccn</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">splitBy</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">,</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">sourceColName</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lccns</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
         <span style="color:#070;font-weight:bold">&lt;/entity&gt;</span> <span style="color:#777">&lt;!-- end of hathiline --&gt;</span>
 
-      <span style="color:#070;font-weight:bold">&lt;/entity&gt;</span> <span style="color:#777">&lt;!-- end of hathifile --&gt;</span> 
+      <span style="color:#070;font-weight:bold">&lt;/entity&gt;</span> <span style="color:#777">&lt;!-- end of hathifile --&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;/document&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;/dataConfig&gt;</span>  
 
@@ -307,7 +322,7 @@ call out to a config file.</p>
 
 <h3 id="andit-doesnt-work">And…it doesn’t work.</h3>
 
-<p>It <em>almost</em> works. The problem is that my attempt to use the variable <code>${dataimporter.last_index_time}</code> is busted. There’s <a href="https://issues.apache.org/jira/browse/SOLR-1473">a ticket to fix it</a> and a patch already provided, so it’s only a matter of time before it’s not an issue. </p>
+<p>It <em>almost</em> works. The problem is that my attempt to use the variable <code>${dataimporter.last_index_time}</code> is busted. There’s <a href="https://issues.apache.org/jira/browse/SOLR-1473">a ticket to fix it</a> and a patch already provided, so it’s only a matter of time before it’s not an issue.</p>
 
 <p>For the moment, though, we’ll change that line to:</p>
 
@@ -344,16 +359,47 @@ http:://solrmachine:port/solr/hathiimport?command=full-import&amp;clean=false
 
 <h3 id="next-steps">Next steps?</h3>
 
-<p>Beer or wine. Take your pick. </p>
+<p>Beer or wine. Take your pick.</p>
 
 <p>After that, though, it’d be a matter of actually writing the download scripts and setting up cron jobs. And, of course, putting a front-end on it if you want, or massaging the data as they come out to return a nice JSON format for your consumers. That sort of thing.</p>
 
 <h3 id="so-waitis-this-really-worth-doing">So, wait…is this really worth doing?</h3>
 
-<p>Maybe. Probably not. It was worth it to me to start thinking about DIH and how I can use it. And it might be worth it to you, if you want to play around with these data in the ways that solr makes easy. </p>
+<p>Maybe. Probably not. It was worth it to me to start thinking about DIH and how I can use it. And it might be worth it to you, if you want to play around with these data in the ways that solr makes easy.</p>
 
 <p>But, like to many things, it’s less worth <em>doing</em> that it was worth <em>writing up</em>. I learned a lot.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/09/an-exercise-in-solr-and-dataimporthandler-hathitrust-data/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -361,15 +407,15 @@ http:://solrmachine:port/solr/hathiimport?command=full-import&amp;clean=false
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -405,8 +451,7 @@ http:://solrmachine:port/solr/hathiimport?command=full-import&amp;clean=false
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

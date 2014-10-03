@@ -1,6 +1,8 @@
 ---
 title: "Ask, and you shall receive, and it shall be AWESOME!"
 date: 2009-02-12
+layout: post
+
 ---
 
 The good folks at <a href="http://www.tictocs.ac.uk">ticToc</a>s heard the call for open data, and they responded...exactly as I asked them to. Which makes me think I should have asked for a pony, too, but I'm still very, very happy!

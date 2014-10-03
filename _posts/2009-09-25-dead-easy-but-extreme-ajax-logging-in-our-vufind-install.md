@@ -1,17 +1,19 @@
 ---
 title: "Dead-easy (but extreme) AJAX logging in our VuFind install"
 date: 2009-09-25
+layout: post
+
 ---
 
-One of the advantages of having complete control over the OPAC is that I change things pretty easily. The downside of that is that we need to know *what* to change. 
+One of the advantages of having complete control over the OPAC is that I change things pretty easily. The downside of that is that we need to know *what* to change.
 
-Many of you that work in libraries may have noticed that data are not necessarily the primary tool in decision-making. Or, say, even a part of the process. Or even thought about hard. Or even considered. 
+Many of you that work in libraries may have noticed that data are not necessarily the primary tool in decision-making. Or, say, even a part of the process. Or even thought about hard. Or even considered.
 
-For many decisions I see going on in the library world, the primary motivator is the *anecdote*. In fact, to be honest, the primary driver is the *faculty anecdote*. Those cliched three curmudgeonly old faculty members invariably have huge influence over systems and interfaces that will be used by 40K undergraduates. The tiny percentage of weirdos that actually talk to reference librarians end up wielding enormous power compared to the untold masses that don't. 
+For many decisions I see going on in the library world, the primary motivator is the *anecdote*. In fact, to be honest, the primary driver is the *faculty anecdote*. Those cliched three curmudgeonly old faculty members invariably have huge influence over systems and interfaces that will be used by 40K undergraduates. The tiny percentage of weirdos that actually talk to reference librarians end up wielding enormous power compared to the untold masses that don't.
 
 ### Enter the dragon...er...log.
 
-So...I'm logging everything. EVERYTHING. Everything I can think of, anyway, and that doesn't slow things down too far. 
+So...I'm logging everything. EVERYTHING. Everything I can think of, anyway, and that doesn't slow things down too far.
 
 I've got a simple database table set up with the following columns:
 
@@ -49,7 +51,7 @@ I've got a lot to learn about stats, and user tracking, and clickpath analysis, 
 
 [Er...them. Not "it". Data are a "them."  Always feels weird to me to refer to data in the plural, but I'm forcing myself to do so these days.]
 
-### What's the server implementation? 
+### What's the server implementation?
 
 I already mentioned the database. I've got a little module called `ActivityLog` that does three and a half things:
 
@@ -58,7 +60,7 @@ I already mentioned the database. I've got a little module called `ActivityLog` 
   3. Modify the parameters if need be (e.g., pull domain name out of an external URL). This is the half a thing.
   4. Stuff it into the database with appropriate timestamps.
 
-And that's it. 
+And that's it.
 
 ### What's the client need to do?
 
@@ -69,26 +71,26 @@ I start off with the following rules:
   3. I want to log outgoing links, too.
   4. I must must must have pretty, bookmarkable URLs.
 
-Truth be told, some of the "client" stuff can be (and is) done on the server. When someone is, say, sending a record or set of records to RefWorks, the server knows everything it needs to know and I can just take care of logging as part of the regular request fulfillment. 
+Truth be told, some of the "client" stuff can be (and is) done on the server. When someone is, say, sending a record or set of records to RefWorks, the server knows everything it needs to know and I can just take care of logging as part of the regular request fulfillment.
 
 But some stuff -- like the search result number, say -- are best taken care of from the browser. Easy enough, for the most part, esp. with form submissions and such.
 
-The potentially-non-obvious part comes in with rule #3 -- I want pretty URLs. That means that the full display of record 123456789 is always going to be at `/Record/123456789` no matter what the user clicked on. Ditto with adding/removing facets and such -- the URL contains the resulting search, not the resulting search *plus which facet was removed or added*. 
+The potentially-non-obvious part comes in with rule #3 -- I want pretty URLs. That means that the full display of record 123456789 is always going to be at `/Record/123456789` no matter what the user clicked on. Ditto with adding/removing facets and such -- the URL contains the resulting search, not the resulting search *plus which facet was removed or added*.
 
-But -- see #1 -- I want to log damn near everything. 
+But -- see #1 -- I want to log damn near everything.
 
 My solution -- and I know lots of people are doing this; this isn't rocket science -- is to fire off an AJAX post for the click events that I'm interested in, sending log data off to my server and then *not waiting for a return*. Just send the data and follow the link as if nothing had intervened. It degrades gracefully (although the rest of my VuFind doesn't, so that doesn't matter much) and it dead-easy to implement.  
 
 ### The actual javascript implementation
 
-I long ago switched our VuFind stuff over to use jQueryuery, just because I like it and know it. 
+I long ago switched our VuFind stuff over to use jQueryuery, just because I like it and know it.
 
-First thing is to use the templates to modify the links to have a particular class (`logit`) and a well-structured *ref* (pipe-delimited values). 
+First thing is to use the templates to modify the links to have a particular class (`logit`) and a well-structured *ref* (pipe-delimited values).
 
 So, a link from the title of a work on the search-results page to the individual record will look like this:
 
     <a ref="srrecview|{$record.id}||{$recordCounter}" href="/Record/{$record.id}" class="title logit">{$title}</a>
-   
+
 The *ref* attribute tells us that we're going to log the type of event (record view from the search results), the ID of the record, a null in the data2 column, and the search result number.
 
 Then there's javascript to make all the magic happen:
@@ -96,16 +98,16 @@ Then there's javascript to make all the magic happen:
 
 ~~~javascript
 
-  
-  
+
+
   function logit(a, args) {
     a = jQuery(a);
-    
+
     // Allow the caller to pass in args, or get them from the ref attribute
     if (!args) {
       args = a.attr('ref').split('|');
     }
-    
+
     jQuery.post(
       url_to_the_logging_method,
       {
@@ -125,16 +127,16 @@ Then there's javascript to make all the magic happen:
 
 ~~~
 
-The `logit` function just does a brain-dead post of the data in the *ref* attribute. We then bind that function to all anchors with the appropriate class, and we're done. 
+The `logit` function just does a brain-dead post of the data in the *ref* attribute. We then bind that function to all anchors with the appropriate class, and we're done.
 
 [Note the use of the jQuery `live` event -- this makes sure the event will be bound to stuff that comes in via AJAX after page load. Our links to Google Books, for example, come in like this.]
 
-Since I'm not returning `false` from the logit function, the default action (actually follow the link) will fire -- without even waiting for the AJAX call to come back. Delay to the user is, hopefully, unnoticeable. 
+Since I'm not returning `false` from the logit function, the default action (actually follow the link) will fire -- without even waiting for the AJAX call to come back. Delay to the user is, hopefully, unnoticeable.
 
 ### Final words
 
-This isn't all that smart. I should be doing more data-integrity stuff than I am, and of course someone could spoof my numbers if they wanted. But someone could spoof my stats just by hitting my normal catalog pages programatically, too, so there's no more risk involved, and I *do* log IPs. 
+This isn't all that smart. I should be doing more data-integrity stuff than I am, and of course someone could spoof my numbers if they wanted. But someone could spoof my stats just by hitting my normal catalog pages programatically, too, so there's no more risk involved, and I *do* log IPs.
 
-And, of course, I get my pretty URLs, and most users (i.e., those not running firebug) will never notice anything. 
+And, of course, I get my pretty URLs, and most users (i.e., those not running firebug) will never notice anything.
 
 I don't know that this would work for everyone, but so far it's working pretty well for us. I'll let you know if that continues in a post in a few weeks.

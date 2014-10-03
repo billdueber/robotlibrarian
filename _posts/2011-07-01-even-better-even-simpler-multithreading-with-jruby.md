@@ -2,6 +2,8 @@
 title: "Even better, even simpler multithreading with JRuby"
 date: 2011-07-01
 tags: "jruby, ruby"
+layout: post
+
 ---
 
 [Yes, another post about ruby code; I'll get back to library stuff soon.]
@@ -44,7 +46,7 @@ But you can also break out of the loop.
 myarray.threach(2) do |item|
   break if item_indicates_to_break(item)
   if item == :really_bad_value
-    raise RuntimeError.new, "Something's really wrong", nil 
+    raise RuntimeError.new, "Something's really wrong", nil
   end
   process_item(item)
 end
@@ -63,7 +65,7 @@ begin
   reader.threach(2) do |item|
     process_item(item)
   end
-rescue SpecializedFileReaderError 
+rescue SpecializedFileReaderError
   # deal with the fact that the reader failed
 rescue Exception
   # deal with the problem processing the item
@@ -95,7 +97,7 @@ You can also access the underlying class that aggregates multiple enumerables di
 require 'jruby_threach'
 me = Threach::MultiEnum.new(
   [enum1, enum2, enum3], # enumerables
-  threads,               # How many threads to use to 
+  threads,               # How many threads to use to
   :each_with_index,      # the iterator to call on the enumerables
   size                   # size of the under-the-hood queue
 )

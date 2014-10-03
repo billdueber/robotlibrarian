@@ -1,6 +1,8 @@
 ---
 title: "Running Blacklight under JRuby"
 date: 2009-11-18
+layout: post
+
 ---
 
 I decided to see if I could get [Blacklight](http://projectblacklight.org/) working under [JRuby](http://jruby.org/), starting with running the test suite and working my way up from there.
@@ -11,7 +13,7 @@ lack of knowledge about what I was doing.
 This is the procedure I eventually arrived at -- if there are places where I made trouble for myself, please let me know!
 
 [And does anyone know how to get jruby's nokogiri to link to a different
-libxml and stop with the crappy libxml2-version error message every time I 
+libxml and stop with the crappy libxml2-version error message every time I
 run it under OSX???]
 
 ### Download jruby
@@ -37,8 +39,8 @@ Again, well say that I put this in _~/blacklight/_
 
 ### Muck with Blacklight dependencies
 
-Edit the file _init.rb_ to comment out references to _libxml_ and _ruby-xslt_, 
-as well as _nokogiri_. My understanding is that the first two are used, at this point, only for the EAD stuff. Both rely on _libxml2_ which is a C-extension and hence unavailable to JRuby. 
+Edit the file _init.rb_ to comment out references to _libxml_ and _ruby-xslt_,
+as well as _nokogiri_. My understanding is that the first two are used, at this point, only for the EAD stuff. Both rely on _libxml2_ which is a C-extension and hence unavailable to JRuby.
 
 Nokogiri gets pulled in during other installs and for some reason jrake will complain later on that it's got a wrong version or something. So, we'll just work without that particular net for now.
 
@@ -49,16 +51,16 @@ Nokogiri gets pulled in during other installs and for some reason jrake will com
 
 ### Do some initial installs
 
-    jgem install -v=2.3.4 rails 
-    jgem install activerecord-jdbc-adapter jdbc-sqlite3 
-                 activerecord-jdbcsqlite3-adapter ActiveRecord-JDBC 
+    jgem install -v=2.3.4 rails
+    jgem install activerecord-jdbc-adapter jdbc-sqlite3
+                 activerecord-jdbcsqlite3-adapter ActiveRecord-JDBC
     jgem install rcov -s http://gemcutter.org --no-rdoc --no-ri
     jrake
     jrake gems:install
 
 ### Edit the _config/database.yml_ file
 
-...to change the adapter to _jdbcsqlite3_ for development and testing. 
+...to change the adapter to _jdbcsqlite3_ for development and testing.
 
 ### Edit the _databases.rake_ file
 
@@ -66,7 +68,7 @@ This one was harder to track down. The default rake task has hard-coded database
 
     edit ~/jruby/lib/ruby/gems/1.8/gems/rails-2.3.4/lib/tasks/databases.rake
 
-You need to find everywhere there's a 
+You need to find everywhere there's a
 
     when "sqlite", "sqlite3" # or when /^sqlite/ in one case
 
@@ -103,27 +105,27 @@ Since we're running jruby, accessing the shell doesn't work. You'll have to fire
 
     cd ~/blacklight
     jrake spec
-   
+
        ................................................................
        ................................................................
        ....F............................................................
        1)
-       'ApplicationHelper Export EndNote should render the correct 
+       'ApplicationHelper Export EndNote should render the correct
        EndNote text file' FAILED
        expected: "%0 Format\n%E Greer, Lowell. \n%E Lubin, Steven. \n%E Chase, Stephanie, \n%E Brahms, Johannes, \n%E Beethoven, Ludwig van, \n%E Krufft, Nikolaus von, \n%T Music for horn \n%I Harmonia Mundi USA, \n%C [United States] : \n%D p2001. \n",
       got: "%0 Format\n%C [United States] : \n%D p2001. \n%E Greer, Lowell. \n%E Lubin, Steven. \n%E Chase, Stephanie, \n%E Brahms, Johannes, \n%E Beethoven, Ludwig van, \n%E Krufft, Nikolaus von, \n%I Harmonia Mundi USA, \n%T Music for horn \n" (using ##)
     ./spec/helpers/application_helper_spec.rb:128:
-    
+
     Finished in 15.519 seconds
     193 examples, 1 failure
-  
+
 I can live with that for the moment. Anyone know why that spec fails?
-   
+
 ### Great! How about the features?
 
     jrake features
       (much output)
-      
+
       59 scenarios (59 passed)
       434 steps (434 passed)
       0m51.186s

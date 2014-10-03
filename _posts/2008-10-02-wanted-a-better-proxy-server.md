@@ -2,6 +2,8 @@
 title: "Wanted: a better proxy server"
 date: 2008-10-02
 tags: "TALITAS"
+layout: post
+
 ---
 
 We in the library world have a problem. We spend a zillion-with-a-Z dollars subscribing to online databases, purchases which presume our ability to make sure only authorized people can look at them. The alternative is to be in breach of contract law, which I've been assured is something we'd like to avoid.

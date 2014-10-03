@@ -2,6 +2,8 @@
 title: "Why programmers hate free text in MARC records"
 date: 2011-04-11
 tags: "bad data"
+layout: post
+
 ---
 
 One of the frustrating things about dealing with MARC (nee AACR2) data is how much nonsense is stored in free text when a unique identifier in a well-defined place would have done a much better job.

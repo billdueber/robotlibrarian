@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Solr and boolean operators</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Summary: <strong>ALWAYS ALWAYS ALWAYS USE PARENTHESES TO GROUP BOOLEANS IN SOLR!!!</strong>]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Solr and boolean operators</h1>
+    <p class="post-meta">Dec 1, 2011</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Summary: <strong>ALWAYS ALWAYS ALWAYS USE PARENTHESES TO GROUP BOOLEANS IN SOLR!!!</strong>]</p>
 
 <p>What does Solr do, given the following query?</p>
 
@@ -64,7 +79,7 @@
 </code></pre>
 
 <p>I’ll give you three guesses, but you’ll get the first two wrong<br />
-and won’t have any idea how to generate a third, so don’t spend too much time on it. </p>
+and won’t have any idea how to generate a third, so don’t spend too much time on it.</p>
 
 <h3 id="boolean-algebra-and-operator-precedence">Boolean algebra and operator precedence</h3>
 
@@ -105,48 +120,48 @@ and won’t have any idea how to generate a third, so don’t spend too much tim
 
 <h3 id="it-gets-weirder">It gets weirder</h3>
 
-<p>I populated a fresh solr (3.5) index with all possible subsets of the strings “curly”, “larry”, “moe”, and “shemp” (not Joe. Don’t talk to me about Joe). There are 15 of them, from the one-item ‘curly’ to all four at once. </p>
+<p>I populated a fresh solr (3.5) index with all possible subsets of the strings “curly”, “larry”, “moe”, and “shemp” (not Joe. Don’t talk to me about Joe). There are 15 of them, from the one-item ‘curly’ to all four at once.</p>
 
 <p>I wrote a script to run a set of queries against the index under both lucene and edismax to see what I would get. In all cases the default lucene operator is ‘AND’ and the edismax mm parameter is set to 100% (equivalent to “all required”).</p>
 
 <pre><code>
-        Lucene                    EDismax                  
+        Lucene                    EDismax
   -------------------------------------------------------
-  
+
   1. curly AND larry
-        curly larry               curly larry              
-        curly larry moe           curly larry moe          
-        curly larry shemp         curly larry shemp        
-        curly larry moe shemp     curly larry moe shemp    
+        curly larry               curly larry
+        curly larry moe           curly larry moe
+        curly larry shemp         curly larry shemp
+        curly larry moe shemp     curly larry moe shemp
 
   2. curly AND larry OR moe
-        curly                     curly larry              
-        curly larry               curly larry moe          
-        curly moe                 curly larry shemp        
-        curly shemp               curly larry moe shemp    
-        curly larry moe                                    
-        curly larry shemp                                  
-        curly moe shemp                                    
-        curly larry moe shemp                              
+        curly                     curly larry
+        curly larry               curly larry moe
+        curly moe                 curly larry shemp
+        curly shemp               curly larry moe shemp
+        curly larry moe
+        curly larry shemp
+        curly moe shemp
+        curly larry moe shemp
 
   3. curly OR larry AND moe
-        larry moe                 larry moe                
-        curly larry moe           curly larry moe          
-        larry moe shemp           larry moe shemp          
-        curly larry moe shemp     curly larry moe shemp    
+        larry moe                 larry moe
+        curly larry moe           curly larry moe
+        larry moe shemp           larry moe shemp
+        curly larry moe shemp     curly larry moe shemp
 
   4. curly AND larry OR moe AND shemp
-        curly moe shemp           curly larry moe shemp    
-        curly larry moe shemp                              
+        curly moe shemp           curly larry moe shemp
+        curly larry moe shemp
 
   5. moe AND shemp OR curly AND larry
-        curly larry moe           curly larry moe shemp    
+        curly larry moe           curly larry moe shemp
         curly larry moe shemp
-        
+
 
 </code></pre>
 
-<p>Query 1 is as expected. Query 2 apparently reduces to just ‘curly’ under the lucene parser and ‘curly AND larry’ under edismax (and query 3 similarly reduces to the two AND’d words). Queries 4 and 5 are…well, you can look at the debugQuery output to see what it gets, but not <strong>why</strong>. And then tell me how to explain it to a user. </p>
+<p>Query 1 is as expected. Query 2 apparently reduces to just ‘curly’ under the lucene parser and ‘curly AND larry’ under edismax (and query 3 similarly reduces to the two AND’d words). Queries 4 and 5 are…well, you can look at the debugQuery output to see what it gets, but not <strong>why</strong>. And then tell me how to explain it to a user.</p>
 
 <h3 id="where-does-this-leave-us">Where does this leave us?</h3>
 
@@ -156,6 +171,37 @@ and won’t have any idea how to generate a third, so don’t spend too much tim
 
 <p>Until the Solr/Lucene powers that be decide to tackle this, the rest of us will either have to write pre-parsers to make sure users get something sensible, or cripple our applications to disallow unrestricted boolean queries.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2011
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2011/12/solr-and-boolean-operators/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -163,15 +209,15 @@ and won’t have any idea how to generate a third, so don’t spend too much tim
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -207,8 +253,7 @@ and won’t have any idea how to generate a third, so don’t spend too much tim
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

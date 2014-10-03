@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>VuFind Midwest gathering</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>A couple weeks ago, representatives from UMich (that’d be me), Purdue, Notre Dame, UChicago, and our hosts at Western Michigan got together in lovely Kalamazoo to talk about our VuFind implementations.</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">VuFind Midwest gathering</h1>
+    <p class="post-meta">Sep 16, 2010</p>
+  </header>
+
+  <article class="post-content">
+    <p>A couple weeks ago, representatives from UMich (that’d be me), Purdue, Notre Dame, UChicago, and our hosts at Western Michigan got together in lovely Kalamazoo to talk about our VuFind implementations.</p>
 
 <p>Eric Lease Morgan <a href="http://www.catholicresearch.net/blog/2010/09/vufind-midwest-users-group-meeting/">already wrote up his notes</a> about the meeting, and I encourage you to go there for more info, but I’ll add my two cents here.</p>
 
@@ -70,13 +85,13 @@
     <p>A point that I made that was echoed by others is that we need to remember that these new discovery systems are all just thin wrappers over <a href="http://lucene.apache.org/solr/">Solr</a>. They basically have two jobs: to get a query and format it in a way that Solr can handle, and then to take the Solr results and display them. There’s some sugar on top of that (exporting, tagging, etc) but that’s really it. The heavy lifting is all done by your indexer (<a href="http://code.google.com/p/solrmarc/">Solrmarc</a> for most, although watch this space for my announcement of my JRuby-based stuff today) and Solr itself. <em>It’s not a hard problem</em>, although it is occasionally a messy one.</p>
   </li>
   <li>
-    <p>VuFind has, in my mind, fundamental architectural issues mostly based on the inability to easily separate local code from core code. A re-architecture to base everything on subclasses of the core code would help, but at some point you start to run up against fundamental limitations of PHP and Smarty to do things cleanly. Without the ability to update core code and know it won’t affect your local code, there’s no good way to keep on track with the trunk of the code and do upgrades; for the same reason, it’s almost impossible to send changes back to trunk. </p>
+    <p>VuFind has, in my mind, fundamental architectural issues mostly based on the inability to easily separate local code from core code. A re-architecture to base everything on subclasses of the core code would help, but at some point you start to run up against fundamental limitations of PHP and Smarty to do things cleanly. Without the ability to update core code and know it won’t affect your local code, there’s no good way to keep on track with the trunk of the code and do upgrades; for the same reason, it’s almost impossible to send changes back to trunk.</p>
   </li>
   <li>
-    <p>Coupled tightly to the architectural issues is the lack of tests. The code is potentially very brittle; there’s no good way to know if you’re breaking anything until you notice it’s broken. It’s not at all clear how to write good tests for the code, because there’s a lot of inter-dependencies. </p>
+    <p>Coupled tightly to the architectural issues is the lack of tests. The code is potentially very brittle; there’s no good way to know if you’re breaking anything until you notice it’s broken. It’s not at all clear how to write good tests for the code, because there’s a lot of inter-dependencies.</p>
   </li>
   <li>
-    <p>The second big problem is one of community; to wit, there isn’t much of one. There are some active players, and there’s what seems like a <a href="http://vufind.org/schedule.php">great conference</a> going on right now, so this may change.  But – especially because of the technical difficulties in contributing local changes back –VuFind could use a benevolent dictator, someone who has organizing and administrating VuFind <em>be a part of his/her job</em>. The last bit is important. </p>
+    <p>The second big problem is one of community; to wit, there isn’t much of one. There are some active players, and there’s what seems like a <a href="http://vufind.org/schedule.php">great conference</a> going on right now, so this may change.  But – especially because of the technical difficulties in contributing local changes back –VuFind could use a benevolent dictator, someone who has organizing and administrating VuFind <em>be a part of his/her job</em>. The last bit is important.</p>
   </li>
 </ul>
 
@@ -84,6 +99,37 @@
 
 <p>If I were starting from scratch tomorrow, we’d already decided to do something locally, and I could convince my systems people to run a ruby implementation (I like JRuby myself), I’d go with Blacklight. If we were already looking at something like Summon, I’d take a hard, hard look at the build-vs-buy numbers. Summon and Primo both give you APIs to program an interface against, and boy, it might be worth the effort to do so and leave everything else alone.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/09/vufind-midwest-gathering/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -91,15 +137,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -135,8 +181,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

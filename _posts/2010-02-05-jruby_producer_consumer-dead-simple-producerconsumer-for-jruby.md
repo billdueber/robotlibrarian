@@ -1,6 +1,8 @@
 ---
 title: "jruby_producer_consumer dead-simple producer/consumer for JRuby"
 date: 2010-02-05
+layout: post
+
 ---
 
 Yea! My first gem ever released!
@@ -13,7 +15,7 @@ I didn't really understand it. So I dug in today and wrote this.]
 I've just pushed to [Gemcutter](http://gemcutter.org/) my first gem -- a [JRuby](http://jruby.org/)-only
 producer/consumer class that works with anything that provides _#each_ called [jruby_producer_consumer](http://gemcutter.org/gems/jruby_producer_consumer).
 
-It's JRuby-only because it uses (a) A blocking queue implemenation that's native Java, and (b) threading, which isn't 
+It's JRuby-only because it uses (a) A blocking queue implemenation that's native Java, and (b) threading, which isn't
 a huge win under regular Ruby.
 
 There's no testing there because I'm not sure how to test threaded stuff :-(

@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Running Blacklight under JRuby</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>I decided to see if I could get <a href="http://projectblacklight.org/">Blacklight</a> working under <a href="http://jruby.org/">JRuby</a>, starting with running the test suite and working my way up from there.</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Running Blacklight under JRuby</h1>
+    <p class="post-meta">Nov 18, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>I decided to see if I could get <a href="http://projectblacklight.org/">Blacklight</a> working under <a href="http://jruby.org/">JRuby</a>, starting with running the test suite and working my way up from there.</p>
 
 <p>There was much pain. Much, much pain. Exacerbated by my almost complete<br />
 lack of knowledge about what I was doing.</p>
@@ -64,7 +79,7 @@ lack of knowledge about what I was doing.</p>
 <p>This is the procedure I eventually arrived at – if there are places where I made trouble for myself, please let me know!</p>
 
 <p>[And does anyone know how to get jruby’s nokogiri to link to a different<br />
-libxml and stop with the crappy libxml2-version error message every time I <br />
+libxml and stop with the crappy libxml2-version error message every time I<br />
 run it under OSX???]</p>
 
 <h3 id="download-jruby">Download jruby</h3>
@@ -92,8 +107,8 @@ export PATH=`pwd`:$PATH
 
 <h3 id="muck-with-blacklight-dependencies">Muck with Blacklight dependencies</h3>
 
-<p>Edit the file <em>init.rb</em> to comment out references to <em>libxml</em> and <em>ruby-xslt</em>, <br />
-as well as <em>nokogiri</em>. My understanding is that the first two are used, at this point, only for the EAD stuff. Both rely on <em>libxml2</em> which is a C-extension and hence unavailable to JRuby. </p>
+<p>Edit the file <em>init.rb</em> to comment out references to <em>libxml</em> and <em>ruby-xslt</em>,<br />
+as well as <em>nokogiri</em>. My understanding is that the first two are used, at this point, only for the EAD stuff. Both rely on <em>libxml2</em> which is a C-extension and hence unavailable to JRuby.</p>
 
 <p>Nokogiri gets pulled in during other installs and for some reason jrake will complain later on that it’s got a wrong version or something. So, we’ll just work without that particular net for now.</p>
 
@@ -105,9 +120,9 @@ as well as <em>nokogiri</em>. My understanding is that the first two are used, a
 
 <h3 id="do-some-initial-installs">Do some initial installs</h3>
 
-<pre><code>jgem install -v=2.3.4 rails 
-jgem install activerecord-jdbc-adapter jdbc-sqlite3 
-             activerecord-jdbcsqlite3-adapter ActiveRecord-JDBC 
+<pre><code>jgem install -v=2.3.4 rails
+jgem install activerecord-jdbc-adapter jdbc-sqlite3
+             activerecord-jdbcsqlite3-adapter ActiveRecord-JDBC
 jgem install rcov -s http://gemcutter.org --no-rdoc --no-ri
 jrake
 jrake gems:install
@@ -115,7 +130,7 @@ jrake gems:install
 
 <h3 id="edit-the-configdatabaseyml-file">Edit the <em>config/database.yml</em> file</h3>
 
-<p>…to change the adapter to <em>jdbcsqlite3</em> for development and testing. </p>
+<p>…to change the adapter to <em>jdbcsqlite3</em> for development and testing.</p>
 
 <h3 id="edit-the-databasesrake-file">Edit the <em>databases.rake</em> file</h3>
 
@@ -124,7 +139,7 @@ jrake gems:install
 <pre><code>edit ~/jruby/lib/ruby/gems/1.8/gems/rails-2.3.4/lib/tasks/databases.rake
 </code></pre>
 
-<p>You need to find everywhere there’s a </p>
+<p>You need to find everywhere there’s a</p>
 
 <pre><code>when "sqlite", "sqlite3" # or when /^sqlite/ in one case
 </code></pre>
@@ -167,12 +182,12 @@ java -Djetty.port=8888 -jar start.jar 2&gt;log.jetty
 
 <pre><code>cd ~/blacklight
 jrake spec
-   
+
    ................................................................
    ................................................................
    ....F............................................................
    1)
-   'ApplicationHelper Export EndNote should render the correct 
+   'ApplicationHelper Export EndNote should render the correct
    EndNote text file' FAILED
    expected: "%0 Format\n%E Greer, Lowell. \n%E Lubin, Steven. \n%E Chase, Stephanie, \n%E Brahms, Johannes, \n%E Beethoven, Ludwig van, \n%E Krufft, Nikolaus von, \n%T Music for horn \n%I Harmonia Mundi USA, \n%C [United States] : \n%D p2001. \n",
   got: "%0 Format\n%C [United States] : \n%D p2001. \n%E Greer, Lowell. \n%E Lubin, Steven. \n%E Chase, Stephanie, \n%E Brahms, Johannes, \n%E Beethoven, Ludwig van, \n%E Krufft, Nikolaus von, \n%I Harmonia Mundi USA, \n%T Music for horn \n" (using ##)
@@ -188,7 +203,7 @@ Finished in 15.519 seconds
 
 <pre><code>jrake features
   (much output)
-  
+
   59 scenarios (59 passed)
   434 steps (434 passed)
   0m51.186s
@@ -198,6 +213,37 @@ Finished in 15.519 seconds
 
 <p>…it appears that, at least on the surface, jruby is a viable platform for Blacklight so long as I don’t actually need any of the <em>libxml</em> stuff. In the next couple days I’ll try and actually get it all up and running and see if I can break it.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/11/running-blacklight-under-jruby/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -205,15 +251,15 @@ Finished in 15.519 seconds
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -249,8 +295,7 @@ Finished in 15.519 seconds
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

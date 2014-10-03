@@ -2,6 +2,8 @@
 title: "Stupid Solr tricks: Introduction (SST #0)"
 date: 2012-02-29
 tags: "solr, Stupid Solr Tricks"
+layout: post
+
 ---
 
 **Completed parts of the series:**

@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Why RDA is doomed to failure</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>[Note: edited for clarity thanks to rsinger’s comment, below]</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Why RDA is doomed to failure</h1>
+    <p class="post-meta">Apr 23, 2010</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Note: edited for clarity thanks to rsinger’s comment, below]</p>
 
 <p>Doomed, I say! DOOOOOOOOOOMMMMMMMED!</p>
 
@@ -64,11 +79,11 @@
 
 <p>Now, those of you who know me might be saying to yourselves, “Waitjustaminute. Bill doesn’t know anything at all about cataloging, or semantic representations, or the relative merits of various encapsulations of bibliographic metadata. I mean, sure, he knows a lot about…err….hmmm…well, in any case, he’s <em>definitely</em> talking out of his ass on this one.”</p>
 
-<p>First off, thanks for having such a long-winded internal monologue about me; it’s good to be thought of. </p>
+<p>First off, thanks for having such a long-winded internal monologue about me; it’s good to be thought of.</p>
 
-<p>And, of course, you’re right on all counts. I don’t know what I’m talking about in any of those realms. </p>
+<p>And, of course, you’re right on all counts. I don’t know what I’m talking about in any of those realms.</p>
 
-<p>And yet I’m still willing to make a strong statement? </p>
+<p>And yet I’m still willing to make a strong statement?</p>
 
 <p>Yes. I am. Here’s why.</p>
 
@@ -79,22 +94,22 @@
 <p>The purpose of any bibliographic metadata is to facilitate three things:</p>
 
 <ul>
-  <li><strong>Description/Identification</strong>. If you know what you want, does the metadata give you enough information to determine if the described item is what you want? Alternately, if you’re holding an item (or an alternate metadata representation of it), can you find the record that describes it? </li>
+  <li><strong>Description/Identification</strong>. If you know what you want, does the metadata give you enough information to determine if the described item is what you want? Alternately, if you’re holding an item (or an alternate metadata representation of it), can you find the record that describes it?</li>
   <li><strong>Machine finding</strong>. Can a machine, given a good-enough query, find a work via a search of the metadata?</li>
-  <li><strong>Machine grouping</strong>. Given the metadata, can a machine help a person find items “like this one”? </li>
+  <li><strong>Machine grouping</strong>. Given the metadata, can a machine help a person find items “like this one”?</li>
 </ul>
 
 <p>Take issue with one or more of those statements. I don’t care. The point I’m really trying to make is that any standard that doesn’t put <em>unmediated machine reasoning</em> at the forefront of what the metadata needs to support is living in a deep, deep hole.</p>
 
-<p>Computer cycles are pretty cheap, and programmers are pretty smart. We can figure out how to do useful things with virtually any data, but only if we can reliably get at those data. </p>
+<p>Computer cycles are pretty cheap, and programmers are pretty smart. We can figure out how to do useful things with virtually any data, but only if we can reliably get at those data.</p>
 
 <h3 id="getting-75-of-the-way-there">Getting 75% of the way there</h3>
 
-<p>Three-fourths of the problem can be addressed with one simple concept. </p>
+<p>Three-fourths of the problem can be addressed with one simple concept.</p>
 
-<p><strong>A solid equality relationship</strong>. </p>
+<p><strong>A solid equality relationship</strong>.</p>
 
-<p>By this I mean that “=” had better damn well mean “equal,” as opposed to “probably the same,  but there might be other representations, too.” If I want to say “A = B” (where A and B are authors, or works, or subjects, or anything that can be nailed down) there’s better be no false positives and no false negatives. Ever. MARC’s use of “hopefully-unique strings” is ridiculously insufficient in the modern era. </p>
+<p>By this I mean that “=” had better damn well mean “equal,” as opposed to “probably the same,  but there might be other representations, too.” If I want to say “A = B” (where A and B are authors, or works, or subjects, or anything that can be nailed down) there’s better be no false positives and no false negatives. Ever. MARC’s use of “hopefully-unique strings” is ridiculously insufficient in the modern era.</p>
 
 <p>RDA does pretty well with this, with URIs for appropriate concepts, so that’s good.</p>
 
@@ -112,7 +127,7 @@ here.</p>
 
 <p>Language such as, “If it is determined that a mechanism for providing a direct<br />
 link between a note and the instance of the element to which it relates is<br />
-required,…” worries me. <em>if</em>? <strong>IF</strong>????? That’s not a spec. That’s a guideline. Nail it down, for god’s sake. When is it appropriate or inappropriate? How do you add links to multiple (but not all) instances of the element? </p>
+required,…” worries me. <em>if</em>? <strong>IF</strong>????? That’s not a spec. That’s a guideline. Nail it down, for god’s sake. When is it appropriate or inappropriate? How do you add links to multiple (but not all) instances of the element?</p>
 
 <p>The spec also seems to describe at least half a dozen kinds of titles. One of these is “Abbreviated title.” Do we really want an abbreviated title? No. We want a title with an “abbreviated” modifier, so we can use that same modifier for, say, a corporate name or publisher or anything else. [Note: see rsinger’s comment below, indicating this was a piss-poor example on my part.]</p>
 
@@ -124,10 +139,41 @@ required,…” worries me. <em>if</em>? <strong>IF</strong>????? That’s not a
 
 <p>We’re not just talking about writing a spec. We’re talking about replacing <em>every single tool in the library toolchain</em>, from the ILS to editing software to OPACs to scripts that keep it all put together. We’ll be asking programmers to learn new skills and new ways of thinking, vendors to produce functional software for untested data formats, and catalogers to essentially take their whole brain out of their heads and get a new one.</p>
 
-<p>But that, frankly, is the <em>easy</em> part. The entire culture of the library is built around AACR2 concepts and MARC data structures. The thought processes, nomenclature – <em>everything</em> sometimes feels as if it’s built around three-digit tags. The majority of the (crucial!) specialized vocabulary librarians, and experts and specialists, use to communicate with each other is directly or indirectly tied to MARC </p>
+<p>But that, frankly, is the <em>easy</em> part. The entire culture of the library is built around AACR2 concepts and MARC data structures. The thought processes, nomenclature – <em>everything</em> sometimes feels as if it’s built around three-digit tags. The majority of the (crucial!) specialized vocabulary librarians, and experts and specialists, use to communicate with each other is directly or indirectly tied to MARC</p>
 
 <p>So, yeah, RDA is a hellofa lot better than AACR2/MARC. But in my view, it’s not better <em>enough</em> to justify all the pain. Switching is incredibly, astoundingly expensive both in terms of cost and in terms of the devaluation of institutional knowledge. We can’t do it every few years. We need to be damn sure we’re getting it right.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/04/why-rda-is-doomed-to-failure/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -135,15 +181,15 @@ required,…” worries me. <em>if</em>? <strong>IF</strong>????? That’s not a
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -179,8 +225,7 @@ required,…” worries me. <em>if</em>? <strong>IF</strong>????? That’s not a
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

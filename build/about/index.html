@@ -8,7 +8,9 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
-    <title>About</title>
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>About Bill</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
 
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,24 +61,43 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <div class="post">
+      <div id="main">
+        <div class="wrapper">
+          <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    <h1 class="post-title">About Bill</h1>
   </header>
 
   <article class="post-content">
-    <p>This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at <a href="http://jekyllrb.com/">jekyllrb.com</a></p>
+    <p>I have been a Systems Librarian at the <a href="http://lib.umich.edu/">University of Michigan Univeristy Library</a> since 2007. I’ve got a great wife, three kids (whose greatness comes and goes), and a home I adore in Ann Arbor, MI.</p>
 
-<p>You can find the source code for the Jekyll new theme at: <a href="https://github.com/jglovier/jekyll-new">github.com/jglovier/jekyll-new</a></p>
+<h3 id="stuff-i-do-at-work">Stuff I do at work</h3>
 
-<p>You can find the source code for Jekyll at <a href="https://github.com/jekyll/jekyll">github.com/jekyll/jekyll</a></p>
+<p>I spend much of my work time dealing with <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>, the library catalog. It’s currently a PHP front-end and a <a href="https://lucene.apache.org/solr/">Solr</a> backend, although any and all of those components may be likely to change as we start doing things differently around here.</p>
+
+<p>I’m also in charge of <a href="http://catalog.hathitrust.org/">the metadata catalog for the HathiTrust</a>. In both cases, I prepare stuff for indexing into Solr using a JRuby-based system called <a href="http://github.com/traject-project/traject/">traject</a>, which at its core is a basic <a href="https://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a> system, but which we’ve built a lot of MARC-centric niceties into.</p>
+
+<p>I also contribute to MARC libraries for <a href="http://github.com/ruby-marc/">ruby</a>, <a href="http://github.com/marc4j/">java</a>, and <a href="http://search.cpan.org/~gmcharlt/MARC-Record-2.0.6/">perl</a> although I really only use the ruby stuff in any consistent way.</p>
+
+<p>Just about everything I do makes it into <a href="http://github.com/billdueber/">my github repo</a> sooner or later. Some of what’s there is old and crusty; other stuff is more useful. Library-types may be interested in <a href="https://github.com/billdueber/library_stdnums">code to deal with standard identifiers</a> or a <a href="https://github.com/billdueber/solr-libstdnum-normalize">solr analyzer for normalzing ISBNs and LCCNs</a>.</p>
+
+<h3 id="stuff-i-do-not-at-work">Stuff I do not at work</h3>
+
+<p>Mostly, I take care of my kids, cook a tiny little bit, feel bad about not cooking more, and go out on dates with my wife whenever I can. I also play some volleyball and like to sing, but the former is sporadic and the latter usually only in the car.</p>
+
+<h3 id="contact-info">Contact info</h3>
+
+<p>You can always drop me a line on <a href="https://twitter.com/billdueber">Twitter</a> , or <a href="https://mcommunity.umich.edu/#profile:dueberb">find me via work</a></p>
 
   </article>
 
 </div>
 
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -80,15 +105,15 @@
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -124,8 +149,7 @@
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

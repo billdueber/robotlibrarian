@@ -2,6 +2,8 @@
 title: "Solr Field Type for numeric(ish) IDs (SST #1)"
 date: 2012-03-01
 tags: "solr, Stupid Solr Tricks"
+layout: post
+
 ---
 
 [For the introduction to this series, take a quick gander at [the introduction](http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/)]
@@ -25,7 +27,7 @@ You know, well-vetted stuff like this:
 
 [Note: some of these may be a titch exaggerated]
 
-How does your system deal with these on index? How about on query? 
+How does your system deal with these on index? How about on query?
 
 Here's an idea of how to use a custom solr fieldtype to do the heavy lifting.
 
@@ -46,12 +48,12 @@ Let's take a look at the end product and then walk through it.
 
 
 ~~~xml
-<fieldtype name="numericID" class="solr.TextField" 
+<fieldtype name="numericID" class="solr.TextField"
            positionIncrementGap="1000" omitNorms="true">
 <analyzer>
   <tokenizer class="solr.KeywordTokenizerFactory"/>
     <filter class="solr.PatternReplaceFilterFactory"
-              pattern="^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$" 
+              pattern="^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$"
               replacement="***$1" />
     <filter class="solr.PatternReplaceFilterFactory"
               pattern="^[^\*].*$" replacement="" />
@@ -59,7 +61,7 @@ Let's take a look at the end product and then walk through it.
               pattern="^\*\*\*" replacement="" />
     <filter class="solr.LowerCaseFilterFactory"/>
     <filter class="solr.PatternReplaceFilterFactory"
-              pattern="[^\p{N}x]" replacement="" 
+              pattern="[^\p{N}x]" replacement=""
               replace="all" />
     <filter class="solr.LengthFilterFactory" min="8" max="14" />
     <filter class="solr.PatternReplaceFilterFactory"
@@ -73,7 +75,7 @@ Let's take a look at the end product and then walk through it.
 
 **NOTE: I really, really recommend taking a look at [Scaling Lucene and Solr](http://www.lucidimagination.com/content/scaling-lucene-and-solr) by the good folks over at [Lucid Imagination](http://www.lucidimagination.com/) for great, short explanations of _omitNorms_, term frequencies, etc.**
 
-Since this is the first post, I'll go over some stuff that's probably a little 
+Since this is the first post, I'll go over some stuff that's probably a little
 too basic for any audience that's likely to show up here, but what the heck.
 
 * KeywordTokenizer
@@ -97,14 +99,14 @@ In the Solr world, that leads us to the confusingly-named [KeywordTokenizer](htt
 
 I primarily work in Ruby and Perl, which means the dramatic abuse of regular expressions is just part of my daily life.
 
-Line 5 is our first use of a regexp in the filter chain via [PatternReplaceFilterFactory](http://wiki.apache.org/solr/AnalyzersTokenizersTokenFilters#solr.PatternReplaceFilterFactory). 
+Line 5 is our first use of a regexp in the filter chain via [PatternReplaceFilterFactory](http://wiki.apache.org/solr/AnalyzersTokenizersTokenFilters#solr.PatternReplaceFilterFactory).
 
 The idea is to:
 
 1. Find something that looks like a match
 2. If found, get rid of everything else, and throw a '***' onto the beginning so later on I can tell if I matched or not.
 
-The second step is a little...odd...but necessary because I need a way to know if I found a candidate ID or not. If I did, well, there will be three asterisks on the front of the string from here on out. If not, there won't. 
+The second step is a little...odd...but necessary because I need a way to know if I found a candidate ID or not. If I did, well, there will be three asterisks on the front of the string from here on out. If not, there won't.
 
 This is a little confusing as these things go, so I'll break it down.
 
@@ -118,7 +120,7 @@ Line 6: the match:
 
 So..._[number][six numbers/dashes][optional X]_
 
-At minimum, that's seven digits/dashes. 
+At minimum, that's seven digits/dashes.
 
 Line 7: replacement
 
@@ -209,7 +211,7 @@ For those of you _not_ following along at home, here are the examples from waaaa
 * 0012-0045 => 120045
 * ISBN13: 1234567890123 => 1234567890123
 * ISSN: 1234567X (1998-99) => 1234567x
-* ISSN (1998-99): 1234567X => **199899** 
+* ISSN (1998-99): 1234567X => **199899**
 * 1234567890 (hdk. 22 pgs) => 1234567890
 * 9 => [nothing]
 * Behind the 3rd floor desk => [nothing]
@@ -219,8 +221,8 @@ So...not too bad. We did miss one, mistaking a year range for a numeric ID, but 
 
 ### Conclusions
 
-Obviously, this is the tip of the iceberg with this sort of thing. And it can still be confused. 
+Obviously, this is the tip of the iceberg with this sort of thing. And it can still be confused.
 
-But it _does_ follow our goal of having the exact same behavior on index and query, moving the logic to solr, and being pretty flexible. 
+But it _does_ follow our goal of having the exact same behavior on index and query, moving the logic to solr, and being pretty flexible.
 
 Perfect? No. Useful? Yes.

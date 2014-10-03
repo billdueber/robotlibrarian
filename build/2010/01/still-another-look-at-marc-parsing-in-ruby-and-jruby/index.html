@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Still another look at MARC parsing in ruby and jruby</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>I’ve been looking at making a jruby-based solr indexer for MARC documents, and started off wanting to make sure I could determine if anything I did would be faster than our existing (solrmarc-based) setup.</p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Still another look at MARC parsing in ruby and jruby</h1>
+    <p class="post-meta">Jan 29, 2010</p>
+  </header>
+
+  <article class="post-content">
+    <p>I’ve been looking at making a jruby-based solr indexer for MARC documents, and started off wanting to make sure I could determine if anything I did would be faster than our existing (solrmarc-based) setup.</p>
 
 <ul>
   <li><strong>Assertion</strong>: The upper bound on how fast I can process records and send them to Solr can be approximated by looking at how fast I can parse (and do nothing else to) marc records from a file.</li>
@@ -74,7 +89,7 @@
   <li><em>The platforms</em> are jruby 1.4 –server and MRI ruby 1.87</li>
   <li><em>The libraries</em> are marc4j and ruby-marc 0.3.3</li>
   <li>
-    <p><em>The parsers</em> are </p>
+    <p><em>The parsers</em> are</p>
 
     <ul>
       <li>The standard binary parsers all around</li>
@@ -90,11 +105,11 @@
 <p>The test files were 18,881 records in marc-xml, marc-binary, and AlephSequential formats.</p>
 
 <pre><code>
-MACHINE  PLATFORM LIBRARY     PARSER    SECONDS    REC/SECOND                      
+MACHINE  PLATFORM LIBRARY     PARSER    SECONDS    REC/SECOND
 desktop  jruby    marc4j      binary      4.06       4650
 desktop  jruby    marc4j      xml         5.55       3401
 desktop  jruby    ruby-marc   binary     17.35       1088
-desktop  jruby    ruby-marc   jstax      80.11        236 
+desktop  jruby    ruby-marc   jstax      80.11        236
 
 desktop  ruby     ruby-marc   binary     33.54        562
 desktop  ruby     ruby-marc   libxml     46.87        402
@@ -113,13 +128,44 @@ server   jruby    ruby-marc   jstax      44.56        424
 <ul>
   <li>jruby with ruby-marc is twice as fast at binary and twice as slow at xml compared with MRI</li>
   <li>marc4j is four times as fast for binary and about an order of magnitutde faster for xml compared with ruby-marc.</li>
-  <li>The server is fast. </li>
+  <li>The server is fast.</li>
 </ul>
 
-<p>We know from previous experience that libxml is the fastest of the current MRI-based marc-xml readers and that jstax is the best of the current jruby-based marc-xml readers. And, finally, we know that many of us can’t use marc-binary format because our records are too big. </p>
+<p>We know from previous experience that libxml is the fastest of the current MRI-based marc-xml readers and that jstax is the best of the current jruby-based marc-xml readers. And, finally, we know that many of us can’t use marc-binary format because our records are too big.</p>
 
 <p>If I’m gonna use jruby (which I think I am due to wanting to use the StreamingUpdateSolrServer) I’m gonna need to use marc4j and just wrap it up in some nicer syntax.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/01/still-another-look-at-marc-parsing-in-ruby-and-jruby/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -127,15 +173,15 @@ server   jruby    ruby-marc   jstax      44.56        424
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -171,8 +217,7 @@ server   jruby    ruby-marc   jstax      44.56        424
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

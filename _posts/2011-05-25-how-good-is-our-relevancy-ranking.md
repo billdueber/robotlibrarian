@@ -1,6 +1,8 @@
 ---
 title: "How good is our relevancy ranking?"
 date: 2011-05-25
+layout: post
+
 ---
 
 For those of us that spend our days trying to tweak <a title="Mirlyn -- The University of Michigan Library Catalog" href="http://mirlyn.lib.umich.edu/">Mirlyn</a> to make it better, one of the most important  -- and, in many ways, most opaque -- questions is, "How good is our relevancy ranking?"

@@ -1,6 +1,8 @@
 ---
 title: "Five rules to make your open source more open"
 date: 2009-01-25
+layout: post
+
 ---
 
 [I've noticed that a sure way to get people to look at stuff (as measured by, say, <a href="http://digg.com/">digg</a>) is to include a number. So I did. Five. ]

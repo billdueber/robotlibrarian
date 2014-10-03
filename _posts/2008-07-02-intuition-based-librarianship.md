@@ -2,6 +2,7 @@
 title: "Intuition-based librarianship?"
 date: 2008-07-02
 tags: "librarianship, rant"
+layout: post
 ---
 
 Not long after I started working in the library, I heard someone talking about "Evidence Based Librarianship." Like the good little kind-of-a-librarian I'd become, I looked it up and found [this article](http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=35250) which states that:
@@ -26,13 +27,13 @@ The logical conclusions to this is that:
 
 And the over-simplified solutions:
 
-**Make reading a job requirement -- for real!** Make librarians responsible for keeping up with the literature -- "responsible" in a "prove to your direct manager that you spent two hours reading and writing this week". 
+**Make reading a job requirement -- for real!** Make librarians responsible for keeping up with the literature -- "responsible" in a "prove to your direct manager that you spent two hours reading and writing this week".
 
 Librarians as a group, I think, *want* to use the research. But not so much that they're willing to let Curmudgeonly Old Faculty Member #2 hang tight for a few hours while they brush up.
 
-**Use the data you already have!** Your systems -- your ILS, any reference desk software, your proxy server, your web server -- all collect data. Warehouse the data. Mine the data. Provide both colorful graphical interfaces and ugly powerful analysis functions for the data. **Figure out how to do something with the freakin' data!** 
+**Use the data you already have!** Your systems -- your ILS, any reference desk software, your proxy server, your web server -- all collect data. Warehouse the data. Mine the data. Provide both colorful graphical interfaces and ugly powerful analysis functions for the data. **Figure out how to do something with the freakin' data!**
 
-Most (all?) libraries have *gobs* of data that are pulled out once a year for ACRL statistics. And even if they're looked at by someone, they're certainly not easily available to *everyone*. 
+Most (all?) libraries have *gobs* of data that are pulled out once a year for ACRL statistics. And even if they're looked at by someone, they're certainly not easily available to *everyone*.
 
 Push access to the data and associated visualization tools as far down the stack as you can. At least people will know what kinds of questions can be answered.
 

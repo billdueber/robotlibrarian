@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>Data structures and Serializations</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,14 +61,23 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>Jonathan Rochkind, in response to a long (and, IMHO, mostly ridiculous) thread on NGC4Lib, has been exploring the boundaries between a data model and its expression/serialization (<br />
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Data structures and Serializations</h1>
+    <p class="post-meta">Apr 20, 2010</p>
+  </header>
+
+  <article class="post-content">
+    <p>Jonathan Rochkind, in response to a long (and, IMHO, mostly ridiculous) thread on NGC4Lib, has been exploring the boundaries between a data model and its expression/serialization (<br />
 see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-formats-and-element-schemata/">here</a>, <a href="http://bibwild.wordpress.com/2010/04/19/and-more-on-software-data-formats/">here</a>, and <a href="http://bibwild.wordpress.com/2010/04/20/serialization-vs-metadata-schemavocabulary/">here</a><br />
-) and I thought I’d jump in. </p>
+) and I thought I’d jump in.</p>
 
 <h3 id="what-this-post-is-not">What this post is <em>not</em></h3>
 
-<p>There’s a lot to be said about a good domain model for bibliographic data. I’m <em>so</em> not the guy to say it. I know there are arguments for and against various aspects of the AACR2 and RDA and FRBR, and I’m unable to go into them. </p>
+<p>There’s a lot to be said about a good domain model for bibliographic data. I’m <em>so</em> not the guy to say it. I know there are arguments for and against various aspects of the AACR2 and RDA and FRBR, and I’m unable to go into them.</p>
 
 <p>What I <em>am</em> comfortable saying is this:</p>
 
@@ -72,9 +87,9 @@ see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-forma
 
 <h3 id="data-serializations">Data serializations</h3>
 
-<p>…are boring. They’re unimportant at the data modeling stage, and only barely important when thinking about data structures. For any given data structure there are lots of ways you can serialize it. A standard programming-language hash can be represented in a zillion ways, for example: yaml, json, various programming languages, .ini files, etc. Even MARC has two standard serializations (binary and xml) with several more actually in use (Aleph Sequential, for example). </p>
+<p>…are boring. They’re unimportant at the data modeling stage, and only barely important when thinking about data structures. For any given data structure there are lots of ways you can serialize it. A standard programming-language hash can be represented in a zillion ways, for example: yaml, json, various programming languages, .ini files, etc. Even MARC has two standard serializations (binary and xml) with several more actually in use (Aleph Sequential, for example).</p>
 
-<p>So, let me repeat again, serializations are boring and not worth talking about until you’ve got everything else nailed down. Any format you can round-trip your data structure to/from is fine. </p>
+<p>So, let me repeat again, serializations are boring and not worth talking about until you’ve got everything else nailed down. Any format you can round-trip your data structure to/from is fine.</p>
 
 <p>Serializations are measured from “less pain” to “more pain”, but all have the exact same <em>expressiveness</em>. Data <em>structures</em>, on the other hand, do not.</p>
 
@@ -91,17 +106,17 @@ see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-forma
   <li>A labeled, directed multigraph (e.g., a set of RDF Triples)</li>
 </ul>
 
-<p>You don’t have to think very hard to see that any of these can be viewed as a restricted version of the data structures above it. An ordered list (array) is just a set of key-value pairs where the keys represent each item’s sequence. A set of key-value pairs is a very, very flat hierarchy. A hierarchy is an undirected graph without cycles. An undirected graph is a directed graph where you’re careful to make links both ways. And a directed graph can easily be represented as a set of RDF triples (where you may, for example, only have one label for your relationships: “links to”). </p>
+<p>You don’t have to think very hard to see that any of these can be viewed as a restricted version of the data structures above it. An ordered list (array) is just a set of key-value pairs where the keys represent each item’s sequence. A set of key-value pairs is a very, very flat hierarchy. A hierarchy is an undirected graph without cycles. An undirected graph is a directed graph where you’re careful to make links both ways. And a directed graph can easily be represented as a set of RDF triples (where you may, for example, only have one label for your relationships: “links to”).</p>
 
 <p>[<strong>Note that I didn’t say any of these would be efficient implementations</strong>!]</p>
 
-<p>The reverse is not true – or, at least, not without an incredible amount of “out of band” information in another layer somewhere. </p>
+<p>The reverse is not true – or, at least, not without an incredible amount of “out of band” information in another layer somewhere.</p>
 
-<p>The structures at the end of the list have more <em>expressiveness</em>. You can just plain model more things in them (give-or-take the out-of-band stuff, composition, etc) per unit of screwing around. I’m not going to try to model my set of key=value pairs in an array. I could <em>do</em> it, but it would take so much of my attention that the data modeling would suffer. </p>
+<p>The structures at the end of the list have more <em>expressiveness</em>. You can just plain model more things in them (give-or-take the out-of-band stuff, composition, etc) per unit of screwing around. I’m not going to try to model my set of key=value pairs in an array. I could <em>do</em> it, but it would take so much of my attention that the data modeling would suffer.</p>
 
 <h3 id="dont-handicap-yourself">Don’t handicap yourself</h3>
 
-<p>Don’t start with the data structure. </p>
+<p>Don’t start with the data structure.</p>
 
 <p>DON’T START WITH THE DATA STRUCTURE!</p>
 
@@ -113,11 +128,11 @@ see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-forma
 
 <p>Domain modeling is <em>ridiculously hard</em> for any domain worth modeling. If you start with a handicap (a restrictive data structure) it’s going to be even harder.</p>
 
-<p>No one would think of trying to model bibliographic data using only arrays. That’s premature optimization on an epic scale. </p>
+<p>No one would think of trying to model bibliographic data using only arrays. That’s premature optimization on an epic scale.</p>
 
 <h3 id="the-appeal-of-rdf-triples">The appeal of RDF Triples</h3>
 
-<p>Even if you ignore all the semantics and rules that make RDF Triples a value-added instance of a labeled, directed multigraph, the appeal (to me, anyway) is that <em>any semantic model based on RDF Triples has enormous expressive power at its disposal</em>. </p>
+<p>Even if you ignore all the semantics and rules that make RDF Triples a value-added instance of a labeled, directed multigraph, the appeal (to me, anyway) is that <em>any semantic model based on RDF Triples has enormous expressive power at its disposal</em>.</p>
 
 <p>Does it turn out that after you’ve fully satisfied the necessary model for the domain, the semantics you need can actually be accomplished with something lower down in the list? Awesome. Go with it. You’ll get great implementations with good real-life computing characteristics. A database can often usefully be thought of an implementation of an undirected graph with typed nodes (and, perhaps, some typed links, if you use the column name in the calling table a “type” of sorts, and add some out-of-band knowledge). And lord knows RDBMS’s have great performance characteristics.</p>
 
@@ -135,22 +150,53 @@ see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-forma
   <li>…and keys are a concatenation of tag/ind1/ind2/code</li>
 </ul>
 
-<p>Control fields are especially restricted (ind1, ind2, and code are all ‘null’). There’s been some bullshit attempts at links (e.g., the 880 fields) but really, this is it. </p>
+<p>Control fields are especially restricted (ind1, ind2, and code are all ‘null’). There’s been some bullshit attempts at links (e.g., the 880 fields) but really, this is it.</p>
 
-<p>It doesn’t give us much to work with. It’s restricted. And, sadly, so is our thinking. </p>
+<p>It doesn’t give us much to work with. It’s restricted. And, sadly, so is our thinking.</p>
 
 <h3 id="putting-the-cart-before-the-horse">Putting the cart before the horse</h3>
 
-<p>As Jonathan (and zillions of others) rightly point out, a huge problem in the library world is that there are generations (plural) of working librarians who, because of years of practice, find it incredibly hard to think about bibliographic data as modeled outside the constraints inherent in the MARC <em>data structure</em>. It’s a handicap. It’s an anchor around our necks. </p>
+<p>As Jonathan (and zillions of others) rightly point out, a huge problem in the library world is that there are generations (plural) of working librarians who, because of years of practice, find it incredibly hard to think about bibliographic data as modeled outside the constraints inherent in the MARC <em>data structure</em>. It’s a handicap. It’s an anchor around our necks.</p>
 
-<p>MARC-the-data-<em>model</em> (nee AACR2) is not inherently bad because it’s built on an impoverished data structure. It’s bad because it does a shitty job at modeling the bibliographic data space. If we could produce a good model in a crappy data structure like that, well, that’d be awesome because it would indicate that things are simple. </p>
+<p>MARC-the-data-<em>model</em> (nee AACR2) is not inherently bad because it’s built on an impoverished data structure. It’s bad because it does a shitty job at modeling the bibliographic data space. If we could produce a good model in a crappy data structure like that, well, that’d be awesome because it would indicate that things are simple.</p>
 
-<p>Things, of course, aren’t simple. They’re <em>hard</em>. </p>
+<p>Things, of course, aren’t simple. They’re <em>hard</em>.</p>
 
-<p>So, if you want to complain about MARC or RDA or FRBR, figure out what its trying to model and talk about the fidelity of the model with respect to the problem space. But don’t conflate data models, data structures, and serializations. </p>
+<p>So, if you want to complain about MARC or RDA or FRBR, figure out what its trying to model and talk about the fidelity of the model with respect to the problem space. But don’t conflate data models, data structures, and serializations.</p>
 
 <p>Oh, and don’t say “PIN Number” or “ATM Machine.” That drives me crazy, too.</p>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2010
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2010/04/data-structures-and-serializations/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -158,15 +204,15 @@ see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-forma
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -202,8 +248,7 @@ see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-forma
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

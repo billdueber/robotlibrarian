@@ -1,6 +1,8 @@
 ---
 title: "Enough with the freakin' LC Call Number normalization!"
 date: 2009-03-18
+layout: post
+
 ---
 
 OK. I'm done with it, and this time I mean it.

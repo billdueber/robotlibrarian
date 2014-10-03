@@ -1,6 +1,8 @@
 ---
 title: "Beta version of the HathiTrust Volumes API available"
 date: 2009-12-15
+layout: post
+
 ---
 
 ## <span style="color: red">MAJOR CHANGE</span>
@@ -75,7 +77,7 @@ Note that the 'records' are keyed on the local umid, also available in the 'from
 The generic short form is:
 
     http://catalog.hathitrust.org/api/volumes/(idtype)/id.(outputtype)
-    
+
 Right now the valid idtypes are:
 
   * issn (will be normalized to just digits, no leading zeros)
@@ -96,15 +98,15 @@ The full API URL is [this]
 
 This is a request for data on two separate items, identified on the calling end as simply '1' and '2' (id:1 and id:2). The first item is searched for using both an oclc number and an lccn; the second supplies only an isbn.
 
-Note that 
+Note that
 
   * The output format (json) has moved to appear right after the '/volumes/'
   * There's an arbitrary 'id' field. This will be used to index the return values, so use something meaningful on your end.
   * keys and values are separated by colons. Key-Value pairs are separated by semi-colons.
   * Separate requests are separated by '/' in the URL, allowing you to request data for an arbitrary number of items with a single call.
-  * Return values are 
+  * Return values are
   * Matches follow the "#3" option on [the old post](http://robotlibrarian.billdueber.com/thinking-through-a-simple-api-for-hathitrust-item-metadata/), the
-   "Must match if present" option -- basically, if you supply an identifier and a record has one of those identifiers, they must match. 
+   "Must match if present" option -- basically, if you supply an identifier and a record has one of those identifiers, they must match.
 
 So, in the example, the first request has both an oclc number and an lccn. Matches are as follows:
 

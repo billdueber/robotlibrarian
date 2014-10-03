@@ -1,6 +1,8 @@
 ---
 title: "The sad truths about journal bundle prices"
 date: 2009-09-23
+layout: post
+
 ---
 
 [Notes taken during a talk today, *Ted Bergstrom: "Some Economics of Saying Nix To Big Deals and the Terrible Fix"*. My own thoughts are interspersed throughout; please don't automatically ascribe everything to Dr. Bergstrom.
@@ -29,9 +31,9 @@ Libraries who bought the first Big Deal had their payments increase 7%/year (not
 
 Plus...it's an incredibly popular product. Faculty love online access, as do students. So negotiating a new contract is tough to do, because libraries (as always) are unwilling to walk away.
 
-The theory of bargaining suggests the the library needs to know what will happen if the Big Deal bargain breaks down -- what happens if we walk? 
+The theory of bargaining suggests the the library needs to know what will happen if the Big Deal bargain breaks down -- what happens if we walk?
 
-Problem: we (the libraries) don't know what the deal is worth to us OR what it's worth to the publisher. Valuation of the big bundles is a ridiculously complex problem. 
+Problem: we (the libraries) don't know what the deal is worth to us OR what it's worth to the publisher. Valuation of the big bundles is a ridiculously complex problem.
 
 ### What happens if we cut if off?
 
@@ -40,23 +42,23 @@ Problem: we (the libraries) don't know what the deal is worth to us OR what it's
 
 So...we need to calculate number of pay-per-view access, which will obviously increase as time goes on (and more stuff falls under this model) and would go down if we were to change consumers (faculty and students) some percentage of the cost.
 
-Big problem: we can't make that calculation. We have no good way of knowing what percentage of article downloads are for current journals, and the publishers don't release that data. 
+Big problem: we can't make that calculation. We have no good way of knowing what percentage of article downloads are for current journals, and the publishers don't release that data.
 
 Even if we had the data, though, the likely outcome after a certain amount of time, as more stuff falls into the pay-per-view window, is a new Big Deal.
 
 ### What about the Big Deals themselves?
 
-Hard to know -- because there are NDA sprinkled around like snow in Minnesota. But it turns out that these deals are FOIA-able! Yea! Elsevier actually tried to sue Ted's group in the state of Washington, but Paul Courant and others helped to win the day, and they haven't been sued since. 
+Hard to know -- because there are NDA sprinkled around like snow in Minnesota. But it turns out that these deals are FOIA-able! Yea! Elsevier actually tried to sue Ted's group in the state of Washington, but Paul Courant and others helped to win the day, and they haven't been sued since.
 
 Publishes want to give the impression that the renewals of the Big Deals are basically formulaic, but in real life there are significant differences from institution to institution.
 
 ### What's the "Economic Solution"
 
-Llet users pay for what they use. If users paid their own money (about $35/article at the for-profit institutions), users will modify their own behavior AND authors will stop submitting to the expensive-to-access journals because they want their stuff to be read. 
+Llet users pay for what they use. If users paid their own money (about $35/article at the for-profit institutions), users will modify their own behavior AND authors will stop submitting to the expensive-to-access journals because they want their stuff to be read.
 
 ### How much money are they making?
 
-Reported profits of Elsevier and Springer are about 30% of sales. That's a huge margin in the regular world, but their costs are tiny? Where does it all go? 
+Reported profits of Elsevier and Springer are about 30% of sales. That's a huge margin in the regular world, but their costs are tiny? Where does it all go?
 
 Basically, it goes to lobbyists, lawers, and executive salaries.
 
@@ -74,7 +76,7 @@ Not much. Faculty will scream, and one library acting alone will have essentiall
 
 #### An interim strategy
 
-Drop Big Deals to overpriced journals. Maintain subscription and free access to journals priced near the average cost, and subsidize (at less than 100%) pay-per-view access to the overpriced journals 
+Drop Big Deals to overpriced journals. Maintain subscription and free access to journals priced near the average cost, and subsidize (at less than 100%) pay-per-view access to the overpriced journals
 
 ### How big are the differences in what people pay?
 

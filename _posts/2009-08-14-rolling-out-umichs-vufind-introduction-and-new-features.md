@@ -1,12 +1,14 @@
 ---
 title: "Rolling out UMich's \"VUFind\": Introduction and New Features"
 date: 2009-08-14
+layout: post
+
 ---
 
 <p>For the last few months, I've been working on rolling out a ridiculous-modified version of <a href="http://vufind.org/">Vufind</a>, which we just launched as our primary OPAC, <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>, with a slightly-different version powering <a href="http://catalog.hathitrust.org/">catalog.hathitrust.org</a>, a temporary metadata search on the HathiTrust data until the OCLC takes it over at some undetermined date.</p>
 
 <p>(Yeah, the HathiTrust site is a lot better looking.)</p>
- 
+
 <p>[Our Aleph-based catalog lives on at <a href="http://mirlyn-classic.lib.umich.edu">mirlyn-classic</a>) -- I'll be interested to see how the traffic on the two differs as time goes on.]</p>
 
 <p>I'm going to spend a few posts talking about how and why we essentially forked vufind, what sorts of modifications I made, and what technologies I hope to extract from our implementation that may be useful to the wider library community. And, I'm sure, a lot about why I hate Solr, why I love love love Solr, why I hate PHP, and why I love...er...no, I still hate PHP.</p>
@@ -19,7 +21,7 @@ date: 2009-08-14
 
 <h2>Non-stock user-facing features</h2>
 <p>In the next post, I'll start with a look at how and why we changed the backend and what I'd do differently if I were starting from scratch. But right now, a quick list of the user-facing stuff that you might find interesting.</p>
- 
+
 <ul>
   <li>Email and export searches and search results, as opposed to just individual records.</li>
   <li>Working endnote and refworks export.</li>

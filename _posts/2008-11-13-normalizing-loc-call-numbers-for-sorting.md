@@ -2,6 +2,8 @@
 title: "Normalizing LoC Call Numbers for sorting"
 date: 2008-11-13
 tags: "callnumbers, code"
+layout: post
+
 ---
 
 **Updated**: <em>I missed a '?' in the original code that pushed a single cutter into the second-cutter position. Fixed below.</em>

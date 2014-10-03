@@ -2,6 +2,8 @@
 title: "Google Doctype -- open documentation, open code"
 date: 2008-05-15
 tags: "google, reference"
+layout: post
+
 ---
 
 Because you can never have too many open encyclopedia-type-thingies, Google has launched

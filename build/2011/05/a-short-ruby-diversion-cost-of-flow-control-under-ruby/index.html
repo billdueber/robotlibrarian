@@ -8,6 +8,8 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
 
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
     <title>A short ruby diversion: cost of flow control under Ruby</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
@@ -21,7 +23,9 @@
 
     <header class="site-header">
 
+
   <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
 
     <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
 
@@ -37,7 +41,9 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
           
         
           
@@ -55,8 +61,17 @@
 
 
     <div class="page-content">
-      <div class="wrapper">
-        <p>A couple days ago I decided to finally get back to working on <a href="https://github.com/billdueber/threach"><code>threach</code></a> to try to deal with problems it had – essentially, it didn’t deal well with non-local exits due to calls to <code>break</code> or even something simple like a <code>NoMethodError</code>. </p>
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">A short ruby diversion: cost of flow control under Ruby</h1>
+    <p class="post-meta">May 3, 2011</p>
+  </header>
+
+  <article class="post-content">
+    <p>A couple days ago I decided to finally get back to working on <a href="https://github.com/billdueber/threach"><code>threach</code></a> to try to deal with problems it had – essentially, it didn’t deal well with non-local exits due to calls to <code>break</code> or even something simple like a <code>NoMethodError</code>.</p>
 
 <p>[BTW, I think I managed it. As near as I can tell, <code>threach</code> version 0.4 won’t deadlock anymore]</p>
 
@@ -73,17 +88,17 @@
   <tr>
     <td>
       <pre lang="ruby">
-range.each do |i|      
-  break          
-end              
+range.each do |i|
+  break
+end
       </pre>
     </td>
     <td>
       <pre lang="ruby">
 catch(:benchmarking) do  
- range.each do |i|      
-   throw(:benchmarking) 
- end                    
+ range.each do |i|
+   throw(:benchmarking)
+ end
 end
       </pre>
     </td>
@@ -94,22 +109,22 @@ end
   <tr>
     <td>
       <pre lang="ruby">
- begin                  
-   range.each do |i|    
+ begin
+   range.each do |i|
      raise StandardError
-   end                  
- rescue                 
-  # do nothing                
- end                          
+   end
+ rescue
+  # do nothing
+ end
      </pre>
     </td>
     <td>
       <pre lang="ruby">
-begin                  
+begin
   range.each do |i|
     raise StandardError, :hi, nil
   end
-rescue 
+rescue
  # do nothing
 end
       </pre>
@@ -131,7 +146,7 @@ end
   <tr><th>raise (3 arg)</th><td>1.85</td><td>2.13</td><td>0.45</td> <td>0.45</td></tr>
 </table>
 
-<p>The first thing to note is that this is 100K iterations. Three of the strategies are fast enough that you’d have to work really, really hard to notice them. </p>
+<p>The first thing to note is that this is 100K iterations. Three of the strategies are fast enough that you’d have to work really, really hard to notice them.</p>
 
 <p>In terms of speed, <code>raise (3 args)</code>, <code>catch/throw</code>, and <code>break</code> are fast enough that you shouldn’t bother worrying about them (although you <em>should</em> choose the method that makes your code easy to understand).</p>
 
@@ -142,11 +157,42 @@ end
 <p>Three things worth saying here:</p>
 
 <ul>
-  <li>If you’re using <code>raise/rescue</code> for flow control, <em>you’re already doing it wrong.</em> Reserve exceptions for, well, exceptional conditions that are only going to be raised once or twice, not all the time. </li>
-  <li>If you’re writing code that, for some ungodly reason, is planning on raising a crapload of exceptions, use the three-arg version. I’m looking at you, gem authors. </li>
+  <li>If you’re using <code>raise/rescue</code> for flow control, <em>you’re already doing it wrong.</em> Reserve exceptions for, well, exceptional conditions that are only going to be raised once or twice, not all the time.</li>
+  <li>If you’re writing code that, for some ungodly reason, is planning on raising a crapload of exceptions, use the three-arg version. I’m looking at you, gem authors.</li>
   <li>If you’re writing your code without worrying about how it will work under multiple threads, well, please don’t do that. Everyone has multi-core systems these days, and it’s silly to not be able to use them. Plus, counting on Matz to never move to a VM with real threads is a big gamble.</li>
 </ul>
 
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2011
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        The sidebar
       </div>
     </div>
 
@@ -154,15 +200,15 @@ end
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Robot Librarian</h2>
-
     <div class="footer-col-wrapper">
+
       <div class="footer-col  footer-col-1">
-        <ul class="contact-list">
-          <li>Robot Librarian</li>
-          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li>Recent posts</li>
         </ul>
       </div>
+
 
       <div class="footer-col  footer-col-2">
         <ul class="social-media-list">
@@ -198,8 +244,7 @@ end
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Stuff about computers in libraries, and libraries in computers
-</p>
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
       </div>
     </div>
 

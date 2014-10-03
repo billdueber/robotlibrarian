@@ -2,13 +2,15 @@
 title: "Boosting on Exactish (anchored) phrase matching in Solr: (SST #4)"
 date: 2012-03-19
 tags: "exact, fieldtype, solr, Stupid Solr Tricks"
+layout: post
+
 ---
 
 > Check out [introduction to the Stupid Solr Tricks series](http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/) if you're just joining us.]
 
 _Exact_ matching in Solr is easy. Use the default _string_ type: all it does is, essentially, exact phrase matching. _string_ is a great type for faceted values, where the only way we expect to search the index is via text pulled from the index itself. Query the index to get a value: use that value to re-query the index. Simple and self-contained.
 
-But much of the time, we don't want exact matching. We want _exactish_ matching. You know, where things are exactly the same _except_. Except for case, or punctuation, or how much whitespace is between tokens. Maybe do some unicode folding, or stemming. 
+But much of the time, we don't want exact matching. We want _exactish_ matching. You know, where things are exactly the same _except_. Except for case, or punctuation, or how much whitespace is between tokens. Maybe do some unicode folding, or stemming.
 
 Essentially, we want to reward users (via high relevancy) for getting _really close_. If someone types in a full title, but misses a colon, well, let's go  ahead and assume they want that particular item.
 
@@ -47,7 +49,7 @@ There are some additions to the `schema.xml` file; let's take a look!
 
 ### Step 1: get a decent text type
 
-The recent-nighty of Solr 3.x we're using has a great tokenizer in ICUTokenizerFactory, which does "the right thing" across a whole host of languages. 
+The recent-nighty of Solr 3.x we're using has a great tokenizer in ICUTokenizerFactory, which does "the right thing" across a whole host of languages.
 
 
 ~~~xml
@@ -56,13 +58,13 @@ The recent-nighty of Solr 3.x we're using has a great tokenizer in ICUTokenizerF
   <analyzer>
     <tokenizer class="solr.ICUTokenizerFactory"/>
       <filter class="solr.ICUFoldingFilterFactory"/>
-      <filter class="solr.SynonymFilterFactory" 
+      <filter class="solr.SynonymFilterFactory"
               synonyms="syn.txt" ignoreCase="true" expand="false"/>
-<!-- <filter class="solr.WordDelimiterFilterFactory" 
-             generateWordParts="1" generateNumberParts="1" 
+<!-- <filter class="solr.WordDelimiterFilterFactory"
+             generateWordParts="1" generateNumberParts="1"
              catenateWords="1" catenateNumbers="1" catenateAll="0"/> -->
       <filter class="solr.CJKWidthFilterFactory"/>
-      <filter class="solr.CJKBigramFilterFactory"/> 
+      <filter class="solr.CJKBigramFilterFactory"/>
   </analyzer>
 </fieldtype>
 
@@ -72,7 +74,7 @@ Let's take it bit by bit:
 
 * Obviously, start with the `ICUTokenizer` with a large positionIncrementGap so we can do some of the tricks we talked about [last time](http://robotlibrarian.billdueber.com/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/)
 * Next, we get one-stop shopping with the `ICUFoldingFilterFactory`. It provides all of the following:
-  * NFKC normalization (precomosing), 
+  * NFKC normalization (precomosing),
   * Unicode case folding (i.e., lowercasing)
   * search term folding (removing accents, etc).
 * Push in synonyms if you have any
@@ -82,7 +84,7 @@ Let's take it bit by bit:
 
 ### Step 2: Set up parallel text types that anchor phrase matches to one or both ends
 
-We're going to use something new: a `charFilter`. This differs from a normal filter in that it affects the input string before tokenization. 
+We're going to use something new: a `charFilter`. This differs from a normal filter in that it affects the input string before tokenization.
 
 Here's the trick. We're going to add anchoring text (I chose just 'AAAA' at the front and 'ZZZZ' at the end) to the normal text type, just by adding a simple charfilter.
 
@@ -92,23 +94,23 @@ Here's the trick. We're going to add anchoring text (I chose just 'AAAA' at the 
 <fieldtype name="text_lr" class="solr.TextField" positionIncrementGap="1000">
   <analyzer>
     <charFilter class="solr.PatternReplaceCharFilterFactory"
-      pattern="^(.*)$" replacement="AAAA $1 ZZZZ" />       
+      pattern="^(.*)$" replacement="AAAA $1 ZZZZ" />
     <tokenizer class="solr.ICUTokenizerFactory"/>
       <filter class="solr.ICUFoldingFilterFactory"/>
-      <filter class="solr.SynonymFilterFactory" 
-              synonyms="syn.txt" 
+      <filter class="solr.SynonymFilterFactory"
+              synonyms="syn.txt"
               ignoreCase="true" expand="false"/>
       <filter class="solr.CJKWidthFilterFactory"/>
-      <filter class="solr.CJKBigramFilterFactory"/> 
+      <filter class="solr.CJKBigramFilterFactory"/>
   </analyzer>
 </fieldtype>
-  
+
 
 ~~~
 
 Note that this charFilter actually adds two new tokens ('AAAA' and 'ZZZZ') to your token stream on both index and query. How does this help us?
 
-Let's look at indexing `Mister Blue Sky` in a normal text field. A normal solr phrase query `q="Blue Sky"` will match on that value, because the query phrase is fully contained in the indexed phrase. 
+Let's look at indexing `Mister Blue Sky` in a normal text field. A normal solr phrase query `q="Blue Sky"` will match on that value, because the query phrase is fully contained in the indexed phrase.
 
 But what happens if we index into a `text_lr` field?
 
@@ -116,9 +118,9 @@ But what happens if we index into a `text_lr` field?
 * Search terms `blue sky` becomes `aaaa blue sky zzzz`
 * Phrase searching will then compare the two transformed values using normal Solr rules, _find the the latter is not fully contained in the former as a phrase_, and give up.
 
-Be careful, though. That 'aaaa' and 'zzzz' are there just as if you'd typed them in. Thus every indexed value has the tokens 'aaaa' and 'zzzz', and every query will, in effect, include a query for 'aaaa' or 'zzzz' (depending on your `mm` settings). 
+Be careful, though. That 'aaaa' and 'zzzz' are there just as if you'd typed them in. Thus every indexed value has the tokens 'aaaa' and 'zzzz', and every query will, in effect, include a query for 'aaaa' or 'zzzz' (depending on your `mm` settings).
 
-That means that **any non-phrase query will match every field that uses this fieldtype**, and it will also mess with token counts with respect to your `mm` parameter. For those reasons, _only ever use anchored fieldtypes for phrase queries when you want exactish matches_. 
+That means that **any non-phrase query will match every field that uses this fieldtype**, and it will also mess with token counts with respect to your `mm` parameter. For those reasons, _only ever use anchored fieldtypes for phrase queries when you want exactish matches_.
 
 By adding only one of 'AAAA' or 'ZZZZ', we can have left-anchored and right-anchored searches as well. See [the schema.xml](https://github.com/billdueber/solr_stupid_tricks/blob/SST4/solr/conf/schema.xml) for these definitions.
 
@@ -166,7 +168,7 @@ If you're following at home, clear out your solr and index them:
 ~~~bash
 
 cd exampledocs
- ./reset_and_index_json.sh exactish.json 
+ ./reset_and_index_json.sh exactish.json
 
 ~~~
 
@@ -182,7 +184,7 @@ You can run all three queries as:
 ~~~bash
 
 cd ruby
-ruby browse.rb exactish_query.rb 
+ruby browse.rb exactish_query.rb
 # or ruby browse.rb exactish_query.rb json|xml|csv to get different output type
 
 ~~~
