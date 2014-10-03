@@ -104,6 +104,26 @@ header.site-header {
 
 }
 
+#pagination {
+background-color: $content-bg-color;
+border: 3pt solid $border-color;
+border-radius: 1.5em;
+padding: 1em;
+text-align: center;
+}
+
+.pagenumber {
+  padding-left: 0.25em;
+}
+
+.all-posts-table {
+  padding: 0em 0em 2em 2em;
+  border: none;
+
+  td.date {
+    width: 25%;
+  }
+}
 
 header.post-header h1 {
   padding-top: 1em;

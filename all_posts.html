@@ -1,20 +1,20 @@
 ---
 layout: page
-title: All posts
 permalink: /all_posts/
 ---
 
 
 <div class="home">
+  <div class="post-text">
 
-  <ul class="post-text">
+  <table class="all-posts-table">
     {% for post in site.posts %}
-      <li>
-            <span style="display: block; float: left; width: 7em;">{{ post.date | date: "%b %-d, %Y" }}</span>
-            <a  href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-      </li>
+      <tr>
+        <td class="date">{{ post.date | date: "%b %-d, %Y" }}</td>
+        <td><a  style="display:block" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
+      </tr>
     {% endfor %}
-  </ul>
-
+  </table>
+<div>
 
 </div>
