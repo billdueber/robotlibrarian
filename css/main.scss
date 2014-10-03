@@ -24,7 +24,7 @@ $grey-color-dark:  darken($grey-color, 25%);
 $on-palm:          600px;
 $on-laptop:        800px;
 
-$code-color:       #ffeeb5;
+$code-color:       lighten(#ffeeb5, 10%);
 $callout_color: #305275;
 $border-color: $callout_color;
 
@@ -77,6 +77,7 @@ body {
   background-color: $bg_color;
   font-family: 'Pontano Sans', Verdana, Helvetica, sans-serif;
   font-size: 110%;
+  padding-right: 1em;
 }
 a {
   font-weight: bold;
@@ -92,13 +93,15 @@ header.site-header {
     font-family: 'Rammetto One', sans-serif;
     font-size: 40px;
     font-weight: bold;
+
+    .site-subtitle {
+      font-size: 50%;
+      margin-top: 0.5em;
+      font-weight: normal;
+    }
+
   }
 
-  .site-subtitle {
-    font-size: 70%;
-    margin-top: 0.5em;
-    font-weight: bold;
-  }
 }
 
 
@@ -108,10 +111,11 @@ header.post-header h1 {
 
 
 #sidebar {
-  color: white;
-  background-color: #305275;
+  background-color: $content-bg-color;
+  border: 3pt solid $border-color;
   border-radius: 1.5em;
   padding: 1em;
+  margin-right: 1em;
 
 }
 
@@ -121,16 +125,12 @@ header.post-header h1 {
 
 .post-text {
   border-radius: 1em;
+  border: 3pt solid $border-color;
 
   background-color: $content-bg-color;
   padding: 0em 2em 2em 2em;
   margin-top: 2em;
   margin-bottom: 2em;
-}
-
-
-.post-list {
-
 
   ul {
     margin-left: 2em;
@@ -138,6 +138,11 @@ header.post-header h1 {
     li {
       list-style-type: disc;
     }
+  }
+
+  .morepost {
+    padding-left: 3em;
+    color: black;
   }
 
 

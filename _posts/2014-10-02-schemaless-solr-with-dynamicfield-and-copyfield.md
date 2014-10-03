@@ -12,12 +12,14 @@ Recent versions of [solr](https://lucene.apache.org/solr/) have the option to ru
 
 I find this intruguing, but it's not what I'm after right now.
 
-The problem I'm in the first stages of addressing is that my `schema.xml` is huge mess -- very little consistency, no naming conventions dictating what's stored/indexed, etc. The way people tend to address this is with strict naming conventions (possibly using [dynamicField](https://cwiki.apache.org/confluence/display/solr/Dynamic+Fields)s) and judicious use of [copyField](https://cwiki.apache.org/confluence/display/solr/Copying+Fields() directives.
+The problem I'm in the first stages of addressing is that my `schema.xml` is huge mess -- very little consistency, no naming conventions dictating what's stored/indexed, etc. It grew "ogranically" (which is what people say when they mean they were lazy and sloppy) and needs a full-on reorganization.
+
+The way people tend to address this is with strict naming conventions (possibly using [dynamicField](https://cwiki.apache.org/confluence/display/solr/Dynamic+Fields)s) and judicious use of [copyField](https://cwiki.apache.org/confluence/display/solr/Copying+Fields() directives. The [Project Hydra](http://projecthydra.org/) folks have [a nice, straightforward system](https://github.com/projecthydra/hydra/wiki/Solr-Schema) for how they set up dynamic fields.
 
 
 ## Indexed XOR Stored?
 
-The more I thought about it, the more I wondered whether it might be useful to have a *strict separation of stored and indexed fields*. Indexed fields would be named appropriately, so you know how they've been analyzed. And stored fields would have pleasant, human-readable names to make them easy to deal with for consuming applications.
+The more I thought about it, the more I wondered whether it might be useful to have a *strict separation of stored and indexed fields*. Indexed fields would be named with an appropriate suffix, so you know how they've been analyzed. And stored fields would have pleasant, human-readable names to make them easy to deal with for consuming applications.
 
 What I *think* I'd like is a system where:
 
@@ -105,23 +107,24 @@ Finally, we have our default: a stored, unindexed string. (Note that when Solr s
 
 Suppose I index an undeclared field called `title_t_s`:
 
-* `title_t_s` matches the first `dynamicField` declaration. This particular field is, thus ignored (no indexing, no storing) -- but it's available for further processing by the `copyField`s.
+* `title_t_s` matches the first `dynamicField` declaration. This specific field is ignored (no indexing, no storing), but the text sent to it remains available for further processing by the `copyField`s.
 * The first `copyField` matches, and copies the text into newly-generated field formed by what matched the `*` in the source field, followed by `_t`. That's `title`, so we get `title_t`.
 * The newly-minted `title_t` field is also unrecognized, but it matches the *second* `dynamicField` and is thus assigned to be an indexed text field.
 * Meanwhile, the second `copyField` *also* matches our original `title_t_s`. It uses what matched against the `*` in the source (`title`, again) to create a new field just called `title`.
 * Now we have a new field called `title` not matching any declared field, so it runs down the list of `dynamicField` definitions until it hits our stopgap at the end: a stored, nonindexed string.
 
 So, what we end up with field-wise is:
+
 * `title_t_s` disappearing into the ether. It's just gone.
 * `title_t`, an indexed text field
 * `title`, a stored string.
 
 Now I can run searches against `title_t`, but my document will have a nice stored string in it just called `title`.
 
-## Caveats
+## Why this is probably a bad idea.
 
-Depending on how crazy you want to get options-wise (multi-valued or not, termVectors or not, etc.) you can get a combinatorial explosion on the number of `dynamicField`/`copyField` sets you need to generate.
+Depending on how crazy you want to get options-wise (multi-valued or not, termVectors or not, etc.) you can get a combinatorial explosion on the number of `dynamicField`/`copyField` sets you need to generate. But that's not the real problem.
 
-You also don't have *any* intrinsic documentation of what your index looks like. None. You can't even look at the indexing code, because it'll look like you're sending a document with a field called `title_t_s` and that field is nowhere to be found.
+The real problem is that you don't have *any* intrinsic documentation of what your index looks like. None. You can't even look at the indexing code, because it'll look like you're sending a document with a field called `title_t_s` and that field is nowhere to be found.
 
 So, like I said: interesting, but by no means the obvious way to go. Still, I'm sure I'll have some variant of this in my schema when it comes time for me to reboot the library catalog.

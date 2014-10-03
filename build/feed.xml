@@ -6,8 +6,8 @@
 </description>
     <link>http://robotlibrarian.billdueber.com/</link>
     <atom:link href="http://robotlibrarian.billdueber.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 03 Oct 2014 12:20:33 -0400</pubDate>
-    <lastBuildDate>Fri, 03 Oct 2014 12:20:33 -0400</lastBuildDate>
+    <pubDate>Fri, 03 Oct 2014 16:16:30 -0400</pubDate>
+    <lastBuildDate>Fri, 03 Oct 2014 16:16:30 -0400</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -18,11 +18,13 @@
 
 &lt;p&gt;I find this intruguing, but it’s not what I’m after right now.&lt;/p&gt;
 
-&lt;p&gt;The problem I’m in the first stages of addressing is that my &lt;code&gt;schema.xml&lt;/code&gt; is huge mess – very little consistency, no naming conventions dictating what’s stored/indexed, etc. The way people tend to address this is with strict naming conventions (possibly using &lt;a href=&quot;https://cwiki.apache.org/confluence/display/solr/Dynamic+Fields&quot;&gt;dynamicField&lt;/a&gt;s) and judicious use of [copyField](https://cwiki.apache.org/confluence/display/solr/Copying+Fields() directives.&lt;/p&gt;
+&lt;p&gt;The problem I’m in the first stages of addressing is that my &lt;code&gt;schema.xml&lt;/code&gt; is huge mess – very little consistency, no naming conventions dictating what’s stored/indexed, etc. It grew “ogranically” (which is what people say when they mean they were lazy and sloppy) and needs a full-on reorganization.&lt;/p&gt;
+
+&lt;p&gt;The way people tend to address this is with strict naming conventions (possibly using &lt;a href=&quot;https://cwiki.apache.org/confluence/display/solr/Dynamic+Fields&quot;&gt;dynamicField&lt;/a&gt;s) and judicious use of [copyField](https://cwiki.apache.org/confluence/display/solr/Copying+Fields() directives. The &lt;a href=&quot;http://projecthydra.org/&quot;&gt;Project Hydra&lt;/a&gt; folks have &lt;a href=&quot;https://github.com/projecthydra/hydra/wiki/Solr-Schema&quot;&gt;a nice, straightforward system&lt;/a&gt; for how they set up dynamic fields.&lt;/p&gt;
 
 &lt;h2 id=&quot;indexed-xor-stored&quot;&gt;Indexed XOR Stored?&lt;/h2&gt;
 
-&lt;p&gt;The more I thought about it, the more I wondered whether it might be useful to have a &lt;em&gt;strict separation of stored and indexed fields&lt;/em&gt;. Indexed fields would be named appropriately, so you know how they’ve been analyzed. And stored fields would have pleasant, human-readable names to make them easy to deal with for consuming applications.&lt;/p&gt;
+&lt;p&gt;The more I thought about it, the more I wondered whether it might be useful to have a &lt;em&gt;strict separation of stored and indexed fields&lt;/em&gt;. Indexed fields would be named with an appropriate suffix, so you know how they’ve been analyzed. And stored fields would have pleasant, human-readable names to make them easy to deal with for consuming applications.&lt;/p&gt;
 
 &lt;p&gt;What I &lt;em&gt;think&lt;/em&gt; I’d like is a system where:&lt;/p&gt;
 
@@ -124,25 +126,28 @@ Finally, we have our default: a stored, unindexed string. (Note that when Solr s
 &lt;p&gt;Suppose I index an undeclared field called &lt;code&gt;title_t_s&lt;/code&gt;:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;title_t_s&lt;/code&gt; matches the first &lt;code&gt;dynamicField&lt;/code&gt; declaration. This particular field is, thus ignored (no indexing, no storing) – but it’s available for further processing by the &lt;code&gt;copyField&lt;/code&gt;s.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;title_t_s&lt;/code&gt; matches the first &lt;code&gt;dynamicField&lt;/code&gt; declaration. This specific field is ignored (no indexing, no storing), but the text sent to it remains available for further processing by the &lt;code&gt;copyField&lt;/code&gt;s.&lt;/li&gt;
   &lt;li&gt;The first &lt;code&gt;copyField&lt;/code&gt; matches, and copies the text into newly-generated field formed by what matched the &lt;code&gt;*&lt;/code&gt; in the source field, followed by &lt;code&gt;_t&lt;/code&gt;. That’s &lt;code&gt;title&lt;/code&gt;, so we get &lt;code&gt;title_t&lt;/code&gt;.&lt;/li&gt;
   &lt;li&gt;The newly-minted &lt;code&gt;title_t&lt;/code&gt; field is also unrecognized, but it matches the &lt;em&gt;second&lt;/em&gt; &lt;code&gt;dynamicField&lt;/code&gt; and is thus assigned to be an indexed text field.&lt;/li&gt;
   &lt;li&gt;Meanwhile, the second &lt;code&gt;copyField&lt;/code&gt; &lt;em&gt;also&lt;/em&gt; matches our original &lt;code&gt;title_t_s&lt;/code&gt;. It uses what matched against the &lt;code&gt;*&lt;/code&gt; in the source (&lt;code&gt;title&lt;/code&gt;, again) to create a new field just called &lt;code&gt;title&lt;/code&gt;.&lt;/li&gt;
   &lt;li&gt;Now we have a new field called &lt;code&gt;title&lt;/code&gt; not matching any declared field, so it runs down the list of &lt;code&gt;dynamicField&lt;/code&gt; definitions until it hits our stopgap at the end: a stored, nonindexed string.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;So, what we end up with field-wise is:&lt;br /&gt;
-* &lt;code&gt;title_t_s&lt;/code&gt; disappearing into the ether. It’s just gone.&lt;br /&gt;
-* &lt;code&gt;title_t&lt;/code&gt;, an indexed text field&lt;br /&gt;
-* &lt;code&gt;title&lt;/code&gt;, a stored string.&lt;/p&gt;
+&lt;p&gt;So, what we end up with field-wise is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;title_t_s&lt;/code&gt; disappearing into the ether. It’s just gone.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;title_t&lt;/code&gt;, an indexed text field&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;title&lt;/code&gt;, a stored string.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Now I can run searches against &lt;code&gt;title_t&lt;/code&gt;, but my document will have a nice stored string in it just called &lt;code&gt;title&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h2 id=&quot;caveats&quot;&gt;Caveats&lt;/h2&gt;
+&lt;h2 id=&quot;why-this-is-probably-a-bad-idea&quot;&gt;Why this is probably a bad idea.&lt;/h2&gt;
 
-&lt;p&gt;Depending on how crazy you want to get options-wise (multi-valued or not, termVectors or not, etc.) you can get a combinatorial explosion on the number of &lt;code&gt;dynamicField&lt;/code&gt;/&lt;code&gt;copyField&lt;/code&gt; sets you need to generate.&lt;/p&gt;
+&lt;p&gt;Depending on how crazy you want to get options-wise (multi-valued or not, termVectors or not, etc.) you can get a combinatorial explosion on the number of &lt;code&gt;dynamicField&lt;/code&gt;/&lt;code&gt;copyField&lt;/code&gt; sets you need to generate. But that’s not the real problem.&lt;/p&gt;
 
-&lt;p&gt;You also don’t have &lt;em&gt;any&lt;/em&gt; intrinsic documentation of what your index looks like. None. You can’t even look at the indexing code, because it’ll look like you’re sending a document with a field called &lt;code&gt;title_t_s&lt;/code&gt; and that field is nowhere to be found.&lt;/p&gt;
+&lt;p&gt;The real problem is that you don’t have &lt;em&gt;any&lt;/em&gt; intrinsic documentation of what your index looks like. None. You can’t even look at the indexing code, because it’ll look like you’re sending a document with a field called &lt;code&gt;title_t_s&lt;/code&gt; and that field is nowhere to be found.&lt;/p&gt;
 
 &lt;p&gt;So, like I said: interesting, but by no means the obvious way to go. Still, I’m sure I’ll have some variant of this in my schema when it comes time for me to reboot the library catalog.&lt;/p&gt;
 </description>

@@ -14,11 +14,12 @@ layout: default
             <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
           </h2>
           <div class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
-          {{ post.excerpt }}
+          {{ post.content |  truncatewords: 75 }} <a class="morepost" href="{{ post.url | prepend: site.baseurl }}">&lt;more&gt;</a>
         </div>
       </li>
     {% endfor %}
   </ul>
 
+  <div>Pagination goes here!</div>
 
 </div>

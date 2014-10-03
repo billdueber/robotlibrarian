@@ -10,7 +10,6 @@ github_username:  billdueber
 
 
 permalink: /:year/:month/:title/
-excerpt_separator: "||||||||"
 defaults:
   -
     scope:
@@ -27,6 +26,8 @@ destination: build
 
 # Build settings
 markdown: kramdown
+paginate: 10
+paginate_path: "page:num"
 
 
 

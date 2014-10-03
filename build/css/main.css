@@ -359,7 +359,7 @@ code {
   font-size: 15px;
   border: 1px solid #e8e8e8;
   border-radius: 3px;
-  background-color: #ffeeb5; }
+  background-color: #fffae8; }
 
 code {
   padding: 1px 5px; }
@@ -543,7 +543,7 @@ pre {
   display: block;
   margin-right: 2.35765%;
   width: 23.23176%;
-  margin-top: 3em; }
+  margin-top: 2em; }
   #sidebar:last-child {
     margin-right: 0; }
 
@@ -752,7 +752,8 @@ pre {
 body {
   background-color: #849cb5;
   font-family: 'Pontano Sans', Verdana, Helvetica, sans-serif;
-  font-size: 110%; }
+  font-size: 110%;
+  padding-right: 1em; }
 
 a {
   font-weight: bold; }
@@ -770,48 +771,52 @@ header.site-header {
     font-family: 'Rammetto One', sans-serif;
     font-size: 40px;
     font-weight: bold; }
-  header.site-header .site-subtitle {
-    font-size: 70%;
-    margin-top: 0.5em;
-    font-weight: bold; }
+    header.site-header .site-title .site-subtitle {
+      font-size: 50%;
+      margin-top: 0.5em;
+      font-weight: normal; }
 
 header.post-header h1 {
   padding-top: 1em; }
 
 #sidebar {
-  color: white;
-  background-color: #305275;
+  background-color: #fffefb;
+  border: 3pt solid #305275;
   border-radius: 1.5em;
-  padding: 1em; }
+  padding: 1em;
+  margin-right: 1em; }
 
 .site-footer {
   background-color: #fffefb; }
 
 .post-text {
   border-radius: 1em;
+  border: 3pt solid #305275;
   background-color: #fffefb;
   padding: 0em 2em 2em 2em;
   margin-top: 2em;
   margin-bottom: 2em; }
-
-.post-list ul {
-  margin-left: 2em; }
-  .post-list ul li {
-    list-style-type: disc; }
-.post-list .post-title {
-  font-size: 150%;
-  color: #000; }
-.post-list .post-link {
-  color: #000; }
-.post-list h2.post-title {
-  padding-top: 1em;
-  padding-bottom: 0em; }
-  .post-list h2.post-title a.post-link {
-    color: #305275; }
-.post-list h2, .post-list h3, .post-list h4 {
-  font-weight: bold;
-  margin-top: 2em; }
-.post-list h2 {
-  font-size: 110%; }
-.post-list h3 {
-  font-size: 100%; }
+  .post-text ul {
+    margin-left: 2em; }
+    .post-text ul li {
+      list-style-type: disc; }
+  .post-text .morepost {
+    padding-left: 3em;
+    color: black; }
+  .post-text .post-title {
+    font-size: 150%;
+    color: #000; }
+  .post-text .post-link {
+    color: #000; }
+  .post-text h2.post-title {
+    padding-top: 1em;
+    padding-bottom: 0em; }
+    .post-text h2.post-title a.post-link {
+      color: #305275; }
+  .post-text h2, .post-text h3, .post-text h4 {
+    font-weight: bold;
+    margin-top: 2em; }
+  .post-text h2 {
+    font-size: 110%; }
+  .post-text h3 {
+    font-size: 100%; }

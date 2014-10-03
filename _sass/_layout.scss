@@ -173,7 +173,7 @@ $sidebar_cols: 12 - $content_cols;
 
 #sidebar {
   @include span_columns($sidebar_cols);
-  margin-top: 3em;
+  margin-top: 2em;
 }
 
 .site-footer {
