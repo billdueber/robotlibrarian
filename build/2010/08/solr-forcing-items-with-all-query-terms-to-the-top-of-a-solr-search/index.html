@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <title>Solr: Forcing items with all query terms to the top of a Solr search</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2010/08/solr-forcing-items-with-all-query-terms-to-the-top-of-a-solr-search/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <p>[Note: I’ve since made a <a href="http://robotlibrarian.billdueber.com/using-localparams-in-solr-sst-2/">better explanation of, and solution for, this problem</a>.]</p>
+
+<p>Here at <a href="http://lib.umich.edu/">UMich</a>, we’re apparently in the minority in that we have <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>, our catalog discovery interface (a very hacked version of <a href="http://vufind.org/">VuFind</a>), set up to find records that match only a subset of the query terms.</p>
+
+<p>Put more succinctly: everyone else seem to join all terms with ‘AND’, whereas we do a <a href="http://www.lucidimagination.com/blog/2010/05/23/whats-a-dismax/">DisMax</a> variant on ‘OR’.</p>
+
+<p>Now, I’m actually quite proud of how our searching behaves. Reference desk anecdotes and our statistics all point to the idea that people tend to find what they’re looking for. I invite you to try <a href="http://mirlyn.lib.umich.edu/">our current configuration</a> out – and, of course, let me know if something feels off to you. We have control of our OPAC now, and can actually fix things.</p>
+
+<h3 id="the-problem-dismax-is-weird">The “problem”: DisMax is weird</h3>
+
+<p>The DisMax algorithm is complex. Even if you ignore the fact that we weight some fields (title, author) much higher than others, a fundamental feature of DisMax is that it basically gives ranking based on the question, “What percentage of the words in the document match one of our query terms”?</p>
+
+<p>Most of the time, that’s exactly what you want. In general, items that have all the keywords, and more of them, appear at the top of the search results.</p>
+
+<p>But sometimes you can have just, say, two of your three search terms appearing like a rash all across a relatively short record, and it’ll pop to the top, appearing ahead of records that actually contain all three search terms. Or maybe three of four search terms appear in both title and author (highly-weighted fields) and the same thing happens.</p>
+
+<p>And, yeah, it really happens.</p>
+
+<h3 id="an-actual-real-life-example">An actual, real-life example</h3>
+
+<p>Searching for the three terms <a href="http://mirlyn.lib.umich.edu/Search/Home?inst=all&amp;lookfor=information+AND+architecture+AND+usability">information AND architecture AND usability</a>, explicitly requiring all three, gives 12 results.</p>
+
+<p>The <a href="http://mirlyn.lib.umich.edu/Search/Home?inst=all&amp;lookfor=information+architecture+usability">equivalent DisMax search</a> (where only two of three need to be found) nets about 4300 results. Which is great – we’re casting a much wider net, with some pretty common words. That doesn’t matter so long as the most relevant results float to the top.</p>
+
+<p>The kicker? The first time an item in the first set appears in the second is at record number <strong>62</strong>. Our user is more than three pages in before she even see a record that contains all three terms.</p>
+
+<p>Again, most of the time, our current algorithm does really, really well in my opinion. But noticing this led to talk about artificially pushing all the “all terms are present” items to the top.</p>
+
+<h3 id="pushing-records-that-contain-all-the-terms-to-the-top">Pushing records that contain all the terms to the top</h3>
+
+<p>So, I wanted to:</p>
+
+<ul>
+  <li>Push records with all search terms to the top, but</li>
+  <li>…don’t otherwise change their scores. i.e., don’t otherwise re-order them in any way, ‘cause I’m already happy with my ordering.</li>
+</ul>
+
+<p>It turns out to be harder than I initially thought. I fought with my code for a whole day, then asked for help, and <a href="http://www.lucidimagination.com/search/document/1f2e58ecc9c16a9c/function_query_to_boost_scores_by_a_constant_if_all_terms_are_present">help was provided</a>.</p>
+
+<p>So, with special thanks to Jan Høydahl for his solution, we get this, in Ruby psuedocode:</p>
+
+<p>andedTerms = allMyTerms.join(‘ AND ‘)<br />
+bf = map(query($qq),0,0,0,100000.0) # Add this value to the ranking score<br />
+qq = “allFields:(#{andedTerms})” # Use this as the query<br />
+## add bf and qq to your solr query</p>
+
+<p>The <code>qq</code> is easy enough – it basically says that to get any relevancy score at all, the record must have all the terms in the <code>allFields</code> Solr field.</p>
+
+<p>For the <code>map</code>, we want to say
+&gt; If the record matches all the terms, give it an extra 100K points. If not, don’t.</p>
+
+<p>The <code>map</code> takes 5 arguments:</p>
+
+<ul>
+  <li>An initial value. In this case, we’re getting the relevancy ranking score based on the <code>qq</code> query. Basically, items that don’t have all the terms will have a score of zero; items that <em>do</em> have all three terms will have something bigger than zero.</li>
+  <li>The beginning of range to compare to. In this case, 0.</li>
+  <li>The end of the range. Another zero, so basically, we’ll be seeing if our initial value is between 0 and 0, e.g., if it’s exactly 0.</li>
+  <li>The value to return if the initial value fits in the range – zero. So, if the records doesn’t have all the terms, return a 0.</li>
+  <li>The value to return if the initial value falls outside the given range. 100K – a random very-large number I picked.</li>
+</ul>
+
+<h3 id="and">And…?</h3>
+
+<p>I just pushed this to our beta site, and folks are still looking at it, but so far, it looks awesome. I’ll do a little update post if/when it goes into production. And if it doesn’t, I’ll say why.</p>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robot Librarian</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Robot Librarian</li>
+          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Stuff about computers in libraries, and libraries in computers
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

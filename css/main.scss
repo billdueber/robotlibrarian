@@ -1,0 +1,109 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+
+
+// Our variables
+$base-font-family: Helvetica, Arial, sans-serif;
+$base-font-size:   16px;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit:     30px;
+
+$text-color:       #111;
+$background-color: #fdfdfd;
+$brand-color:      #2a7ae2;
+
+$grey-color:       #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
+
+$on-palm:          600px;
+$on-laptop:        800px;
+
+
+
+// Using media queries with like this:
+// @include media-query($palm) {
+//     .wrapper {
+//         padding-right: $spacing-unit / 2;
+//         padding-left: $spacing-unit / 2;
+//     }
+// }
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "base",
+        "layout",
+        "syntax-highlighting"
+;
+
+@import "bourbon/bourbon";
+@import "bitters/bitters";
+@import "neat/neat";
+
+$content_cols: 9;
+$sidebar_cols: 12 - $content_cols;
+
+//$text_color:       #2b2b2b;
+//$bg_callout_color: #d7d7dd;
+//$bold_color:       #001166;
+//$bg_color:         #F2f2f2;
+//$code_bg_color:     #FFFFFF;
+//$border_color:     #001166;
+//$sidebar_text:     #001166;
+
+$bg_color: #fff;
+$text_color: #585858;
+$border_color: darken(#118C4E, 15%);
+$bold_color: $border_color;
+$bg_callout_color: $bold_color;
+
+$code_bg_color: #eee;
+$sidebar_text: $text_color;
+// $article_title_text: $bg_color;
+$article_title_text: $border_color;
+
+// $link_color: darken(#4A96AD, 15%);
+$link_color: darken($border_color, 5%);
+
+body {
+  background-color: $bg_color;
+}
+
+header.site-header {
+  border: 1pt solid green;
+  @include span_columns(12);
+  background-image: url("/images/robot_alpha.png");
+  height: 140px;
+  background-repeat: no-repeat;
+  background-position: top 0em left 2em;
+  padding-top: 1.5em;
+
+  .site-title {
+    font-family: 'Rammetto One', sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .site-subtitle {
+    font-size: 70%;
+    margin-top: 0.5em;
+    font-weight: bold;
+  }
+}
+
+
+header.post-header h1 {
+  padding-top: 4em;
+}

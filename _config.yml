@@ -1,0 +1,50 @@
+# Site settings
+title: Robot Librarian
+email: bill@dueber.com
+description: > # this means to ignore newlines until "baseurl:"
+  Stuff about computers in libraries, and libraries in computers
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://robotlibrarian.billdueber.com" # the base hostname & protocol for your site
+twitter_username: billdueber
+github_username:  billdueber
+
+
+permalink: /:year/:month/:title/
+defaults:
+  -
+    scope:
+      path: ""
+      type: posts
+    values:
+      layout: default
+
+
+
+
+# source and dest
+destination: build
+
+# Build settings
+markdown: kramdown
+
+
+
+
+kramdown:
+  input: GFM
+  auto_ids:      true
+  footnote_nr:   1
+  entity_output: as_char
+  toc_levels:    1..6
+  smart_quotes:  lsquo,rsquo,ldquo,rdquo
+  use_coderay:   true
+  coderay_line_numbers: nil
+  extensions: [.markdown, .md]
+
+coderay:
+  coderay_wrap:              div
+  coderay_line_numbers:      nil
+  coderay_line_number_start: 1
+  coderay_tab_width:         2
+#  coderay_bold_every:        10
+  coderay_css:               style

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <title>Adding LibXML and Java STAX support to ruby-marc with pluggable XML parsers</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/10/adding-libxml-and-java-stax-support-to-ruby-marc-with-pluggable-xml-parsers-2/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <p>JRuby is my ruby platform of choice, mostly because I think its deployment options in my work environment are simpler (perhaps technically and certainly politically), but also because I have high, high hopes to use lots of super-optimized native java libraries. The <a href="http://cpan.perl.org/">CPAN</a> is what keeps me tethered to Perl, and whether or not you like Java-the-language, boy, are there a lot of high-quality libraries out there.</p>
+
+<p>Since I’ve been messing around with MARC-XML parsing of late, and since Ross Singer added <a href="http://groups.google.com/group/blacklight-development/browse_thread/thread/b6f7e064c0cf0bbd/9cd076ca7eeb1293?hl=en&amp;lnk=gst&amp;q=a+few+rubymarc+announcements#9cd076ca7eeb1293">pluggable xml-parser awesomeness</a> to the ruby-marc project, I thought I’d see what I could do with native Java methods when parsing MARC-XML.</p>
+
+<p>And just for kicks, I threw in the old code that I wrote before that uses LibXML.</p>
+
+<h3 id="why-do-this-at-all">Why do this at all?</h3>
+
+<p>Because…er…there’s an obvious work-situation where I need to squeeze every last drop of speed out of…ruby…which we don’t use…er…</p>
+
+<p>Because. Because I wanted to screw around with the technologies. Because I wanted to learn about calling java native stuff. Because I already wrote the libxml stuff. Because it feels silly to run on the JVM and not use JVM-native code to deal with XML, given that standard java projects make it seem like Java is a giant XML processor with a language wrapped around it.</p>
+
+<h3 id="what-exactly-did-i-do">What exactly did I do?</h3>
+
+<p>For the <a href="http://libxml.rubyforge.org/">LibXML</a> stuff, I copied my own code. For the java <a href="http://en.wikipedia.org/wiki/StAX">stax</a> (javax.xml.stream.XMLInputFactory.StreamReader) parser, I stole just about everything from Ross’s nokogiri code and put it into its own module, and then slimmed down the nokogiri module and the stax module to only include their differences. </p>
+
+<p><a href="http://rubyforge.org/tracker/index.php?func=detail&amp;aid=27253&amp;group_id=964&amp;atid=3783">The patch</a> is at the <a href="http://rubyforge.org/projects/marc/">ruby-marc rubyforge site</a> if you want to play along at home.</p>
+
+<p>Other than using the stax or libxml parser, everything else is the same – MARC::Record objects and their components are created exactly as they are with the other parsers. It might be “fun” (for some twisted definition of “fun”) to wrap the MARC::Record interface around <a href="http://marc4j.tigris.org/">marc4j</a> at some point, but right now all that’s changed is the parsing. </p>
+
+<h3 id="do-they-work">Do they work?</h3>
+
+<p>Yes. Thanks for asking. At least all the tests pass when I type ‘rake’. </p>
+
+<h3 id="how-fast-is-it">How fast is it?</h3>
+
+<p>As always, the numbers are iffy. These were done on my desktop, with other stuff going on. I didn’t bother to benchmark <code>rexml</code> because we know how slow <em>that</em> is.</p>
+
+<p>The test file is a nightly dump intended to go into our VuFind install. It was born as binary marc, and changed to marc-xml using <code>yaz-marcdump</code>, which is so fast that I thought maybe something had gone wrong. Holy cow, is <code>yaz-marcdump</code> fast. </p>
+
+<p>The resulting XML is 219MB and contains 46,242 records.</p>
+
+<p>The test was to open it up, loop through the records, and pull the 245 out of each. Each segment looks something like this:</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+  reader = <span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">XMLReader</span>.new(filename, <span style="color:#A60">:parser</span>=&gt;<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jstax</span><span style="color:#710">'</span></span>)
+  reader.each <span style="color:#080;font-weight:bold">do</span> |record|
+    title = record[<span style="color:#00D">245</span>]
+  <span style="color:#080;font-weight:bold">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Times are in seconds. I ran each one five times, with the exception of <code>jrexml</code>, during which I got bored.  And the perl code, for which I just wanted to get a ballpark to compare.</p>
+
+<pre><code>
+MRI 1.8.7
+    libxml     104    (103, 103, 106, 104, 103)
+    nokogiri   301    (304, 300, 301, 301, 300)
+
+JRuby trunk
+    jrexml     547    (539, 554)
+    jstax      203    (201, 208, 201, 201, 204 )
+    
+Perl 5.10 w/MARC::File:XML
+    perl       340    (340)
+
+</code></pre>
+
+<h4 id="sofaster-right">So…faster, right?</h4>
+
+<p>Pretty much, yeah.</p>
+
+<p>Under (MRI) ruby, Ross found that nokogiri was 3.5x faster than rexml, and my noodling-around at home showed the same speedup. Using that as a baseline, we get the following speed comparison table using the libxml time normalized to 1.00.</p>
+
+<p>In case that wasn’t clear: lower numbers are better.</p>
+
+<pre><code>libxml:   1.00
+jstax:    1.95
+nokogiri: 2.89
+jrexml:   5.16
+rexml:    10.11 (estimated; 3.5x nokogiri's speed)
+</code></pre>
+
+<h3 id="what-does-it-all-mean">What does it all mean?</h3>
+
+<p>It means that adding pluggable parsers was freakin’ brilliant.</p>
+
+<p>It means that a guy like me – with no real expertise in <em>any</em> of the applicable technologies – can do a passable job at integrating a java library into JRuby.</p>
+
+<p>And it means that if I (a) can get folks around here to use Ruby, and (b) can get them to use MARC-XML instead of binary MARC (which we can’t use anyway because of the record-length limitations), I can be sure that any bottlenecks aren’t going to be the result of those choices.</p>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robot Librarian</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Robot Librarian</li>
+          <li><a href="mailto:bill@dueber.com">bill@dueber.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Stuff about computers in libraries, and libraries in computers
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

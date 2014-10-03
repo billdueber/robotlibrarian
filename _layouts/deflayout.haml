@@ -1,0 +1,45 @@
+!!! 5
+%html
+  %head
+    %title= "Robot Librarian: #{current_page.data.title}"
+    %link{ :href => "/feed.xml", :rel => "alternate", :title => "Atom", :type => "application/atom+xml" }
+    %link{:href=>"http://fonts.googleapis.com/css?family=Rammetto+One", :rel=>"stylesheet", :type=>"text/css"}
+    = stylesheet_link_tag "all"
+    = javascript_include_tag  "all"    
+  %body
+    %div#wrapper
+      %header
+        %div#title 
+          %a{:href=>"/"} Robot Librarian
+          %div#subtitle Disclaimer: I'm not actually a robot.
+        %div#pages
+          %div.page_link
+            %a{:href=>"http://github.com/billdueber/"} Bill on Github
+          %div.page_link
+            %a{:href=>"http://twitter.com/billdueber/"} Bill on Twitter
+          %div.page_link
+            %a{:href=>"/about/"} About Bill
+      %div#content
+        %div#main
+          = yield
+        %div#sidebar
+          %div#recent
+            %h2 Recent posts
+            %ul
+              - blog.articles[0...5].each do |article|
+                %li= link_to article.title, article
+            %div#all_posts
+              
+              %a{:href=>"/all_posts"} ...or see a list of All Posts
+          %div#bydate
+            %h2 By Year
+            %ul
+              - blog.articles.group_by {|a| a.date.year }.each do |year, articles|
+                %li
+                  %a{:href=>blog_year_path(year)}= "#{year} (#{articles.size})"
+          %div#tags
+            %h2 Tags
+            = blog.tags.map{|tag, articles| link_to "#{tag} (#{articles.size})", tag_path(tag)}.join(' | ')
+    %footer
+      Copyright &copy; 2013 Bill Dueber
+      = google_analytics_tag
