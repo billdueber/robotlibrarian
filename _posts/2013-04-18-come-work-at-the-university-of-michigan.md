@@ -2,6 +2,7 @@
 title: "Come work at the University of Michigan"
 date: 2013-04-18
 layout: post
+slug: come-work-at-the-university-of-michigan
 
 ---
 

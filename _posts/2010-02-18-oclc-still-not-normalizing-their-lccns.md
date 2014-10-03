@@ -2,6 +2,7 @@
 title: "OCLC still not (NO! They are!) normalizing their LCCNs"
 date: 2010-02-18
 layout: post
+slug: oclc-still-not-normalizing-their-lccns
 
 ---
 

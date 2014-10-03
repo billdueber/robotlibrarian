@@ -3,6 +3,7 @@ title: "The friend of my enemy's friend's enemy's...err..."
 date: 2008-05-15
 tags: "politics"
 layout: post
+slug: the-friend-of-my-enemys-friends-enemyserr
 
 ---
 

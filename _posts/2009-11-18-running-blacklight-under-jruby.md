@@ -2,6 +2,7 @@
 title: "Running Blacklight under JRuby"
 date: 2009-11-18
 layout: post
+slug: running-blacklight-under-jruby
 
 ---
 

@@ -3,6 +3,7 @@ title: "Four things I hate about Ruby"
 date: 2011-01-13
 tags: "ruby"
 layout: post
+slug: four-things-i-hate-about-ruby
 
 ---
 

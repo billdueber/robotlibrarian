@@ -2,6 +2,7 @@
 title: "Enough with the freakin' LC Call Number normalization!"
 date: 2009-03-18
 layout: post
+slug: enough-with-the-freakin-lc-call-number-normalization
 
 ---
 

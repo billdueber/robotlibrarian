@@ -3,6 +3,7 @@ title: "UPenn library has video \"commercials\""
 date: 2008-05-07
 tags: "marketing"
 layout: post
+slug: upenn-library-has-video-commercials
 
 ---
 

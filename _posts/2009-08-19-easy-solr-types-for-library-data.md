@@ -2,6 +2,7 @@
 title: "Easy Solr types for library data"
 date: 2009-08-19
 layout: post
+slug: easy-solr-types-for-library-data
 
 ---
 

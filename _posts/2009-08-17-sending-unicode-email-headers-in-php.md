@@ -2,6 +2,7 @@
 title: "Sending unicode email headers in PHP"
 date: 2009-08-17
 layout: post
+slug: sending-unicode-email-headers-in-php
 
 ---
 

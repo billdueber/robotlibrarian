@@ -2,6 +2,7 @@
 title: "The sad truths about journal bundle prices"
 date: 2009-09-23
 layout: post
+slug: the-sad-truths-about-journal-bundle-prices
 
 ---
 

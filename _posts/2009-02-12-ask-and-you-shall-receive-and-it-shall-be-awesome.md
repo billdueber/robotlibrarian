@@ -2,6 +2,7 @@
 title: "Ask, and you shall receive, and it shall be AWESOME!"
 date: 2009-02-12
 layout: post
+slug: ask-and-you-shall-receive-and-it-shall-be-awesome
 
 ---
 

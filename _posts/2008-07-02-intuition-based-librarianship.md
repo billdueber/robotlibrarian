@@ -3,6 +3,7 @@ title: "Intuition-based librarianship?"
 date: 2008-07-02
 tags: "librarianship, rant"
 layout: post
+slug: intuition-based-librarianship
 ---
 
 Not long after I started working in the library, I heard someone talking about "Evidence Based Librarianship." Like the good little kind-of-a-librarian I'd become, I looked it up and found [this article](http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=35250) which states that:

@@ -3,6 +3,7 @@ title: "Please: don't return your books"
 date: 2013-02-12
 layout: post
 slug: please-dont-return-your-books
+slug: please-dont-return-your-books
 
 ---
 

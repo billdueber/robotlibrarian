@@ -2,6 +2,7 @@
 title: "Stupid catalog tricks: Subject Headings and the Long Tail"
 date: 2010-04-13
 layout: post
+slug: stupid-catalog-tricks-subject-headings-and-the-long-tail
 
 ---
 

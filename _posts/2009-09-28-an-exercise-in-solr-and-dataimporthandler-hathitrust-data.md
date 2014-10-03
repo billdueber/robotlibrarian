@@ -2,6 +2,7 @@
 title: "An exercise in Solr and DataImportHandler: HathiTrust data"
 date: 2009-09-28
 layout: post
+slug: an-exercise-in-solr-and-dataimporthandler-hathitrust-data
 
 ---
 

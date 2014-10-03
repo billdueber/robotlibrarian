@@ -3,6 +3,7 @@ title: "A short personal note"
 date: 2011-10-11
 tags: "personal"
 layout: post
+slug: a-short-personal-note
 
 ---
 

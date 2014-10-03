@@ -2,6 +2,7 @@
 title: "Announcing \"traject\" indexing software"
 date: 2013-10-14
 layout: post
+slug: announcing-traject-indexing-software
 
 ---
 

@@ -3,6 +3,7 @@ title: "Normalizing LoC Call Numbers for sorting"
 date: 2008-11-13
 tags: "callnumbers, code"
 layout: post
+slug: normalizing-loc-call-numbers-for-sorting
 
 ---
 

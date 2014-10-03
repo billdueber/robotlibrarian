@@ -3,6 +3,7 @@ title: "ISBN parenthetical notes: Bad MARC data #1"
 date: 2011-04-12
 tags: "bad data"
 layout: post
+slug: isbn-parenthetical-notes-bad-marc-data-1
 
 ---
 

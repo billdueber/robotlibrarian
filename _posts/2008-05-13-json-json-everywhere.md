@@ -3,6 +3,7 @@ title: "JSON, JSON everywhere"
 date: 2008-05-13
 tags: "api, datastorage, json"
 layout: post
+slug: json-json-everywhere
 
 ---
 

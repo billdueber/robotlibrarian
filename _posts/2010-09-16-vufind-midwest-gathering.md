@@ -2,6 +2,7 @@
 title: "VuFind Midwest gathering"
 date: 2010-09-16
 layout: post
+slug: vufind-midwest-gathering
 
 ---
 

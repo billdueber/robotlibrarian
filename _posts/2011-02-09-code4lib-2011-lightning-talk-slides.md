@@ -2,6 +2,7 @@
 title: "[RETRACTED] Code4Lib 2011 Lightning Talk Slides"
 date: 2011-02-09
 layout: post
+slug: code4lib-2011-lightning-talk-slides
 
 ---
 

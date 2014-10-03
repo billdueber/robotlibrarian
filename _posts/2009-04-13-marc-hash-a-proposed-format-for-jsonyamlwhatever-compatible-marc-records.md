@@ -2,6 +2,7 @@
 title: "MARC-Hash: a proposed format for JSON/YAML/Whatever-compatible MARC records "
 date: 2009-04-13
 layout: post
+slug: marc-hash-a-proposed-format-for-jsonyamlwhatever-compatible-marc-records
 
 ---
 

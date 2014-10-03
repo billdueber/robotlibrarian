@@ -2,6 +2,7 @@
 title: "ruby-marc with pluggable readers"
 date: 2010-03-02
 layout: post
+slug: ruby-marc-with-pluggable-readers
 
 ---
 

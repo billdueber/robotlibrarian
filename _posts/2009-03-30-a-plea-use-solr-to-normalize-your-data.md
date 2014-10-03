@@ -2,6 +2,7 @@
 title: "A plea: use Solr to normalize your data"
 date: 2009-03-30
 layout: post
+slug: a-plea-use-solr-to-normalize-your-data
 
 ---
 

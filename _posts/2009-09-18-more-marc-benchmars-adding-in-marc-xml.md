@@ -2,6 +2,7 @@
 title: "More Ruby MARC Benchmarks: Adding in MARC-XML"
 date: 2009-09-18
 layout: post
+slug: more-marc-benchmars-adding-in-marc-xml
 
 ---
 

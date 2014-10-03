@@ -2,6 +2,7 @@
 title: "How good is our relevancy ranking?"
 date: 2011-05-25
 layout: post
+slug: how-good-is-our-relevancy-ranking
 
 ---
 

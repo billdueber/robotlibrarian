@@ -2,6 +2,7 @@
 title: "New interest in MARC-HASH / JSON"
 date: 2010-02-26
 layout: post
+slug: new-interest-in-marc-hash-json
 
 ---
 

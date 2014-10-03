@@ -2,6 +2,7 @@
 title: "Building a solr text filter for normalizing data"
 date: 2009-08-20
 layout: post
+slug: building-a-solr-text-filter-for-normalizing-data
 
 ---
 

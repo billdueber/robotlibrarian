@@ -3,6 +3,7 @@ title: New blog front- and back-end
 date: 2013-12-17
 tags:
 layout: post
+slug: new-blog-front-and-back-end.html
 
 ---
 

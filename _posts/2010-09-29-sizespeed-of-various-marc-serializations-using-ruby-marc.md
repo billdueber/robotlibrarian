@@ -2,6 +2,7 @@
 title: "Size/speed of various MARC serializations using ruby-marc"
 date: 2010-09-29
 layout: post
+slug: sizespeed-of-various-marc-serializations-using-ruby-marc
 
 ---
 

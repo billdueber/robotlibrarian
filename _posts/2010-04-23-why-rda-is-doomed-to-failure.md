@@ -2,6 +2,7 @@
 title: "Why RDA is doomed to failure"
 date: 2010-04-23
 layout: post
+slug: why-rda-is-doomed-to-failure
 
 ---
 

@@ -2,6 +2,7 @@
 title: "TicTocs: Give us a file! Pretty pretty pretty please!"
 date: 2009-02-02
 layout: post
+slug: tictocs-give-us-a-file-pretty-pretty-pretty-please
 
 ---
 

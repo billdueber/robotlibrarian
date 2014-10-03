@@ -2,6 +2,7 @@
 title: "Dead-easy (but extreme) AJAX logging in our VuFind install"
 date: 2009-09-25
 layout: post
+slug: dead-easy-but-extreme-ajax-logging-in-our-vufind-install
 
 ---
 

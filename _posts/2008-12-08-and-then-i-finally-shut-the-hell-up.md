@@ -2,6 +2,7 @@
 title: "And then I finally shut the hell up"
 date: 2008-12-08
 layout: post
+slug: and-then-i-finally-shut-the-hell-up
 
 ---
 

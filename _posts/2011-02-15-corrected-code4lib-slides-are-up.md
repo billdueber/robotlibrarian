@@ -2,6 +2,7 @@
 title: "Corrected Code4Lib slides are up"
 date: 2011-02-15
 layout: post
+slug: corrected-code4lib-slides-are-up
 
 ---
 

@@ -2,6 +2,7 @@
 title: "MARC-HASH: The saga continues (now with even less structure)"
 date: 2009-04-15
 layout: post
+slug: marc-hash-the-saga-continues-now-with-even-less-structure
 
 ---
 

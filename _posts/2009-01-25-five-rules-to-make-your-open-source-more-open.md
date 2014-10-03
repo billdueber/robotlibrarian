@@ -2,6 +2,7 @@
 title: "Five rules to make your open source more open"
 date: 2009-01-25
 layout: post
+slug: five-rules-to-make-your-open-source-more-open
 
 ---
 

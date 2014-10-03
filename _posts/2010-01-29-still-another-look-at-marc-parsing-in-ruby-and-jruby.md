@@ -2,6 +2,7 @@
 title: "Still another look at MARC parsing in ruby and jruby"
 date: 2010-01-29
 layout: post
+slug: still-another-look-at-marc-parsing-in-ruby-and-jruby
 
 ---
 

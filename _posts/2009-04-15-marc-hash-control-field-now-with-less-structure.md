@@ -2,6 +2,7 @@
 title: "MARC-HASH control field, now with less structure"
 date: 2009-04-15
 layout: post
+slug: marc-hash-control-field-now-with-less-structure
 
 ---
 

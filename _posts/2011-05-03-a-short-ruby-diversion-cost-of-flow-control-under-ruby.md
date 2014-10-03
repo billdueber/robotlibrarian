@@ -3,6 +3,7 @@ title: "A short ruby diversion: cost of flow control under Ruby"
 date: 2011-05-03
 tags: "ruby"
 layout: post
+slug: a-short-ruby-diversion-cost-of-flow-control-under-ruby
 
 ---
 

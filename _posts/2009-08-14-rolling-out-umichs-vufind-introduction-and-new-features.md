@@ -2,6 +2,7 @@
 title: "Rolling out UMich's \"VUFind\": Introduction and New Features"
 date: 2009-08-14
 layout: post
+slug: rolling-out-umichs-vufind-introduction-and-new-features
 
 ---
 

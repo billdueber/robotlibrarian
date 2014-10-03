@@ -3,6 +3,7 @@ title: "Wanted: a better proxy server"
 date: 2008-10-02
 tags: "TALITAS"
 layout: post
+slug: wanted-a-better-proxy-server
 
 ---
 

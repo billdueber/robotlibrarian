@@ -3,6 +3,7 @@ title: "Google Doctype -- open documentation, open code"
 date: 2008-05-15
 tags: "google, reference"
 layout: post
+slug: google-doctype-open-documentation-open-code
 
 ---
 

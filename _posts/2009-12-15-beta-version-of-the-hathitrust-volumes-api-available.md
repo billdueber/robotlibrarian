@@ -2,6 +2,7 @@
 title: "Beta version of the HathiTrust Volumes API available"
 date: 2009-12-15
 layout: post
+slug: beta-version-of-the-hathitrust-volumes-api-available
 
 ---
 

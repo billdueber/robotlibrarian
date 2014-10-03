@@ -2,6 +2,7 @@
 title: "Solr: Forcing items with all query terms to the top of a Solr search"
 date: 2010-08-18
 layout: post
+slug: solr-forcing-items-with-all-query-terms-to-the-top-of-a-solr-search
 
 ---
 

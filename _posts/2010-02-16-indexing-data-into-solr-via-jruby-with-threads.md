@@ -2,6 +2,7 @@
 title: "Indexing data into Solr via JRuby (with threads!)"
 date: 2010-02-16
 layout: post
+slug: indexing-data-into-solr-via-jruby-with-threads
 
 ---
 

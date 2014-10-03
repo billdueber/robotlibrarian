@@ -2,6 +2,7 @@
 title: "Setting up your OPAC for Zotero support using unAPI"
 date: 2009-11-06
 layout: post
+slug: setting-up-your-opac-for-zotero-support-using-unapi
 
 ---
 

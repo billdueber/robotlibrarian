@@ -3,6 +3,7 @@ title: "Even better, even simpler multithreading with JRuby"
 date: 2011-07-01
 tags: "jruby, ruby"
 layout: post
+slug: even-better-even-simpler-multithreading-with-jruby
 
 ---
 

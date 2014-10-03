@@ -2,6 +2,7 @@
 title: "Adding LibXML and Java STAX support to ruby-marc with pluggable XML parsers"
 date: 2009-10-07
 layout: post
+slug: adding-libxml-and-java-stax-support-to-ruby-marc-with-pluggable-xml-parsers-2
 
 ---
 

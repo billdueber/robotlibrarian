@@ -2,6 +2,7 @@
 title: "jruby_producer_consumer dead-simple producer/consumer for JRuby"
 date: 2010-02-05
 layout: post
+slug: jruby_producer_consumer-dead-simple-producerconsumer-for-jruby
 
 ---
 

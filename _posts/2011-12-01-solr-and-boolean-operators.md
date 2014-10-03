@@ -2,6 +2,7 @@
 title: "Solr and boolean operators"
 date: 2011-12-01
 layout: post
+slug: solr-and-boolean-operators
 
 ---
 

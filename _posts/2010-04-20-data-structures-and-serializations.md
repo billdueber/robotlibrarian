@@ -2,6 +2,7 @@
 title: "Data structures and Serializations"
 date: 2010-04-20
 layout: post
+slug: data-structures-and-serializations
 
 ---
 

@@ -2,6 +2,7 @@
 title: "Thinking through a simple API for HathiTrust item metadata"
 date: 2009-11-03
 layout: post
+slug: thinking-through-a-simple-api-for-hathitrust-item-metadata
 
 ---
 

@@ -2,6 +2,7 @@
 title: "Simple Ruby gem for dealing with ISBN/ISSN/LCCN"
 date: 2010-09-13
 layout: post
+slug: simple-ruby-gem-for-dealing-with-isbnissnlccn
 
 ---
 

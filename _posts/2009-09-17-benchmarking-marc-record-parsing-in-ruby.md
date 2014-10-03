@@ -2,6 +2,7 @@
 title: "Benchmarking MARC record parsing in Ruby"
 date: 2009-09-17
 layout: post
+slug: benchmarking-marc-record-parsing-in-ruby
 
 ---
 

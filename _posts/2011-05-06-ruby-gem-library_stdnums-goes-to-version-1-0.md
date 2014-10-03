@@ -3,6 +3,7 @@ title: "Ruby gem library_stdnums goes to version 1.0"
 date: 2011-05-06
 tags: "librarian code, ruby"
 layout: post
+slug: ruby-gem-library_stdnums-goes-to-version-1-0
 
 ---
 

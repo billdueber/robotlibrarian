@@ -2,6 +2,7 @@
 title: "Pushing MARC to Solr; processing times and threading and such"
 date: 2010-03-04
 layout: post
+slug: pushing-marc-to-solr-processing-times-and-threading-and-such
 
 ---
 

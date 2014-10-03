@@ -3,6 +3,7 @@ title: "Using SQLite3 from JRuby without ActiveRecord"
 date: 2011-05-26
 tags: "jruby"
 layout: post
+slug: using-sqlite3-from-jruby-without-activerecord-2
 
 ---
 

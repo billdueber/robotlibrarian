@@ -2,6 +2,7 @@
 title: "Why bother with threading in jruby? Because it's easy."
 date: 2010-03-12
 layout: post
+slug: why-bother-with-threading-in-jruby-because-its-easy
 
 ---
 

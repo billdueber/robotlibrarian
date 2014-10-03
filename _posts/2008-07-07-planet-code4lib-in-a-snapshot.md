@@ -3,6 +3,7 @@ title: "Planet Code4Lib in a snapshot"
 date: 2008-07-07
 tags: "code4lib, fun"
 layout: post
+slug: planet-code4lib-in-a-snapshot
 
 ---
 

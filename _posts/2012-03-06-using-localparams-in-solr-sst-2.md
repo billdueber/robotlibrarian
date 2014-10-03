@@ -3,6 +3,7 @@ title: "Using localparams in Solr (or, how to boost records that contain all ter
 date: 2012-03-06
 tags: "solr, Stupid Solr Tricks"
 layout: post
+slug: using-localparams-in-solr-sst-2
 
 ---
 

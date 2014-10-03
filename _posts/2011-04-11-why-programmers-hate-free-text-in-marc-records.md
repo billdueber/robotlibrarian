@@ -3,6 +3,7 @@ title: "Why programmers hate free text in MARC records"
 date: 2011-04-11
 tags: "bad data"
 layout: post
+slug: why-programmers-hate-free-text-in-marc-records
 
 ---
 

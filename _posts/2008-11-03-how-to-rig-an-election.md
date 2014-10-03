@@ -2,6 +2,7 @@
 title: "How to rig an election"
 date: 2008-11-03
 layout: post
+slug: how-to-rig-an-election
 
 ---
 

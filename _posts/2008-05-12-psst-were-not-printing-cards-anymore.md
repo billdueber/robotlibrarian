@@ -3,6 +3,7 @@ title: "Psst. We're not printing cards anymore"
 date: 2008-05-12
 tags: "code4lib, TALITAS"
 layout: post
+slug: psst-were-not-printing-cards-anymore
 
 ---
 

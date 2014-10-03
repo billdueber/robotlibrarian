@@ -2,6 +2,7 @@
 title: "Does anyone use those prev/next/back-to-search links?"
 date: 2010-11-03
 layout: post
+slug: does-anyone-use-those-prevnextback-to-search-links
 
 ---
 

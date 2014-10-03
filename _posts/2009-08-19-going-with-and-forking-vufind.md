@@ -2,6 +2,7 @@
 title: "Going with and \"forking\" VUFind"
 date: 2009-08-19
 layout: post
+slug: going-with-and-forking-vufind
 
 ---
 

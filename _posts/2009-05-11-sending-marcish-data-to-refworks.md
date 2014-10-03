@@ -2,6 +2,7 @@
 title: "Sending MARC(ish) data to Refworks"
 date: 2009-05-11
 layout: post
+slug: sending-marcish-data-to-refworks
 
 ---
 
