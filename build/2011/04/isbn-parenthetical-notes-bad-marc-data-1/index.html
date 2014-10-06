@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>ISBN parenthetical notes: Bad MARC data #1</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2011/04/isbn-parenthetical-notes-bad-marc-data-1/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">ISBN parenthetical notes: Bad MARC data #1</h1>
+    <p class="post-meta">Apr 12, 2011</p>
+  </header>
+
+  <article class="post-content">
+    <p>Yesterday, I gave a brief overview of <a href="http://robotlibrarian.billdueber.com/why-programmers-hate-free-text-in-marc-records/">why free text is hard to deal with</a>.</p>
+
+<p>Today, I’m turning my attention to a concrete example that drives me absolutely batshit crazy: taking a perfectly good unique-id field (in this case, the ISBN in the 020) and appending stuff onto the end of it.</p>
+
+<p>The point is not to mock anything. Mocking will, however, be included for free.</p>
+
+<h3 id="whats-supposed-to-be-in-the-020">What’s supposed to be in the 020?</h3>
+
+<p>Well, for starters, an ISBN (10 or 13 digit, we’re not picky).</p>
+
+<p>Let’s not worry, for the moment, about the actual ISBN and whether it’s valid or not.</p>
+
+<p>Wait, no, let’s go ahead and worry about it. It’s an easy enough script to write, although it takes a while to run.</p>
+
+<pre><code>8,630,794  Total records
+3,220,666  Total 020a's
+    6,498  020a's that don't obviously contain an ISBN
+    8,407  that look like an ISBN but fail checksum test:
+... so 0.26% of the ISBNs have invalid checksums
+</code></pre>
+
+<p>So, not bad at all, especially considering some of those are known to be bad, but are transcribed dutifully from the actual (mis-)printed book.</p>
+
+<p>A lot of the malformed data (anything from which I can’t seem to extract something that looks like an ISBN) is pricing data, and most of it appears in system numbers that are close enough to each other that I presume it was just a bad batch.</p>
+
+<h3 id="whats-goes-after-the-isbn-in-the-020">What’s goes after the ISBN in the 020?</h3>
+
+<p>I’m no cataloger, of course, but it looks to me like the answer is “Something about how the book is bound together, or the publisher, unless you want to put something else there, and then, really, go ahead, because it’s not like anyone is ever going to want to parse this out, all we need to do is print cards with it for god’s sake.”</p>
+
+<p>No, I kid, I kid! The actual rules are in <a href="http://sites.google.com/site/opencatalogingrules/aacr2-chapter-1/1-8-standard-number-and-terms-of-availability-area">Library of Congress Rule Interpretation 1.8</a>, which reads, in part:</p>
+
+<blockquote>
+  <p>For a hardbound resource, there is no attempt to use a consistent term other than to use one that conveys the condition intelligibly.</p>
+</blockquote>
+
+<p>I think it’s important to read that a second time, because it succinctly conveys the culture in which these rules were devised.</p>
+
+<ul>
+  <li>Don’t worry about consistency, because your only reader is human.</li>
+  <li>Defer to the cataloger.</li>
+  <li>Being complete is more important than being consistent.</li>
+  <li>Base your notes on your subjective view of the actual, physical item you’re presumed to be holding in your hands.</li>
+</ul>
+
+<p>Interestingly (to me, anyway), it looks like the <a href="http://www.oclc.org/bibformats/en/0xx/020.shtm">OCLC once had a (now deprecated) <code>$$b</code> subfield for binding information</a>. Apparently it didn’t catch on.</p>
+
+<h3 id="what-did-i-find">What did I find?</h3>
+
+<p>So, let’s pretend I’d like to be able to differentiate between paperback and hardbound books. Probably useful, yes?</p>
+
+<p>I went ahead and took all parenthetical notes from any field in the 020, split them on colon (‘cause that seems to be the way they roll) and did some basic normalization:</p>
+
+<ul>
+  <li>Eliminate numbers (so ‘vol. 1’ and ‘vol. 2’ count as only one pattern)</li>
+  <li>Lowercase everything</li>
+  <li>Turn runs of spaces into a single space</li>
+  <li>Trim leading/trailing spaces</li>
+  <li>Remove any trailing punctuation</li>
+</ul>
+
+<p>I found 1,506,729 parenthetical remarks in the 020 subfields of our catalog.</p>
+
+<p>The top twenty most common entries using those normalizations are:</p>
+
+<ol>
+  <li>402537 pbk</li>
+  <li>387406 alk. paper</li>
+  <li>99260 v  # <em>(e.g., “v. 1”, “v. 22”, etc.)</em></li>
+  <li>82918 cloth</li>
+  <li>51125 hbk</li>
+  <li>42036 electronic bk</li>
+  <li>41360 acid-free paper</li>
+  <li>38792 hardcover</li>
+  <li>28913 set</li>
+  <li>20358 hardback</li>
+  <li>19160 ebook</li>
+  <li>16264 paper</li>
+  <li>15269 u.s</li>
+  <li>12770 hd.bd</li>
+  <li>11793 print</li>
+  <li>10625 lib. bdg</li>
+  <li>10520 hc</li>
+  <li>8772 est</li>
+  <li>7767 pb</li>
+  <li>7639 hard</li>
+</ol>
+
+<p>The kicker? These are the top twenty of <em>13,374</em> unique parenthetical strings found in the 020 field. Many of them are publishers, or cities, or whatnot, but an awful lot of them are variations on “hardcover” and “paperback.”</p>
+
+<p>For example, a quick search for anything that might be “hard” (regexp: /h[ar]{0,2}d/) got me started on a list. Here’s just the 90 examples from that list that start with ‘h’:</p>
+
+<blockquote>
+  <p>hard | hard adhesive | hard back | hard bd | hard book | hard bound | hard bound book | hard boundhard case | hard casehard copy | hard copy | hard copy set | hard cov | hard cover | hard covers | hard sewn | hard signed | hard-backhard-backcased | hard-bound | hard-cover | hard-cover acid-free | hardb | hard\cover | hardbach | hardback | hardback book | hardback cover |  hardbackcased | hardbd | hardbk | hardbond | hardbook | hardboubd | hardbound | hardboundhardboundtion | hardc | hardcase | hardcopy | hardcopy publication | hardcov | hardcov er | hardcovcer | hardcove | hardcover | hardcover-alk. paper | hardcovercloth | hardcoverflexibound | hardcoverhardcoverwith cd | hardcoverr | hardcovers | hardcoversame | hardcoversame as above | hardcoverset | hardcovertion | hardcver | hardcvoer | hardcvr | harddback | harde | hardocover | hardover | hardpack | hardpaper | hardvocer | hardware | hd | hd bd | hd. bd | hd. bd. in slip case | hd. bd.in sl.cs | hd. bk | hd. cover | hd.bd | hd.bd. in box | hdb | hdbd | hdbk | hdbkb | hdbkhdbk | hdbnd | hdc | hdcvr | hdk | hdp | hdpk | hradback | hradcover | hrd | hrdbk | hrdcver | hrdcvr</p>
+</blockquote>
+
+<p>And that’s after eliminating things like places of publication, strings like  “with…”, “plus…”, “alk. paper”, etc.</p>
+
+<h3 id="yeah-but-you-have-to-understand-that-historically">“Yeah, but you have to understand that historically…”</h3>
+
+<p>Stop hiding behind that.</p>
+
+<p>I understand that at one point in time it probably made sense (to someone at least) to do it this way. I can deal with that.</p>
+
+<p>What I can’t accept is that <em>as I type this</em> there’s a cataloger doing this in this way. Today. April 2011. Some, what? maybe <em>thirty years</em> since computer-based OPACs became prevalent?</p>
+
+<p>These sorts of problems were recognized <em>ages</em> ago and should have been dealt with. Add a subfield. Invent a controlled vocabulary. Don’t worry about the legacy data; it’s always going to suck.</p>
+
+<p>But <em>why are we still producing sucky data???</em></p>
+
+<h3 id="to-sum-up">To sum up</h3>
+
+<p>The point is that there’s a better way to do this stuff. Lots and lots of better ways, in fact. Time I spend dealing with crappy data is time I <em>don’t</em> spend making relevancy raking better, or building a better command language search option for my librarians, or working on ways to get a decent “more like this”.</p>
+
+<p>The need is both dire and urgent; the latter because sooner or later we’re going to have to go to a “two state solution” with traditional MARC21 for many of our records and whatever comes next (RDA?) for the newer stuff. And every day we wait, that first category grows, and the growth rate keeps increasing.</p>
+
+<p>And then there’s serials. Don’t talk to me about serials.</p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2011
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com/isbn-parenthetical-notes-bad-marc-data-1/"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2011/04/isbn-parenthetical-notes-bad-marc-data-1/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Going with and "forking" VUFind</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/08/going-with-and-forking-vufind/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Going with and "forking" VUFind</h1>
+    <p class="post-meta">Aug 19, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p><em>Note: This is the second in a series I’m doing about our VUFind installation, <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>. Here I talk about how we got to where we are. Next I’ll start looking at specific technologies, how we solved various problems, and generally more nerd-centered stuff.</em></p>
+
+<p>When the <a href="http://www.lib.umich.edu/">University Library</a> decided to go down the path of an open-source, solr-based OPAC, there were (and are, I guess) two big players: <a href="http://vufind.org/">VUFind</a> and <a href="http://projectblacklight.org/">Blacklight</a>.</p>
+
+<p>I wasn’t involved in the decision, but it must have seemed like a no-brainer. VUFind was in production (at <a href="http://library.villanova.edu/Find">Villanova</a>), seemed to be building a community of similar institutions around it (e.g., Stanford), and was based on a technology stack we had some experience with (PHP). Blacklight seemed to be just getting off to a fitfull start, and its Ruby stack was at that time an iffy proposition (this was before any sort of major adoption of <a href="http://www.modrails.com/">Passenger</a> or <a href="http://jruby.org/">JRuby</a>).</p>
+
+<p>As I write this, things have flipped around a little. Andrew Nagy, the principle architect of VUFind, left Villanova for Serial Solutions and VUFind stopped being his primary focus. The Blacklight community decided to go with a major reorganization of the code to make it easier to deploy, which resulted in a flurry of refactoring and improvements and folks generally thinking things through really well. Stanford just flipped the switch from their VUFind to a Blacklight installation, and as I pointed out, the Ruby deployment options are more stable and less resource-hungry than they were back then. If the decision were being made today, it would be a much more complex analysis.</p>
+
+<p>But anyway, the decision was made, and Tim Prettyman and I were tapped to do most of the hardcore nerd work to make it suitable for our environment.</p>
+
+<p>Right away, I found things that would need some pretty major revision. The user model was based on a local database of logins (we use <a href="http://www.umich.edu/~umweb/software/cosign/">cosign</a>), even moderately-long search strings would crash the thing, cookies were being used instead of sessions and hitting the 4K limit, search specification were hardcoded in the PHP, and lots of the UI elements didn’t actually have working code behind them (RSS feeds, endnote export, spellcheck, etc).</p>
+
+<p>So, I dug in and started learning PHP and Smarty and refactoring/rewriting/rearchitecting the crap out of it. One of the first things I did was to extract the search specification – the mapping of, say, a ‘title’ search to a weighted search of six or seven actual Solr fields – into a yaml file so we could mess around with it more easily than modifying the giant case-statement in the PHP code. I built a patch against the then-current revision, filed it as a bug, and sent email to the list.</p>
+
+<p>And nothing happened. That patch is still sitting there, in fact. Maybe I’m the only one that thinks it’s useful. But in any case, there was no discussion of it, no one <em>rejected</em> it. It just sat. Sits. Whatever.</p>
+
+<p>I could have asked for write access to the repository, but I didn’t. I saw a few other patches get submitted and met with yawns all around, and started looking more closely at the list and saw pretty much no one doing anything with the then-current code base, and frankly kind of gave up. The folks that I knew were working actively on implementing VUFind – us, Australia and Alan Rykhus at  <a href="http://www.mnpals.net">MNPals</a> – were all working from very different code bases, which made our ability to share code very limited. Any sort of official work on VUFind seemed to have slowed to a near standstill (based on svn checkins), and almost no one else seemed interested in submitting patches. After a while, we stopped, too.  </p>
+
+<p>So, we didn’t really <em>fork</em> VUFind. We just rewrote much of it and stopped trying to generate interest in our changes. The <em>right</em> thing to do would have been to either grab the bull by the horns, or do an actual fork of the project. But we didn’t feel as if we had time to shepherd a project of this size, and after many, many (<em>many</em>) discussions, decided to just do our thing. I assume that’s what everyone else has done, too, since I see plenty of differences in how things work at the different sites.</p>
+
+<p>As it stands, the wiki shows a <a href="http://vufind.org/about.php">good handful</a> of libraries live with VUFind, and a bunch more marked as being in “beta.” I don’t know if what we’re running <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a> on is still enough VUFind to be called VUFind. Probably. The basic structure is the same, the search syntax as exposed in the URL is the same. The plumbing underneath is changed in a lot of ways, and I like to think the flow of control makes a little more sense now.</p>
+
+<p>In real life, of course, it doesn’t matter where you draw the line. Our code is far enough removed from the svn repository now that we’re essentially going it alone.</p>
+
+<p>That doesn’t bother me.</p>
+
+<p>The reality is that we’ve taken control of the UI and learned what we need to know about using Solr with our data. If I need to change the backend – to Blacklight, to a newer VUFind, to anything – my users need not ever know, other than to notice that things are a little bit better. If we end up moving to a release-quality version of VUFind, there’s almost nothing I can’t reuse if it makes sense.</p>
+
+<p>We’ve also learned a lot. Solr, obviously, and how to write text filters for it and push it around just a little bit.  Solrmarc, too. But we’ve also taken a hard look at data normalization in ways we haven’t before, and decided how we’re going to output to Refworks, and to email, what kinds of searches we want to offer, where we have collisions in ID namespaces (OCLC &amp; ISSN, I’m looking at you).</p>
+
+<p>We’ve discovered issues and problems with our data we’d have never seen otherwise, and started up whole sets of conversations about OPAC issues that used to languish for lack of a reification for reference.  The ability to actually (try to) implement the collective intelligence of the library and embody it in a public-facing system is a rush compared to fighting with the ILS.</p>
+
+<p>The system has tons of problems still, starting with underlying templates that will make you a little sick if you do a “view source” and going right through my call number search not working for some edge cases. But that stuff will get cleaned up as we get a little downtime from adding new features, and there are elements of the new backend code that could be useful to others once I clean them up and remove local dependencies.</p>
+
+<p>I’m not sure when, if ever, we’ll start thinking of ourselves as part of the “VUFind community” again. The heavy intellectual lifting about how to organize what is essentially a front-end for Solr doesn’t seem to be happening on the VUFind list. And to be honest, I’m not sure it should be. Solr is the real engine. Solrmarc is, for us right now, an important piece. Data normalization, translation, workaround for crappy data, and the basic information theory of a faceted search system are all independent of the particular middleware you’re using to grab Solr results and throw them up on the screen.</p>
+
+<p>So, what we have is good for us, for now, and we’re continuing to learn how to move forward. And I’ve been able to get bug reports and say, “Thanks, Fixed” fifteen minutes later and get warm fuzzy feelings that don’t usually accompany, “Thanks. I’ll put a request in at Ex Libris’ online ticket system”.</p>
+
+<p>Next time: using and abusing Solr for data normalization.</p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com/going-with-and-forking-vufind/"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/08/going-with-and-forking-vufind/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>

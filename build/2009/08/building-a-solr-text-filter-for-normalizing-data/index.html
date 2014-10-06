@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Building a solr text filter for normalizing data</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/08/building-a-solr-text-filter-for-normalizing-data/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Building a solr text filter for normalizing data</h1>
+    <p class="post-meta">Aug 20, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p>[Kind of part of a continuing series on our VUFind implementation; more of a sidebar, really.]</p>
+
+<p>In my <a href="http://robotlibrarian.billdueber.com/easy-solr-types-for-library-data/">last post</a> I made the case that you should put as much data normalization into Solr as possible. The built-in text filters will get you a long, long way, but sometimes you want to have specialized code, and then you need to build your own filter.</p>
+
+<p><strong>Huge Disclaimer</strong>: <em>I’m putting this up not because I’m the best person to do so, but because it doesn’t look as if anyone else has. I don’t know what I’m doing. I don’t know why the code I’m showing below is the way it is, and if anyone would like to make it better, that’d be great. This is basically just a lot of pattern-matching on my part.</em></p>
+
+<p>[A second disclaimer: I haven’t actually built this into Solr yet, although I’ve done some simple testing on the ISBN-13 checksum code.  I’ll remove this disclaimer when I get a chance to actually index some data with it.]</p>
+
+<h2 id="the-setup-an-isbn-10-to-isbn-13-converter">The Setup: An ISBN-10 to ISBN-13 converter</h2>
+
+<p>Last time, I said I didn’t know why I hadn’t put together an ISBN longifier yet. So let’s walk through it.</p>
+
+<p>This is a lot easier than most things in that I’m assuming we’re going to be getting exactly one token<br />
+to work with (via the <em>KeywordTokenizer</em>) and can just work on it with impunity.</p>
+
+<p>If you’d like to follow along, get the <a href="http://svn.apache.org/repos/asf/lucene/solr/trunk">solr source via svn</a> on a machine<br />
+with java and ant. And junit, I think.</p>
+
+<p>##Where to put stuff</p>
+
+<p>Of all the black magic associated with doing this, figuring out how to actually make it build is the part that’s probably easiest for Java-heads and the most confusing to the rest of us. Anyone attempting this sort of thing should probably get a good grounding in how Solr is set up and how its build system works before doing anything else.</p>
+
+<p>Me? I cheated.</p>
+
+<p>I basically just copied the directory structure of another project in the <code>config</code> directory in the solr root (looks like maybe it was velocity), did some tiny modifications to the <code>build.xml</code> file to change the name of the project, renamed the ‘.pom’ file and edited <em>it</em> in the obvious ways, and followed the copied directory structure to figure out where to put my files.</p>
+
+<p>And then it worked. And I didn’t ask any question, and metaphorically just backed away slowly with a nonchalant look on my face. Of course, if you know what you’re doing with java and ant, I’m sure there are better ways.</p>
+
+<p>For the record, the directory in solr/config/umichnormalizers (where I put this stuff) would look something like this by the end of this project:</p>
+
+<pre><code>
+./target/
+./build.xml
+
+./src/main/java/edu/umich/lib/normalizers/ISBNLongifier.java
+./src/test/java/edu/umich/lib/normalizers/ISBNLongifier.java
+
+./src/main/java/edu/umich/lib/solr/analysis/ISBNLongifierFilter.java
+./src/main/java/edu/umich/lib/solr/analysis/ISBNLongifierFilterFactory.java
+
+
+</code></pre>
+
+<p>You then just run <code>ant</code> in your config directory to generate a .jar file that can be put in solrmarc’s <code>lib</code> directory or (I think) jetty’s <code>lib</code> directory. You can also just run <code>ant dist</code> at the solr root level to get a .war file with your stuff embedded.</p>
+
+<h2 id="the-converter">The converter</h2>
+
+<p>First, you just need some basic code to actually do the conversion. I’m sure this is hideously inefficient, but probably not as inefficient as the actual filter I’ll be producing in a minute.</p>
+
+<p>We take in a string. If it looks like it might have a 10-digit ISBN in it (possibly with dashes or periods as delimiters), extract it, do the conversion to an ISBN-13, and return that as a 13-character string (e.g., no dashes or whatnot).</p>
+
+<p>Note that I’m not working hard to determine if it’s an ISBN – this isn’t designed to try to pull an ISBN from random text. The hope is that by the time you get this far you’ve already got a pretty good idea that you’ve got an ISBN on your hands. I’m also not checking to see if the incoming ISBN is valid in any way; that’s left as an exercise for the dilligent reader.</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+<span style="color:#080;font-weight:bold">package</span> <span style="color:#707;font-weight:bold">edu.umich.lib.normalizers</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">java.util.regex</span>.*;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">ISBNLongifier</span> {
+
+  <span style="color:#777">// dashes and dots are acceptable delimiters. Should we add spaces??</span>
+  <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">String</span>  ISBNDelimiiterPattern = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[</span><span style="color:#D20">\-</span><span style="color:#D20">\.</span><span style="color:#D20">]</span><span style="color:#710">&quot;</span></span>;
+
+  <span style="color:#777">// Look for a string of nine digits followed by another digit or an X</span>
+  <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">Pattern</span> ISBNPattern = <span style="color:#0a8;font-weight:bold">Pattern</span>.compile(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">^.*?(</span><span style="color:#D20">\d</span><span style="color:#D20">{9})[</span><span style="color:#D20">\d</span><span style="color:#D20">Xx].*$</span><span style="color:#710">&quot;</span></span>);
+
+  <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">Boolean</span> matches(<span style="color:#0a8;font-weight:bold">String</span> isbn)  <span style="color:#088;font-weight:bold">throws</span> <span style="color:#C00;font-weight:bold">IllegalArgumentException</span> {
+    isbn = isbn.replaceAll(ISBNDelimiiterPattern, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>);
+    <span style="color:#0a8;font-weight:bold">Matcher</span> m = ISBNPattern.matcher(isbn);
+    <span style="color:#080;font-weight:bold">return</span> m.matches();
+  }
+
+  <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">String</span> longify(<span style="color:#0a8;font-weight:bold">String</span> isbn) {
+    isbn = isbn.replaceAll(ISBNDelimiiterPattern, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>);
+    <span style="color:#0a8;font-weight:bold">Matcher</span> m = ISBNPattern.matcher(isbn);
+    <span style="color:#080;font-weight:bold">if</span> (!m.matches()) {
+      <span style="color:#080;font-weight:bold">throw</span> <span style="color:#080;font-weight:bold">new</span> <span style="color:#C00;font-weight:bold">IllegalArgumentException</span>(isbn + <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">: Not an ISBN</span><span style="color:#710">&quot;</span></span>);
+    }
+
+    <span style="color:#0a8;font-weight:bold">String</span> longisbn = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">978</span><span style="color:#710">&quot;</span></span> + m.group(<span style="color:#00D">1</span>);
+    <span style="color:#339;font-weight:bold">int</span><span style="color:#339;font-weight:bold">[]</span> digits = <span style="color:#080;font-weight:bold">new</span> <span style="color:#339;font-weight:bold">int</span>[<span style="color:#00D">12</span>];
+    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#339;font-weight:bold">int</span> i=<span style="color:#00D">0</span>;i&lt;<span style="color:#00D">12</span>;i++) {
+      digits[i] =  <span style="color:#080;font-weight:bold">new</span> <span style="color:#0a8;font-weight:bold">Integer</span>(longisbn.substring(i, i+<span style="color:#00D">1</span>));
+    }
+
+    <span style="color:#0a8;font-weight:bold">Integer</span> sum = <span style="color:#00D">0</span>;
+    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#339;font-weight:bold">int</span> i = <span style="color:#00D">0</span>; i &lt; <span style="color:#00D">12</span>; i++) {
+      sum = sum + digits[i] + (<span style="color:#00D">2</span> * digits[i] * (i % <span style="color:#00D">2</span>));
+    }
+
+    <span style="color:#777">// Get the smallest multiple of ten &gt; sum</span>
+    <span style="color:#0a8;font-weight:bold">Integer</span> top = sum + (<span style="color:#00D">10</span> - (sum % <span style="color:#00D">10</span>));
+    <span style="color:#0a8;font-weight:bold">Integer</span> check = top - sum;
+    <span style="color:#080;font-weight:bold">if</span> (check == <span style="color:#00D">10</span>) {
+      <span style="color:#080;font-weight:bold">return</span> longisbn + <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">0</span><span style="color:#710">&quot;</span></span>;
+    } <span style="color:#080;font-weight:bold">else</span> {
+      <span style="color:#080;font-weight:bold">return</span> longisbn + check.toString();
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="the-factory-object">The Factory Object</h2>
+
+<p>Next is a boilerplate factory object. The only change will be the package you put it in, and the last method’s name and return value.</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+<span style="color:#080;font-weight:bold">package</span> <span style="color:#707;font-weight:bold">edu.umich.lib.solr.analysis</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">java.util.Map</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.apache.solr.analysis.BaseTokenFilterFactory</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.apache.lucene.analysis.TokenStream</span>;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">ISBNLongifierFilterFactory</span> <span style="color:#088;font-weight:bold">extends</span> BaseTokenFilterFactory {
+  <span style="color:#0a8;font-weight:bold">Map</span>&lt;<span style="color:#0a8;font-weight:bold">String</span>,<span style="color:#0a8;font-weight:bold">String</span>&gt; args;
+
+  <span style="color:#088;font-weight:bold">public</span> <span style="color:#0a8;font-weight:bold">Map</span>&lt;<span style="color:#0a8;font-weight:bold">String</span>,<span style="color:#0a8;font-weight:bold">String</span>&gt; getArgs()
+  {
+    <span style="color:#080;font-weight:bold">return</span> args;
+  }
+  <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> init(<span style="color:#0a8;font-weight:bold">Map</span>&lt;<span style="color:#0a8;font-weight:bold">String</span>,<span style="color:#0a8;font-weight:bold">String</span>&gt; args)
+  {
+    <span style="color:#950">this</span>.args = args;
+  }
+  <span style="color:#088;font-weight:bold">public</span> ISBNLongifierFilter create(TokenStream input)
+  {
+    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">new</span> ISBNLongifierFilter(input);
+  }
+}
+
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="the-actual-filter">The actual filter</h2>
+
+<p>And, finally, the filter class. You’ll notice that I’m catching any illegal argument error and just returning the input unchanged. So anything that comes through that <em>isn’t</em> an ISBN just gets passed along.</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+<span style="color:#080;font-weight:bold">package</span> <span style="color:#707;font-weight:bold">edu.umich.lib.solr.analysis</span>;
+
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">edu.umich.lib.normalizers.ISBNLongifier</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.apache.lucene.analysis.Token</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.apache.lucene.analysis.TokenFilter</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.apache.lucene.analysis.TokenStream</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">java.util.regex</span>.*;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">java.io.IOException</span>;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">final</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">ISBNLongifierFilter</span> <span style="color:#088;font-weight:bold">extends</span> org.apache.lucene.analysis.TokenFilter {
+
+  <span style="color:#088;font-weight:bold">public</span> ISBNLongifierFilter(TokenStream in) {
+    <span style="color:#950">super</span>(in);
+  }
+
+  <span style="color:#088;font-weight:bold">public</span> Token next() <span style="color:#088;font-weight:bold">throws</span> <span style="color:#C00;font-weight:bold">IOException</span> {
+    <span style="color:#080;font-weight:bold">return</span> normalize(<span style="color:#950">this</span>.input.next());
+  }
+
+  <span style="color:#088;font-weight:bold">public</span> Token next(Token result) <span style="color:#088;font-weight:bold">throws</span> <span style="color:#C00;font-weight:bold">IOException</span> {
+    <span style="color:#080;font-weight:bold">return</span> normalize(<span style="color:#950">this</span>.input.next());
+
+  }
+
+  <span style="color:#088;font-weight:bold">public</span> Token normalize(Token t) {
+    <span style="color:#080;font-weight:bold">if</span> (<span style="color:#069">null</span> == t || <span style="color:#069">null</span> == t.termBuffer() || t.termLength() == <span style="color:#00D">0</span>) {
+      <span style="color:#080;font-weight:bold">return</span> t;
+    }
+    <span style="color:#0a8;font-weight:bold">String</span> val = <span style="color:#080;font-weight:bold">new</span> <span style="color:#0a8;font-weight:bold">String</span>(t.termBuffer());
+    <span style="color:#080;font-weight:bold">try</span> {
+      t.setTermBuffer(ISBNLongifier.longify(val));
+      <span style="color:#080;font-weight:bold">return</span> t;
+    } <span style="color:#080;font-weight:bold">catch</span> (<span style="color:#C00;font-weight:bold">IllegalArgumentException</span> e) {
+       <span style="color:#777">// pass it through unchanged</span>
+      <span style="color:#080;font-weight:bold">return</span> t;
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="how-to-use-it">How to use it</h2>
+
+<p>Assuming you’ve managed to get it built into Solr and then deployed, just define it as a type in your <code>schema.xml</code>:</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+  <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">isbnlongifier</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
+    <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
+      <span style="color:#070;font-weight:bold">&lt;tokenizer</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.KeywordTokenizerFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
+      <span style="color:#070;font-weight:bold">&lt;filter</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">edu.umich.lib.solr.analysis.ISBNLongifierFilterFactory</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
+    <span style="color:#070;font-weight:bold">&lt;/analyzer&gt;</span>
+  <span style="color:#070;font-weight:bold">&lt;/fieldType&gt;</span>
+
+  # and later...
+
+  <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">isbn</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">isbnlongifier</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">false</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>There it is. The rocket science is all hidden behind the import statements. My understanding is that casting the token value to/from Strings makes things horribly inefficient, but I’m pretty sure I’ve got bigger bottlenecks to tackle before worrying about this.</p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com/building-a-solr-text-filter-for-normalizing-data/"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/08/building-a-solr-text-filter-for-normalizing-data/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>

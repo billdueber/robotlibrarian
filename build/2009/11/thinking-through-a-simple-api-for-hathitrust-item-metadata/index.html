@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Thinking through a simple API for HathiTrust item metadata</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/11/thinking-through-a-simple-api-for-hathitrust-item-metadata/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">Thinking through a simple API for HathiTrust item metadata</h1>
+    <p class="post-meta">Nov 3, 2009</p>
+  </header>
+
+  <article class="post-content">
+    <p><strong>EDITS</strong>:</p>
+
+<ul>
+  <li>Added “recordURL” per Tod’s request</li>
+  <li>Made a record’s <em>title</em> field an array and call it <em>titles</em>, to allow for vernacular entries</li>
+  <li>Changed item’s <em>ingest</em> to <em>lastUpdate</em> to accurately note what the actual date reflects. This gets updated every time either the item or the record to which it’s attached gets changed.</li>
+  <li>Fixed a couple typos, including one where I substituted an ampersand for a pipe in the multi-get example (thanks again, Tod).</li>
+  <li>Added a better explanation of option #4</li>
+</ul>
+
+<h3 id="introduction-and-history">Introduction and History</h3>
+
+<p>Ages ago, I wrote a simple(ish) little cgi program to get basic item-level data out of what is now <a href="http://mirlyn-classic.lib.umich.edu/">Mirlyn Classic</a>, our OPAC. Soon enough, I was asked to modify it so people could get <a href="http://catalog.hathitrust.org/">HathiTrust</a> data from the underlying Aleph system, check viewability of the associated items, etc.</p>
+
+<p>It works…kinda…but reflects what I now look back on as blissful ignorance. It doesn’t deal at all with serials, and doesn’t deal correctly with duplicated records or cases where multiple records have the same (supposedly-unique) identifiers,</p>
+
+<p>We need something better. And I’m hoping comments on this post will result in something better.</p>
+
+<h3 id="scope">Scope</h3>
+
+<blockquote>
+  <p>Given standard identifiers for a known item, return basic item-level metadata for volumes deposited in the HathiTrust.</p>
+</blockquote>
+
+<p>I want to keep this <em>simple</em>. There will likely be other APIs for other, more complex (or specialized) tasks, linked data for folks who dig that sort of thing, and so on. The goal here is to make something that’s <em>fast</em> and can help people inline data about HT into their own OPAC or similar system.</p>
+
+<p>I’d also like to get this thing in place, at least the basics, in the next two weeks. Anything longer is self-indulgent.</p>
+
+<h3 id="data-returned">Data returned</h3>
+
+<p>At the moment, I’m only planning on offering JSON out, unless someone really, really needs something else. Speak up if you’re an edge case.</p>
+
+<h4 id="proposed-basic-return-structure">Proposed basic return structure</h4>
+
+<p>…complete with JSON-illegal comments embedded</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+  {
+    <span style="color:#606"><span style="color:#404">&quot;</span><span>records</span><span style="color:#404">&quot;</span></span>:
+      {
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>003384758</span><span style="color:#404">&quot;</span></span>: <span style="color:#777">// The HathiTrust record id of a matched record</span>
+          {
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>recordURL</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://catalog.hathitrust.org/Record/003384758</span><span style="color:#710">&quot;</span></span>
+            <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">titles</span><span style="color:#710">&quot;</span></span>:  [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Full, space-joined 245s</span><span style="color:#710">&quot;</span></span>],
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>isbns</span><span style="color:#404">&quot;</span></span> : [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">123456789X</span><span style="color:#710">&quot;</span></span>], <span style="color:#777">// any/all ISBNs on this record</span>
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>issns</span><span style="color:#404">&quot;</span></span> : [], <span style="color:#777">// any/all ISSNs on this record</span>
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>oclcs</span><span style="color:#404">&quot;</span></span> : [], <span style="color:#777">// any/all OCLC numbers</span>
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>lccns</span><span style="color:#404">&quot;</span></span>  : [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">68001537</span><span style="color:#710">&quot;</span></span>], <span style="color:#777">// any/all LCCNs</span>
+          },
+          ... <span style="color:#777">// any more records that were matched</span>
+      },
+    <span style="color:#606"><span style="color:#404">'</span><span>items</span><span style="color:#404">'</span></span> :
+      [
+        {
+          <span style="color:#606"><span style="color:#404">&quot;</span><span>fromRecord</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">003384758</span><span style="color:#710">&quot;</span></span>,
+          <span style="color:#606"><span style="color:#404">&quot;</span><span>htid</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">mdp.39015054407062</span><span style="color:#710">&quot;</span></span>,
+          <span style="color:#606"><span style="color:#404">&quot;</span><span>itemURL</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://hdl.handle.net/2027/mdp.39015054407062</span><span style="color:#710">&quot;</span></span>,
+          <span style="color:#606"><span style="color:#404">&quot;</span><span>rights</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ic</span><span style="color:#710">&quot;</span></span>,
+          <span style="color:#606"><span style="color:#404">&quot;</span><span>orig</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">University of Michigan</span><span style="color:#710">&quot;</span></span>, <span style="color:#777">// supplying institution</span>
+          <span style="color:#606"><span style="color:#404">&quot;</span><span>lastUpdate</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">20090807</span><span style="color:#710">&quot;</span></span> <span style="color:#777">// date of ingest into HathiTrust or last change</span>
+          <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">enumcron</span><span style="color:#710">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">An enumeration/chronology, if available</span><span style="color:#710">&quot;</span></span> <span style="color:#777">// OPTIONAL</span>
+        }
+      ]
+  }
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="a-quick-walk-through-the-proposed-return-structure">A quick walk through the proposed return structure</h4>
+
+<p>Obviously, there are two sets of items: a list of records that matched the query, and a list representing the union of all items on those matched records.</p>
+
+<h5 id="records">records</h5>
+
+<p>For most purposes, people won’t care so much about the record-level data unless you’re trying to do your own error-checking (possible) or want to link to the catalog record-level page (more likely).</p>
+
+<p>[I’m actually very open to just plain leaving it out.]</p>
+
+<p>The format is a hash keyed on the HathiTrust record ID, which can currently be turned into a URL such as <a href="http://catalog.hathitrust.org/Record/003384758">http://catalog.hathitrust.org/Record/003384758</a>. Elements are:</p>
+
+<ul>
+  <li><em>recordURL</em>: The URL to the human-readable record view in the catalog</li>
+  <li><em>titles</em>: an array of all the full 245, space-separated subfields. Always present, usually with one item, sometimes more than one (vernacular entries), almost never with zero.</li>
+  <li><em>isbns</em>: An array of all the ISBNs associated with the record. Always present; an empty array if none.</li>
+  <li><em>issns</em>, <em>oclcs</em>, <em>lccns</em>: Same as ISBNs, but for the appropriate data.</li>
+</ul>
+
+<p>Note that at this time, LCCNs are taken from the 010, so the LCCN array will either be empty or have one item. I left it as an array just for consistency.</p>
+
+<h5 id="items">items</h5>
+
+<p>This is an array of items, taken from <em>all</em> the matched records and ordered (as best I can) based on their enumcron. If no enumcron is present, order is undefined.</p>
+
+<ul>
+  <li><em>fromRecord</em>: The HathiTrust record ID, as used as a key in the hash of records (explained above).</li>
+  <li><em>htid</em>: The HathiTrust ID for the item.</li>
+  <li><em>itemURL</em>: The URL to the page-turner (or search box, for search-only items) for this item. It’s currently just appended to the prefix “http://hdl.handle.net/2027/”, but I thought I’d include it in case the preferred URL algorithm changes at some point.</li>
+  <li><em>rights</em>: The rights code for this item, as explained at <a href="http://www.hathitrust.org/hathifiles_metadata">http://www.hathitrust.org/hathifiles_metadata</a>.</li>
+  <li><em>orig</em>: The institution that supplied the item for digitization.</li>
+  <li><em>lastUpdate</em>: The date of the last time this item or its containing record was touched, either because of  ingest by the HathiTrust system or later editing, as YYYYMMDD. May be 00000000 if unknown.</li>
+  <li><em>enumcron</em>: (OPTIONAL) The enumeration/cronology (e.g., “v. 3 1997” or somesuch). Again – optional. Leave out the key? Provide an empty string? Provide a <em>false</em>?</li>
+</ul>
+
+<h5 id="a-word-about-enumcron">A word about enumcron</h5>
+
+<p>The enumcron string is fickle, and very local. The algorithm I’m using to sort them basically consists of taking all the numbers in the enumcron strings and zero-padding them to 8 digits, then sorting. It works pretty well, but isn’t perfect. I’m incredibly resistant to trying to do anything fancier, simply because I want it to be fast and because trying to deal with all possible enumcron formats is a sisyphean task.  </p>
+
+<h4 id="an-actual-record">An actual record</h4>
+
+<p>Here’s the simplest possible case: a single matched record with a single item</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+  {
+    <span style="color:#606"><span style="color:#404">&quot;</span><span>records</span><span style="color:#404">&quot;</span></span>:
+      {
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>000366004</span><span style="color:#404">&quot;</span></span>:
+          {
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>recordURL</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://catalog.hathitrust.org/Record/000366004</span><span style="color:#710">&quot;</span></span>,
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>titles</span><span style="color:#404">&quot;</span></span>: [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">The Sneetches, and other stories. Written and illustrated by Dr. Seuss.</span><span style="color:#710">&quot;</span></span>],
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>isbns</span><span style="color:#404">&quot;</span></span>: [],
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>issns</span><span style="color:#404">&quot;</span></span>: [],
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>oclcs</span><span style="color:#404">&quot;</span></span>: [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">00470409</span><span style="color:#710">&quot;</span></span>],
+            <span style="color:#606"><span style="color:#404">&quot;</span><span>lccns</span><span style="color:#404">&quot;</span></span>: [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">68001537</span><span style="color:#710">&quot;</span></span>]
+          }
+      }
+    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">items</span><span style="color:#710">&quot;</span></span>: [
+      {
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>fromRecord</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">000366004</span><span style="color:#710">&quot;</span></span>,
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>htid</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">mdp.39015079651611</span><span style="color:#710">&quot;</span></span>,
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>itemURL</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://hdl.handle.net/2027/mdp.39015079651611</span><span style="color:#710">&quot;</span></span>,
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>rightscode</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ic</span><span style="color:#710">&quot;</span></span>,
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>lastUpdate</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">20091004</span><span style="color:#710">&quot;</span></span>,
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>orig</span><span style="color:#404">&quot;</span></span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">University of Michigan</span><span style="color:#710">&quot;</span></span>,
+        <span style="color:#606"><span style="color:#404">&quot;</span><span>enumcron</span><span style="color:#404">&quot;</span></span>: <span style="color:#069">false</span>
+      }
+    ],
+  }
+
+</pre></div>
+</div>
+</div>
+
+<p>We can see that (despite my expectation) we don’t happen to have an ISBN for this item. The item originally came from Michigan, either ingested or last updated on October 10th, 2009. The HathiTrust catalog page for this item is <a href="http://catalog.hathitrust.org/Record/000366004">http://catalog.hathitrust.org/Record/000366004</a> (derived from the record ID) and it is In Copyright (ic), so the itemURL goes to a page that allows only search.</p>
+
+<h3 id="making-the-request">Making the request</h3>
+
+<p>I’ll take care of normalizing data on the way in (mostly done by the Solr backend): strip leading zeros off the OCLC number, normalize the LCCN as per <a href="http://www.loc.gov/marc/lccn-namespace.html#syntax">this page at the Library of Congress</a>, strip anything funny-looking from the ISBN and ISSN, and (probably) convert all ISBNs into ISBN13s.</p>
+
+<p>I’m anticipating three formats for a request (note: they don’t work yet. There’s no code):</p>
+
+<h4 id="single-identifier-option">Single-identifier option</h4>
+
+<pre><code>http://catalog.hathitrust.org/api/volumes/oclc/00470409.json
+http://catalog.hathitrust.org/api/volumes/lccn/68001537.json
+http://catalog.hathitrust.org/api/volumes/issn/1051290x.json
+http://catalog.hathitrust.org/api/volumes/isbn/0835221792.json  
+</code></pre>
+
+<p>Simple and unambiguous; returns the proposed return structure as described above (and presumable amended before actual implementation). Again, any normalization that needs to be done will be done on my end, so “00470409” and “470409” are considered the same OCLC number.</p>
+
+<h4 id="multiple-identifier-multi-request-option">Multiple-identifier, multi-request option</h4>
+
+<pre><code>http://catalog.hathitrust.org/api/volumes?yourID1=oclc:00470409|lccn:68001537&amp;amp;yourID2=oclc:67890987|isbn:987652348X
+</code></pre>
+
+<table>
+  <tbody>
+    <tr>
+      <td>In this format, you can see that (a) you can provide multiple pieces of metadata for a record, separated by pipe characters (</td>
+      <td>),  and (b) you can provide metadata sets for multiple records at once, keyed on whatever arbitrary ID you want to use.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The return format would look like this:</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>
+  {
+    <span style="color:#606"><span style="color:#404">&quot;</span><span>yourID1</span><span style="color:#404">&quot;</span></span> : &lt;proposed <span style="color:#080;font-weight:bold">return</span> structure&gt;,
+    <span style="color:#606"><span style="color:#404">&quot;</span><span>yourID2</span><span style="color:#404">&quot;</span></span> : &lt;proposed <span style="color:#080;font-weight:bold">return</span> structure&gt;,
+      ...
+  }
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="what-to-do-when-the-provided-metadata-dont-agree">What to do when the provided metadata don’t agree?</h4>
+
+<p>It’s entirely possible to provide an OCLC number and an LCCN that, in fact, refer to two different records. It’s also possible that we have two records in the system that should be merged, but haven’t been.</p>
+
+<p>Some possible algorithms:</p>
+
+<ol>
+  <li><em>Require that all sent numbers match</em>: If you send an OCLC, and ISBN, and an LCCN, any returned record must have all three, and all must match. That seems too strict.</li>
+  <li><em>Return any records that match any sent numbers</em>: I could do a boolean-OR, so any record that matches any of the numbers you send gets returned. The risk of returning too much data seems too great.</li>
+  <li><em>Return any records that don’t mismatch any sent numbers</em>: The same as the first option, but null matches anything. So, <em>if</em> you sent an LCCN, and <em>if</em> the record has an LCCN, they must match. <em>If</em> you sent an OCLC number and <em>if</em> the record has an OCLC number, it, too, must match, etc.. Basically, every piece of metadata, if provided, must match.</li>
+  <li><em>Order the number types and only match the best available</em>. We provide an ordered list of type: OCLC, LCCN, ISBN, and finally ISSN. If you provide an OCLC number and there is a record with that OCLC number, return it and ignore everything else. If you didn’t provide an OCLC number (or if you did but we didn’t get any matches), move on to the LCCN and try again, as shown below.</li>
+</ol>
+
+<pre><code>
+    // The algorithm for #4
+    foreach type in (OCLC, LCCN, ISBN, ISSN) {
+      next unless (providedSearch[type]); ## move on unless a number was provided
+      records = recordsThatMatch(type, providedSearch[type]);
+      if records.size &gt; 0 { # If we found some, return
+        return records;
+      }
+      ## else, we move to the next type.
+    }
+
+</code></pre>
+
+<p>So, for #4, if you provide an OCLC number and we find a match or matches, stop looking and return them. If we don’t find an OCLC match but you also provided an LCCN, look for records that match the LCCN, and if found return <em>them</em>. Repeat with ISBN and ISSN.</p>
+
+<h4 id="understanding-3-vs-4">Understanding #3 vs. #4</h4>
+
+<p>Suppose the following are true:</p>
+
+<ul>
+  <li>You provide an OCLC number <em>O</em> and an LCCN <em>L</em></li>
+  <li>I have a record r1 with OCLC number <em>O</em> and no LCCN at all</li>
+  <li>I have a record r2 with LCCN <em>L</em> and no OCLC number at all.</li>
+</ul>
+
+<p>Under option #3, both records would be returned. They both fulfill the criteria that they match all the supplied identifiers in all fields for which they have values. In other words, <em>r1</em> has a positive match on OCLC (<em>O</em> == <em>O</em>) and a null-matches-everything match on LCCN (<em>L</em> == no data).</p>
+
+<p>Under option #4, only <em>r1</em> is returned. We first look for all records that match on the OCLC number provided, find exactly one, and return it. We never even bother to look for records that match on LCCN only.</p>
+
+<h4 id="lets-pick-one-and-see-how-it-works-in-the-real-world">Let’s pick one and see how it works in the real world</h4>
+
+<p>I’m leaning toward #4, but I’m open to #3 as well, or any other variant that can be computed quickly and easily on this end. We’re talking about some pretty weird edge cases when we start going down this road, and I don’t want to sacrifice ease of use and ease of computation any more than we have to.</p>
+
+<h3 id="please-comment">Please comment!</h3>
+
+<p>You can comment here, or send email directly to me. I’ll follow up this post periodically with more thoughts and synopses of what I’ve heard.</p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2009
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com/thinking-through-a-simple-api-for-hathitrust-item-metadata/"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2009/11/thinking-through-a-simple-api-for-hathitrust-item-metadata/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>
