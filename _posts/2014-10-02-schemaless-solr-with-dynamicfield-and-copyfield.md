@@ -12,9 +12,9 @@ Recent versions of [solr](https://lucene.apache.org/solr/) have the option to ru
 
 I find this intruguing, but it's not what I'm after right now.
 
-The problem I'm in the first stages of addressing is that my `schema.xml` is huge mess -- very little consistency, no naming conventions dictating what's stored/indexed, etc. It grew "ogranically" (which is what people say when they mean they were lazy and sloppy) and needs a full-on reorganization.
+The problem I'm in the first stages of addressing is that my `schema.xml` is huge mess -- very little consistency, no naming conventions dictating what's stored/indexed, etc. It grew "ogranically" (which is what I say when I mean I've been lazy and sloppy) and needs a full-on reorganization.
 
-The way people tend to address this is with strict naming conventions (possibly using [dynamicField](https://cwiki.apache.org/confluence/display/solr/Dynamic+Fields)s) and judicious use of [copyField](https://cwiki.apache.org/confluence/display/solr/Copying+Fields() directives. The [Project Hydra](http://projecthydra.org/) folks have [a nice, straightforward system](https://github.com/projecthydra/hydra/wiki/Solr-Schema) for how they set up dynamic fields.
+The way people tend to address this is with strict naming conventions (possibly using [dynamicField](https://cwiki.apache.org/confluence/display/solr/Dynamic+Fields) ) and judicious use of [copyField](https://cwiki.apache.org/confluence/display/solr/Copying+Fields) directives. The [Project Hydra](http://projecthydra.org/) folks have [a nice, straightforward system](https://github.com/projecthydra/hydra/wiki/Solr-Schema) for how they set up dynamic fields.
 
 
 ## Indexed XOR Stored?
@@ -113,7 +113,9 @@ Suppose I index an undeclared field called `title_t_s`:
 * Meanwhile, the second `copyField` *also* matches our original `title_t_s`. It uses what matched against the `*` in the source (`title`, again) to create a new field just called `title`.
 * Now we have a new field called `title` not matching any declared field, so it runs down the list of `dynamicField` definitions until it hits our stopgap at the end: a stored, nonindexed string.
 
-So, what we end up with field-wise is:
+Yeah, like that wasn't confusing. 
+
+The result is what's important, though. What we end up with field-wise is:
 
 * `title_t_s` disappearing into the ether. It's just gone.
 * `title_t`, an indexed text field
