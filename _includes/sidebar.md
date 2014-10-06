@@ -33,3 +33,5 @@ Hi. I'm Bill Dueber.
           </li>
 
         </ul>
+
+<p><a href="/all_posts/">All posts</a></p>        
