@@ -156,7 +156,7 @@ mri-marc-multistring (2000)      3.400000   3.430000  (3.441052)
 
 <p>Now, I’m sure all my records came out of the cache, so my query time wasn’t very long. But we still end up with a maximum of roughly 0.2 seconds plus the time to actually do the query to end up with a set of 50 marc records.</p>
 
-<p>We can see from looking at the totals that it looks like MRI’s bottleneck is<br />
+<p>We can see from looking at the totals that it looks like MRI’s bottleneck is
 the actual parsing, whereas constructing the input streams is expensive under jruby (at least the way I’m doing it), resulting in a benefit of concatenating them all together into one longish string before parsing.</p>
 
 <p>Marc4j is faster (20%ish), but not enough faster to be worth the effort in my mind. Keep in mind that I have no idea how fast Marc4j is when running under pure java, without all the jruby overhead.</p>

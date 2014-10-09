@@ -6,9 +6,242 @@
 </description>
     <link>http://robotlibrarian.billdueber.com/</link>
     <atom:link href="http://robotlibrarian.billdueber.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Oct 2014 15:41:10 -0400</pubDate>
-    <lastBuildDate>Mon, 06 Oct 2014 15:41:10 -0400</lastBuildDate>
+    <pubDate>Thu, 09 Oct 2014 12:58:59 -0400</pubDate>
+    <lastBuildDate>Thu, 09 Oct 2014 12:58:59 -0400</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>Ruby MARC serialization/deserialization revisited</title>
+        <description>&lt;p&gt;A few years ago, I &lt;a href=&quot;http://robotlibrarian.billdueber.com/2010/09/sizespeed-of-various-marc-serializations-using-ruby-marc/&quot;&gt;benchmarked&lt;/a&gt;
+various methods of serializing/deserialzing MARC data using the &lt;a href=&quot;http://github.com/ruby-marc/ruby-marc/&quot;&gt;ruby-marc&lt;/a&gt;
+gem. Given that I’m planning on starting fresh with my catalog setup, I thought I’d take a moment
+to revisit them.&lt;/p&gt;
+
+&lt;p&gt;The biggest changes since that time have been (a) the continued speed improvements in JRuby,
+(b) the introduction of the &lt;a href=&quot;https://github.com/ohler55/oj&quot;&gt;Oj&lt;/a&gt; json parser for MRI ruby, and
+(c) wider availability of msgpack code in the wild.&lt;/p&gt;
+
+&lt;p&gt;I also wondered what would happen if I tried ruby’s &lt;code&gt;Marshal&lt;/code&gt; serialization; maybe it would be
+faster because I wouldn’t have to “manually” create a &lt;code&gt;MARC::Record&lt;/code&gt; object from a hash?&lt;/p&gt;
+
+&lt;h2 id=&quot;file-sizes&quot;&gt;File sizes&lt;/h2&gt;
+
+&lt;p&gt;File size isn’t as important as it once was, but still matters to some of us working with
+ginormous amounts of data:&lt;/p&gt;
+
+&lt;p&gt;This is the file size to hold the 18,881 records used for the benchmark.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Serialization&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Size on disk (MB)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Size vs. marc21&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Gzipped size on disk (MB)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Gzipped size vs marc21&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;marc21&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;31&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;100%&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.0&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;100%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;msgpack&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;42&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;135%&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8.2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;91%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;json (ndj)&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;56&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;180%&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8.1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;90%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;marshal&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;69&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;223%&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;104%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;marc-xml&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;93&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;300%&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;102%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;It’s interesting, if not super-useful, to note that the file sizes differ by a factor of three
+uncompressed, but hardly at all when compressed. I was surprised at how well the binary
+formats (msgpack, marshal, and marc21) compressed.&lt;/p&gt;
+
+&lt;h2 id=&quot;serialization--deserialization-time&quot;&gt;Serialization / Deserialization time&lt;/h2&gt;
+
+&lt;p&gt;I took a file of about 19k MARC records and tested the serialization/deserialization time, as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;marc21&lt;/strong&gt; uses MARC::Reader and MARC::Writer from the ruby marc distribution&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;json&lt;/strong&gt; Uses &lt;code&gt;MARC::Record#to_hash&lt;/code&gt; to produce a marc-in-json hash, serializes with the stock JSON library, and
+the writes to a file with one record per line (sometimes known as &lt;em&gt;newline-delimited JSON, or NDJ&lt;/em&gt;). Deserialization
+reverses the process&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;json (oj)&lt;/strong&gt; is the same, except using the Oj json library under MRI.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;msgpack&lt;/strong&gt; uses the &lt;a href=&quot;https://github.com/msgpack/msgpack-ruby&quot;&gt;msgpack&lt;/a&gt; or &lt;a href=&quot;https://github.com/iconara/msgpack-jruby&quot;&gt;msgpack-jruby&lt;/a&gt; gems to
+serialize/deserialize msgpack objects to/from a file stream.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;marshal&lt;/strong&gt; uses the core ruby &lt;a href=&quot;http://www.ruby-doc.org/core-2.1.3/Marshal.html&quot;&gt;Marshal&lt;/a&gt; class to serialize/deserialize to a file stream.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In all cases, deserialization means to pull each record in turn from a file on disk and turn it into a &lt;code&gt;MARC::Record&lt;/code&gt; object;
+serialization means to take a set of pre-created &lt;code&gt;MARC::Record&lt;/code&gt; objects, serialize them, and push them into a file.&lt;/p&gt;
+
+&lt;p&gt;All times are in “real time” seconds as reported by Benchmark, averaged across two runs on my desktop machine:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;MRI&lt;/strong&gt; ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-darwin13.0&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;JRuby&lt;/strong&gt; jruby 1.7.15 (1.9.3p392) 2014-09-03 82b5cc3 on Java HotSpot(TM) 64-Bit Server VM 1.8.0-b132 +indy +jit [darwin-x86_64]&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/billdueber/e375a35ebabd2de73616&quot;&gt;The benchmark code&lt;/a&gt; is up on a gist if you’d like
+to look at or modify it.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;MRI Ruby&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Method&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Deserialize (s)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Serialize (s)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total (s)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total time vs. marc21&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;marc21&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;11.5&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6.7&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;18.2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;100%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;json&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.5&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5.9&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;15.4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;85%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;json (oj)&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6.4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.9&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;54%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;msgpack&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5.8&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3.4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;51%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;marshal&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;7.0&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8.7&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;15.7&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;86%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;JRuby&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Method&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Deserialize (s)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Serialize (s)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total (s)&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total time vs. marc21&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;marc21&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6.9&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;11.1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;100%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;json&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4.1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2.5&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6.6&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;59%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;json (oj)&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;N/A&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;N/A&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;N/A&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;N/A&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;msgpack&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4.0&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3.9&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;7.9&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;71%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;marshal&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5.3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8.1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;13.4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;121%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JRuby is faster than MRI on this these tasks, at least once it’s warmed up.&lt;/li&gt;
+  &lt;li&gt;JSON, with a decent library, is either the fastest (JRuby) or really close (MRI)&lt;/li&gt;
+  &lt;li&gt;Marshal is slow and big.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I come away with this thinking the same thing I did last time. I’m going to use compressed ndj in files, and (possibly compressed) JSON
+over the wire. The speed is great, tool support is outstanding, and having something human-readable is a big bonus.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 09 Oct 2014 12:58:00 -0400</pubDate>
+        <link>http://robotlibrarian.billdueber.com/2014/10/marc_serialization_revisited/</link>
+        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2014/10/marc_serialization_revisited/</guid>
+        
+        
+      </item>
     
       <item>
         <title>&quot;Schemaless&quot; solr with dynamicField and copyField</title>
@@ -120,7 +353,7 @@
 
 &lt;p&gt;First, there are two &lt;code&gt;dynamicField&lt;/code&gt; definitions. The first is a no-op: unstored, unindexed. We use it only for copying. The second is a standard indexed (but not stored) text field.&lt;/p&gt;
 
-&lt;p&gt;Then come the &lt;code&gt;copyField&lt;/code&gt;s, where we match on the suffixes of the field types.&lt;br /&gt;
+&lt;p&gt;Then come the &lt;code&gt;copyField&lt;/code&gt;s, where we match on the suffixes of the field types.
 Finally, we have our default: a stored, unindexed string. (Note that when Solr stores a value, it stores whatever you put into it, not the value after analysis – same as a String does anyway).&lt;/p&gt;
 
 &lt;p&gt;Suppose I index an undeclared field called &lt;code&gt;title_t_s&lt;/code&gt;:&lt;/p&gt;
@@ -1123,7 +1356,7 @@ or
 
 &lt;p&gt;Nifty, huh?&lt;/p&gt;
 
-&lt;p&gt;Next time we’ll use a local params query to get around something about dismax that drives me crazy: preventing (or penalizing) matches that go across a field’s multiple values.100%&lt;br /&gt;
+&lt;p&gt;Next time we’ll use a local params query to get around something about dismax that drives me crazy: preventing (or penalizing) matches that go across a field’s multiple values.100%
 What’s nice about this is that I’m reusing the search terms (for the main query and the boost query) and field list (for the query field and the phrase fields) so I don’t have to repeat them.&lt;/p&gt;
 
 &lt;h3 id=&quot;try-along-at-home-1&quot;&gt;Try along at home&lt;/h3&gt;
@@ -1207,10 +1440,10 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;Nifty, huh?&lt;/p&gt;
 
-&lt;p&gt;Next time we’ll use a local params query to get around something about dismax that drives me crazy: preventing (or penalizing) matches that go across a field’s multiple values. v=$q1 }”^5’,&lt;br /&gt;
-  ‘fl’ =&amp;gt; ‘score,*’&lt;br /&gt;
-  }&lt;br /&gt;
-~~~&lt;br /&gt;
+&lt;p&gt;Next time we’ll use a local params query to get around something about dismax that drives me crazy: preventing (or penalizing) matches that go across a field’s multiple values. v=$q1 }”^5’,
+  ‘fl’ =&amp;gt; ‘score,*’
+  }
+~~~
 What’s nice about this is that I’m reusing the search terms (for the main query and the boost query) and field list (for the query field and the phrase fields) so I don’t have to repeat them.&lt;/p&gt;
 
 &lt;h3 id=&quot;try-along-at-home-2&quot;&gt;Try along at home&lt;/h3&gt;
@@ -1385,7 +1618,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;&lt;strong&gt;NOTE: I really, really recommend taking a look at &lt;a href=&quot;http://www.lucidimagination.com/content/scaling-lucene-and-solr&quot;&gt;Scaling Lucene and Solr&lt;/a&gt; by the good folks over at &lt;a href=&quot;http://www.lucidimagination.com/&quot;&gt;Lucid Imagination&lt;/a&gt; for great, short explanations of &lt;em&gt;omitNorms&lt;/em&gt;, term frequencies, etc.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Since this is the first post, I’ll go over some stuff that’s probably a little&lt;br /&gt;
+&lt;p&gt;Since this is the first post, I’ll go over some stuff that’s probably a little
 too basic for any audience that’s likely to show up here, but what the heck.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -1667,7 +1900,7 @@ too basic for any audience that’s likely to show up here, but what the heck.&l
 &lt;pre&gt;&lt;code&gt;  a OR b AND c
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;I’ll give you three guesses, but you’ll get the first two wrong&lt;br /&gt;
+&lt;p&gt;I’ll give you three guesses, but you’ll get the first two wrong
 and won’t have any idea how to generate a third, so don’t spend too much time on it.&lt;/p&gt;
 
 &lt;h3 id=&quot;boolean-algebra-and-operator-precedence&quot;&gt;Boolean algebra and operator precedence&lt;/h3&gt;
@@ -2150,136 +2383,6 @@ end
         <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/</guid>
         
         <category>ruby</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>ISBN parenthetical notes: Bad MARC data #1</title>
-        <description>&lt;p&gt;Yesterday, I gave a brief overview of &lt;a href=&quot;http://robotlibrarian.billdueber.com/why-programmers-hate-free-text-in-marc-records/&quot;&gt;why free text is hard to deal with&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Today, I’m turning my attention to a concrete example that drives me absolutely batshit crazy: taking a perfectly good unique-id field (in this case, the ISBN in the 020) and appending stuff onto the end of it.&lt;/p&gt;
-
-&lt;p&gt;The point is not to mock anything. Mocking will, however, be included for free.&lt;/p&gt;
-
-&lt;h3 id=&quot;whats-supposed-to-be-in-the-020&quot;&gt;What’s supposed to be in the 020?&lt;/h3&gt;
-
-&lt;p&gt;Well, for starters, an ISBN (10 or 13 digit, we’re not picky).&lt;/p&gt;
-
-&lt;p&gt;Let’s not worry, for the moment, about the actual ISBN and whether it’s valid or not.&lt;/p&gt;
-
-&lt;p&gt;Wait, no, let’s go ahead and worry about it. It’s an easy enough script to write, although it takes a while to run.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;8,630,794  Total records
-3,220,666  Total 020a&#39;s
-    6,498  020a&#39;s that don&#39;t obviously contain an ISBN
-    8,407  that look like an ISBN but fail checksum test:
-... so 0.26% of the ISBNs have invalid checksums
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So, not bad at all, especially considering some of those are known to be bad, but are transcribed dutifully from the actual (mis-)printed book.&lt;/p&gt;
-
-&lt;p&gt;A lot of the malformed data (anything from which I can’t seem to extract something that looks like an ISBN) is pricing data, and most of it appears in system numbers that are close enough to each other that I presume it was just a bad batch.&lt;/p&gt;
-
-&lt;h3 id=&quot;whats-goes-after-the-isbn-in-the-020&quot;&gt;What’s goes after the ISBN in the 020?&lt;/h3&gt;
-
-&lt;p&gt;I’m no cataloger, of course, but it looks to me like the answer is “Something about how the book is bound together, or the publisher, unless you want to put something else there, and then, really, go ahead, because it’s not like anyone is ever going to want to parse this out, all we need to do is print cards with it for god’s sake.”&lt;/p&gt;
-
-&lt;p&gt;No, I kid, I kid! The actual rules are in &lt;a href=&quot;http://sites.google.com/site/opencatalogingrules/aacr2-chapter-1/1-8-standard-number-and-terms-of-availability-area&quot;&gt;Library of Congress Rule Interpretation 1.8&lt;/a&gt;, which reads, in part:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;For a hardbound resource, there is no attempt to use a consistent term other than to use one that conveys the condition intelligibly.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I think it’s important to read that a second time, because it succinctly conveys the culture in which these rules were devised.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Don’t worry about consistency, because your only reader is human.&lt;/li&gt;
-  &lt;li&gt;Defer to the cataloger.&lt;/li&gt;
-  &lt;li&gt;Being complete is more important than being consistent.&lt;/li&gt;
-  &lt;li&gt;Base your notes on your subjective view of the actual, physical item you’re presumed to be holding in your hands.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Interestingly (to me, anyway), it looks like the &lt;a href=&quot;http://www.oclc.org/bibformats/en/0xx/020.shtm&quot;&gt;OCLC once had a (now deprecated) &lt;code&gt;$$b&lt;/code&gt; subfield for binding information&lt;/a&gt;. Apparently it didn’t catch on.&lt;/p&gt;
-
-&lt;h3 id=&quot;what-did-i-find&quot;&gt;What did I find?&lt;/h3&gt;
-
-&lt;p&gt;So, let’s pretend I’d like to be able to differentiate between paperback and hardbound books. Probably useful, yes?&lt;/p&gt;
-
-&lt;p&gt;I went ahead and took all parenthetical notes from any field in the 020, split them on colon (‘cause that seems to be the way they roll) and did some basic normalization:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Eliminate numbers (so ‘vol. 1’ and ‘vol. 2’ count as only one pattern)&lt;/li&gt;
-  &lt;li&gt;Lowercase everything&lt;/li&gt;
-  &lt;li&gt;Turn runs of spaces into a single space&lt;/li&gt;
-  &lt;li&gt;Trim leading/trailing spaces&lt;/li&gt;
-  &lt;li&gt;Remove any trailing punctuation&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I found 1,506,729 parenthetical remarks in the 020 subfields of our catalog.&lt;/p&gt;
-
-&lt;p&gt;The top twenty most common entries using those normalizations are:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;402537 pbk&lt;/li&gt;
-  &lt;li&gt;387406 alk. paper&lt;/li&gt;
-  &lt;li&gt;99260 v  # &lt;em&gt;(e.g., “v. 1”, “v. 22”, etc.)&lt;/em&gt;&lt;/li&gt;
-  &lt;li&gt;82918 cloth&lt;/li&gt;
-  &lt;li&gt;51125 hbk&lt;/li&gt;
-  &lt;li&gt;42036 electronic bk&lt;/li&gt;
-  &lt;li&gt;41360 acid-free paper&lt;/li&gt;
-  &lt;li&gt;38792 hardcover&lt;/li&gt;
-  &lt;li&gt;28913 set&lt;/li&gt;
-  &lt;li&gt;20358 hardback&lt;/li&gt;
-  &lt;li&gt;19160 ebook&lt;/li&gt;
-  &lt;li&gt;16264 paper&lt;/li&gt;
-  &lt;li&gt;15269 u.s&lt;/li&gt;
-  &lt;li&gt;12770 hd.bd&lt;/li&gt;
-  &lt;li&gt;11793 print&lt;/li&gt;
-  &lt;li&gt;10625 lib. bdg&lt;/li&gt;
-  &lt;li&gt;10520 hc&lt;/li&gt;
-  &lt;li&gt;8772 est&lt;/li&gt;
-  &lt;li&gt;7767 pb&lt;/li&gt;
-  &lt;li&gt;7639 hard&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The kicker? These are the top twenty of &lt;em&gt;13,374&lt;/em&gt; unique parenthetical strings found in the 020 field. Many of them are publishers, or cities, or whatnot, but an awful lot of them are variations on “hardcover” and “paperback.”&lt;/p&gt;
-
-&lt;p&gt;For example, a quick search for anything that might be “hard” (regexp: /h[ar]{0,2}d/) got me started on a list. Here’s just the 90 examples from that list that start with ‘h’:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;hard | hard adhesive | hard back | hard bd | hard book | hard bound | hard bound book | hard boundhard case | hard casehard copy | hard copy | hard copy set | hard cov | hard cover | hard covers | hard sewn | hard signed | hard-backhard-backcased | hard-bound | hard-cover | hard-cover acid-free | hardb | hard\cover | hardbach | hardback | hardback book | hardback cover |  hardbackcased | hardbd | hardbk | hardbond | hardbook | hardboubd | hardbound | hardboundhardboundtion | hardc | hardcase | hardcopy | hardcopy publication | hardcov | hardcov er | hardcovcer | hardcove | hardcover | hardcover-alk. paper | hardcovercloth | hardcoverflexibound | hardcoverhardcoverwith cd | hardcoverr | hardcovers | hardcoversame | hardcoversame as above | hardcoverset | hardcovertion | hardcver | hardcvoer | hardcvr | harddback | harde | hardocover | hardover | hardpack | hardpaper | hardvocer | hardware | hd | hd bd | hd. bd | hd. bd. in slip case | hd. bd.in sl.cs | hd. bk | hd. cover | hd.bd | hd.bd. in box | hdb | hdbd | hdbk | hdbkb | hdbkhdbk | hdbnd | hdc | hdcvr | hdk | hdp | hdpk | hradback | hradcover | hrd | hrdbk | hrdcver | hrdcvr&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;And that’s after eliminating things like places of publication, strings like  “with…”, “plus…”, “alk. paper”, etc.&lt;/p&gt;
-
-&lt;h3 id=&quot;yeah-but-you-have-to-understand-that-historically&quot;&gt;“Yeah, but you have to understand that historically…”&lt;/h3&gt;
-
-&lt;p&gt;Stop hiding behind that.&lt;/p&gt;
-
-&lt;p&gt;I understand that at one point in time it probably made sense (to someone at least) to do it this way. I can deal with that.&lt;/p&gt;
-
-&lt;p&gt;What I can’t accept is that &lt;em&gt;as I type this&lt;/em&gt; there’s a cataloger doing this in this way. Today. April 2011. Some, what? maybe &lt;em&gt;thirty years&lt;/em&gt; since computer-based OPACs became prevalent?&lt;/p&gt;
-
-&lt;p&gt;These sorts of problems were recognized &lt;em&gt;ages&lt;/em&gt; ago and should have been dealt with. Add a subfield. Invent a controlled vocabulary. Don’t worry about the legacy data; it’s always going to suck.&lt;/p&gt;
-
-&lt;p&gt;But &lt;em&gt;why are we still producing sucky data???&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;to-sum-up&quot;&gt;To sum up&lt;/h3&gt;
-
-&lt;p&gt;The point is that there’s a better way to do this stuff. Lots and lots of better ways, in fact. Time I spend dealing with crappy data is time I &lt;em&gt;don’t&lt;/em&gt; spend making relevancy raking better, or building a better command language search option for my librarians, or working on ways to get a decent “more like this”.&lt;/p&gt;
-
-&lt;p&gt;The need is both dire and urgent; the latter because sooner or later we’re going to have to go to a “two state solution” with traditional MARC21 for many of our records and whatever comes next (RDA?) for the newer stuff. And every day we wait, that first category grows, and the growth rate keeps increasing.&lt;/p&gt;
-
-&lt;p&gt;And then there’s serials. Don’t talk to me about serials.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 12 Apr 2011 00:00:00 -0400</pubDate>
-        <link>http://robotlibrarian.billdueber.com/2011/04/isbn-parenthetical-notes-bad-marc-data-1/</link>
-        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/04/isbn-parenthetical-notes-bad-marc-data-1/</guid>
-        
-        <category>bad</category>
-        
-        <category>data</category>
         
         
       </item>

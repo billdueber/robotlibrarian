@@ -90,6 +90,18 @@
 
         <div class="post-text">
           <h2 class="post-title">
+            <a class="post-link" href="/2010/01/still-another-look-at-marc-parsing-in-ruby-and-jruby/">Still another look at MARC parsing in ruby and jruby</a>
+          </h2>
+          <div class="post-meta">Jan 29, 2010</div>
+          <p>I’ve been looking at making a jruby-based solr indexer for MARC documents, and started off wanting to make sure I could determine if anything I did would be faster than our existing (solrmarc-based) setup.</p> <ul> <li><strong>Assertion</strong>: The upper bound on how fast I can process records and send them to Solr can be approximated by looking at how fast I can parse (and do nothing else to) marc records from a file.</li> <li><strong>Assertion</strong>: If I... <a class="morepost" href="/2010/01/still-another-look-at-marc-parsing-in-ruby-and-jruby/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
             <a class="post-link" href="/2009/12/beta-version-of-the-hathitrust-volumes-api-available/">Beta version of the HathiTrust Volumes API available</a>
           </h2>
           <div class="post-meta">Dec 15, 2009</div>
@@ -105,7 +117,7 @@
             <a class="post-link" href="/2009/11/running-blacklight-under-jruby/">Running Blacklight under JRuby</a>
           </h2>
           <div class="post-meta">Nov 18, 2009</div>
-          <p>I decided to see if I could get <a href="http://projectblacklight.org/">Blacklight</a> working under <a href="http://jruby.org/">JRuby</a>, starting with running the test suite and working my way up from there.</p> <p>There was much pain. Much, much pain. Exacerbated by my almost complete<br /> lack of knowledge about what I was doing.</p> <p>This is the procedure I eventually arrived at – if there are places where I made trouble for myself, please let me know!</p> <p>[And does anyone know... <a class="morepost" href="/2009/11/running-blacklight-under-jruby/">&lt;more&gt;</a>
+          <p>I decided to see if I could get <a href="http://projectblacklight.org/">Blacklight</a> working under <a href="http://jruby.org/">JRuby</a>, starting with running the test suite and working my way up from there.</p> <p>There was much pain. Much, much pain. Exacerbated by my almost complete lack of knowledge about what I was doing.</p> <p>This is the procedure I eventually arrived at – if there are places where I made trouble for myself, please let me know!</p> <p>[And does anyone know how... <a class="morepost" href="/2009/11/running-blacklight-under-jruby/">&lt;more&gt;</a>
         </div>
       </li>
     
@@ -190,18 +202,6 @@
           </h2>
           <div class="post-meta">Sep 18, 2009</div>
           <p>It turns out that UVA’s reluctance to use the raw MARC data on the search results screen is driven more by processing time than parsing time. Even if they were to start with a fully-parsed MARC object, they’re doing enough screwing around with that data that the bottleneck on their end appears to be all the regex and string processing, not the parsing. Their specs for what gets displayed are complex enough that they want... <a class="morepost" href="/2009/09/more-marc-benchmars-adding-in-marc-xml/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2009/09/benchmarking-marc-record-parsing-in-ruby/">Benchmarking MARC record parsing in Ruby</a>
-          </h2>
-          <div class="post-meta">Sep 17, 2009</div>
-          <p>[Note: since I started writing this, I found out Bess &amp; Co. store MARC-XML. That makes a difference, since XML in Ruby can be really, really slow]</p> <p>[<strong>UPADTE</strong> It turns out they <em>don’t</em> use MARC-XML. They use MARC-Binary just like the rest of us. Oops. ]</p> <p>[<strong>UP-UPDATE</strong> Well, no, they <em>do</em> use MARC-XML. I’m not afraid to constantly change my story. This is why I’m the best investigative reporter in the business]</p> <p>The other day... <a class="morepost" href="/2009/09/benchmarking-marc-record-parsing-in-ruby/">&lt;more&gt;</a>
         </div>
       </li>
     

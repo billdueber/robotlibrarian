@@ -93,13 +93,13 @@
 
 <p style="color: red">[YUCK! It was a disaster in a few ways! Don't look at this! It's hideous! There's a new <a href="http://rdoc.info/projects/billdueber/jruby_producer_consumer">jruby_producer_consumer</a> gem on gemcutter that is slightly different from this in that it works. Ignore the stuff below.]</p>
 
-<p>[In working on a threaded JRuby-based MARC-to-Solr project, I realized that my threading stuff was…ugly. And<br />
+<p>[In working on a threaded JRuby-based MARC-to-Solr project, I realized that my threading stuff was…ugly. And
 I didn’t really understand it. So I dug in today and wrote this.]</p>
 
-<p>I’ve just pushed to <a href="http://gemcutter.org/">Gemcutter</a> my first gem – a <a href="http://jruby.org/">JRuby</a>-only<br />
+<p>I’ve just pushed to <a href="http://gemcutter.org/">Gemcutter</a> my first gem – a <a href="http://jruby.org/">JRuby</a>-only
 producer/consumer class that works with anything that provides <em>#each</em> called <a href="http://gemcutter.org/gems/jruby_producer_consumer">jruby_producer_consumer</a>.</p>
 
-<p>It’s JRuby-only because it uses (a) A blocking queue implemenation that’s native Java, and (b) threading, which isn’t<br />
+<p>It’s JRuby-only because it uses (a) A blocking queue implemenation that’s native Java, and (b) threading, which isn’t
 a huge win under regular Ruby.</p>
 
 <p>There’s no testing there because I’m not sure how to test threaded stuff :-(</p>

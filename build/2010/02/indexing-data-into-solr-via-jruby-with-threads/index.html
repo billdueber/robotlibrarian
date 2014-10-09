@@ -89,7 +89,7 @@
   </header>
 
   <article class="post-content">
-    <p>[Note: in this post I’m just going to focus on the “get stuff into Solr” part. My normal focus – MARC data – will<br />
+    <p>[Note: in this post I’m just going to focus on the “get stuff into Solr” part. My normal focus – MARC data – will
 make an appearance in the next post when I talk about using this in addition to / instead of solrmarc.]</p>
 
 <h3 id="working-with-solr">Working with Solr</h3>
@@ -108,8 +108,8 @@ make an appearance in the next post when I talk about using this in addition to 
   <li><strong>marc4j4r</strong> (<a href="http://github.com/billdueber/marc4j4r">github</a>, <a href="http://rdoc.info/projects/billdueber/marc4j4r">rdoc.info</a>) Ruby syntax on top of the marc4j java library.</li>
 </ul>
 
-<p><em>WARNING</em>: None of these gems have a 1.0 version tag on them, and that means that the API may change a titch in<br />
-  the future. Also, the fact that they’re released as gems means that it’s easy to release gems, not that I’m not<br />
+<p><em>WARNING</em>: None of these gems have a 1.0 version tag on them, and that means that the API may change a titch in
+  the future. Also, the fact that they’re released as gems means that it’s easy to release gems, not that I’m not
   an idiot.</p>
 
 <h3 id="the-basics-using-solrinputdocument-and-streamingupdatesolrserver">The basics: Using SolrInputDocument and StreamingUpdateSolrServer</h3>
@@ -198,20 +198,20 @@ make an appearance in the next post when I talk about using this in addition to 
 
 <h3 id="adding-threads">Adding Threads</h3>
 
-<p>I also went down the garden path of threading things. There are an awful lot<br />
-of operations that are not threadsafe (e.g., reading a line from a file) but<br />
-once you’ve got a bunch of records to worth with, turning them into Solr<br />
+<p>I also went down the garden path of threading things. There are an awful lot
+of operations that are not threadsafe (e.g., reading a line from a file) but
+once you’ve got a bunch of records to worth with, turning them into Solr
 documents is usually thread-safe.</p>
 
-<p>My model is that there’s a producer (usually the method <code>#each</code>) from an<br />
-underlying data object. A thread takes whatever that method yields<br />
-and sticks the values into a java<br />
-BlockingQueue awaiting consumption. You then use <code>ProdcuerConsumer#threaded_each</code><br />
+<p>My model is that there’s a producer (usually the method <code>#each</code>) from an
+underlying data object. A thread takes whatever that method yields
+and sticks the values into a java
+BlockingQueue awaiting consumption. You then use <code>ProdcuerConsumer#threaded_each</code>
 (or <code>ProducerConsumer#threaded_each_with_index</code>) to pull items out of the queue and do something useful with them.</p>
 
 <p>I extracted stuff into a library (jruby_producer_consumer) for your viewing pleasure.</p>
 
-<p><strong>CONFUSION ALERT</strong>: It’s perhaps unfortunate that the object you send to <code>ProducerConsumer.new(obj)</code> must implement <code>#each</code> and that the ProducerConsumer method <code>#threaded_each</code> calls that underlying <code>#each</code>…well<br />
+<p><strong>CONFUSION ALERT</strong>: It’s perhaps unfortunate that the object you send to <code>ProducerConsumer.new(obj)</code> must implement <code>#each</code> and that the ProducerConsumer method <code>#threaded_each</code> calls that underlying <code>#each</code>…well
 there’s a lot of <code>#each</code>’s floating around. Keep them straight.</p>
 
 <p>So…let’s look at some code to work with consumer threads.</p>

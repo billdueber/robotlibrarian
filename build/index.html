@@ -90,6 +90,18 @@
 
         <div class="post-text">
           <h2 class="post-title">
+            <a class="post-link" href="/2014/10/marc_serialization_revisited/">Ruby MARC serialization/deserialization revisited</a>
+          </h2>
+          <div class="post-meta">Oct 9, 2014</div>
+          <p>A few years ago, I <a href="http://robotlibrarian.billdueber.com/2010/09/sizespeed-of-various-marc-serializations-using-ruby-marc/">benchmarked</a> various methods of serializing/deserialzing MARC data using the <a href="http://github.com/ruby-marc/ruby-marc/">ruby-marc</a> gem. Given that I’m planning on starting fresh with my catalog setup, I thought I’d take a moment to revisit them.</p> <p>The biggest changes since that time have been (a) the continued speed improvements in JRuby, (b) the introduction of the <a href="https://github.com/ohler55/oj">Oj</a> json parser for MRI ruby, and (c) wider availability of msgpack code in the wild.</p>... <a class="morepost" href="/2014/10/marc_serialization_revisited/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
             <a class="post-link" href="/2014/10/schemaless-solr-with-dynamicfield-and-copyfield/">"Schemaless" solr with dynamicField and copyField</a>
           </h2>
           <div class="post-meta">Oct 2, 2014</div>
@@ -193,18 +205,6 @@
           </h2>
           <div class="post-meta">Mar 6, 2012</div>
           <p>[Note: this isn’t so much a <em>Stupid Solr Trick</em> as a <em>Thing You Should Probably Know</em>; consider it required reading for the next SST. If you’re just joining us, check out the <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a>]</p> <h3 id="what-the-heck-is-a-localparams-query">What the heck is a localparams query?</h3> <p>A garden-variety Solr query URL looks something like this:</p> <pre><code> http://localhost:8983/solr/select? defType=dismax &amp;amp;qf=name^2 place^1 &amp;amp;q=Dueber </code></pre> <p>Which is fine, as far as it goes. But it’s easy... <a class="morepost" href="/2012/03/using-localparams-in-solr-sst-2/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2012/03/solr-field-type-for-numericish-ids/">Solr Field Type for numeric(ish) IDs (SST #1)</a>
-          </h2>
-          <div class="post-meta">Mar 1, 2012</div>
-          <p>[For the introduction to this series, take a quick gander at <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">the introduction</a>]</p> <p>Like everyone else in the library world, I’ve got a bunch of well-defined, well-controlled standard identifiers I need to keep track of and allow searching on.</p> <p>You know, well-vetted stuff like this:</p> <ul> <li>1234-5678</li> <li>123-4567-890</li> <li>12-34-567-X</li> <li>0012-0045</li> <li>ISBN13: 1234567890123</li> <li>ISSN: 1234567X (1998-99)</li> <li>ISSN (1998-99): 1234567X</li> <li>1234567890 (hdk. 22 pgs)</li> <li>9</li> <li>Behind the 3rd floor desk</li> <li>Henry VIII</li> </ul> <p>[Note: some of... <a class="morepost" href="/2012/03/solr-field-type-for-numericish-ids/">&lt;more&gt;</a>
         </div>
       </li>
     

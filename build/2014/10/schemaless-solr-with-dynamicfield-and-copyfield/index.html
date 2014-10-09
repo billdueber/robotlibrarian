@@ -197,7 +197,7 @@
 
 <p>First, there are two <code>dynamicField</code> definitions. The first is a no-op: unstored, unindexed. We use it only for copying. The second is a standard indexed (but not stored) text field.</p>
 
-<p>Then come the <code>copyField</code>s, where we match on the suffixes of the field types.<br />
+<p>Then come the <code>copyField</code>s, where we match on the suffixes of the field types.
 Finally, we have our default: a stored, unindexed string. (Note that when Solr stores a value, it stores whatever you put into it, not the value after analysis – same as a String does anyway).</p>
 
 <p>Suppose I index an undeclared field called <code>title_t_s</code>:</p>

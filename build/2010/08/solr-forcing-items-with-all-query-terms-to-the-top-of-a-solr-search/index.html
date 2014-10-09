@@ -130,9 +130,9 @@
 
 <p>So, with special thanks to Jan Høydahl for his solution, we get this, in Ruby psuedocode:</p>
 
-<p>andedTerms = allMyTerms.join(‘ AND ‘)<br />
-bf = map(query($qq),0,0,0,100000.0) # Add this value to the ranking score<br />
-qq = “allFields:(#{andedTerms})” # Use this as the query<br />
+<p>andedTerms = allMyTerms.join(‘ AND ‘)
+bf = map(query($qq),0,0,0,100000.0) # Add this value to the ranking score
+qq = “allFields:(#{andedTerms})” # Use this as the query
 ## add bf and qq to your solr query</p>
 
 <p>The <code>qq</code> is easy enough – it basically says that to get any relevancy score at all, the record must have all the terms in the <code>allFields</code> Solr field.</p>

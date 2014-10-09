@@ -42,6 +42,7 @@ kramdown:
   use_coderay:   true
   coderay_line_numbers: nil
   extensions: [.markdown, .md]
+  hard_wrap: false
 
 coderay:
   coderay_wrap:              div
