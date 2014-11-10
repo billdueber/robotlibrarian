@@ -6,7 +6,7 @@ date: 2014-11-10 11:09
 ---
 
 I complain a lot about [the MARC format](/2010/04/data-structures-and-serializations/),
-[the way people put data in MARC records](/2011/04/why-programmers-hate-free-text-in-marc-records/)
+[the way people put data in MARC records](/2011/04/why-programmers-hate-free-text-in-marc-records/),
 the [actual data themselves I find in MARC records](/2011/04/isbn-parenthetical-notes-bad-marc-data-1/),
 the [inexplicably complex syntax for identifiers](/yet-another-lc-callnumber-parser/) and, ironically, 
 [attempts to replace MARC with something else](/2010/04/why-rda-is-doomed-to-failure/).
@@ -36,7 +36,7 @@ So, there are roughly a bazillion ways one could try to slice and dice the data 
 accurate textual representation of a place name should be for a given record. More cut-and-dry is a simple question: 
 how many of the 008s have a valid (current or obsolete) place-of-publication code in them?
 
-I ran an analysis of all the 008s in all the records in the [University of Michigan catalog(]http://mirlyn.lib.umich.edu/),
+I ran an analysis of all the 008s in all the records in the [University of Michigan catalog](http://mirlyn.lib.umich.edu/),
 which helpfully includes all the HathiTrust holdings as well, so we're getting a nice cross-section of institutional records.
 
 Here's what I found, in round numbers

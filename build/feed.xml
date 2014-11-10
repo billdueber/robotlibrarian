@@ -6,14 +6,14 @@
 </description>
     <link>http://robotlibrarian.billdueber.com/</link>
     <atom:link href="http://robotlibrarian.billdueber.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 10 Nov 2014 12:29:40 -0500</pubDate>
-    <lastBuildDate>Mon, 10 Nov 2014 12:29:40 -0500</lastBuildDate>
+    <pubDate>Mon, 10 Nov 2014 12:33:46 -0500</pubDate>
+    <lastBuildDate>Mon, 10 Nov 2014 12:33:46 -0500</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
         <title>How good/bad is MARC data? The case of place-of-publication</title>
         <description>&lt;p&gt;I complain a lot about &lt;a href=&quot;/2010/04/data-structures-and-serializations/&quot;&gt;the MARC format&lt;/a&gt;,
-&lt;a href=&quot;/2011/04/why-programmers-hate-free-text-in-marc-records/&quot;&gt;the way people put data in MARC records&lt;/a&gt;
+&lt;a href=&quot;/2011/04/why-programmers-hate-free-text-in-marc-records/&quot;&gt;the way people put data in MARC records&lt;/a&gt;,
 the &lt;a href=&quot;/2011/04/isbn-parenthetical-notes-bad-marc-data-1/&quot;&gt;actual data themselves I find in MARC records&lt;/a&gt;,
 the &lt;a href=&quot;/yet-another-lc-callnumber-parser/&quot;&gt;inexplicably complex syntax for identifiers&lt;/a&gt; and, ironically, 
 &lt;a href=&quot;/2010/04/why-rda-is-doomed-to-failure/&quot;&gt;attempts to replace MARC with something else&lt;/a&gt;.&lt;/p&gt;
@@ -43,7 +43,7 @@ and merges (Germany). &lt;/p&gt;
 accurate textual representation of a place name should be for a given record. More cut-and-dry is a simple question: 
 how many of the 008s have a valid (current or obsolete) place-of-publication code in them?&lt;/p&gt;
 
-&lt;p&gt;I ran an analysis of all the 008s in all the records in the [University of Michigan catalog(]http://mirlyn.lib.umich.edu/),
+&lt;p&gt;I ran an analysis of all the 008s in all the records in the &lt;a href=&quot;http://mirlyn.lib.umich.edu/&quot;&gt;University of Michigan catalog&lt;/a&gt;,
 which helpfully includes all the HathiTrust holdings as well, so we’re getting a nice cross-section of institutional records.&lt;/p&gt;
 
 &lt;p&gt;Here’s what I found, in round numbers&lt;/p&gt;
