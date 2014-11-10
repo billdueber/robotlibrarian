@@ -74,4 +74,4 @@ RewriteRule ^boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4 /2012/0
 RewriteRule ^please-dont-return-your-books /2013/02/please-dont-return-your-books/ [L,R=permanent]
 RewriteRule ^come-work-at-the-university-of-michigan /2013/04/come-work-at-the-university-of-michigan/ [L,R=permanent]
 RewriteRule ^announcing-traject-indexing-software /2013/10/announcing-traject-indexing-software/ [L,R=permanent]
-RewriteRule ^new-blog-front-and-back-end.html /2013/12/new-blog-front-and-back-end.html/ [L,R=permanent]
+RewriteRule ^new-blog-front-and-back-end.html /2013/12/new-blog-front-and-back-end/ [L,R=permanent]
