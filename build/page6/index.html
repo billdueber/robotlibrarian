@@ -90,6 +90,18 @@
 
         <div class="post-text">
           <h2 class="post-title">
+            <a class="post-link" href="/2009/09/more-marc-benchmars-adding-in-marc-xml/">More Ruby MARC Benchmarks: Adding in MARC-XML</a>
+          </h2>
+          <div class="post-meta">Sep 18, 2009</div>
+          <p>It turns out that UVA’s reluctance to use the raw MARC data on the search results screen is driven more by processing time than parsing time. Even if they were to start with a fully-parsed MARC object, they’re doing enough screwing around with that data that the bottleneck on their end appears to be all the regex and string processing, not the parsing. Their specs for what gets displayed are complex enough that they want... <a class="morepost" href="/2009/09/more-marc-benchmars-adding-in-marc-xml/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
             <a class="post-link" href="/2009/09/benchmarking-marc-record-parsing-in-ruby/">Benchmarking MARC record parsing in Ruby</a>
           </h2>
           <div class="post-meta">Sep 17, 2009</div>
@@ -190,18 +202,6 @@
           </h2>
           <div class="post-meta">Apr 15, 2009</div>
           <p>Why do I ever, ever think that MARC might not rely on order? I don’t know.</p> <p>In any case, control fields will now be just an array of duples:</p> <div><div class="CodeRay"> <div class="code"><pre> control: [ [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">001</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">value of the 001</span><span style="color:#710">'</span></span>], [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">006</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">value of the 006</span><span style="color:#710">'</span></span>] [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">006</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">another 006</span><span style="color:#710">'</span></span>] } </pre></div> </div>... <a class="morepost" href="/2009/04/marc-hash-control-field-now-with-less-structure/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2009/04/marc-hash-a-proposed-format-for-jsonyamlwhatever-compatible-marc-records/">MARC-Hash: a proposed format for JSON/YAML/Whatever-compatible MARC records </a>
-          </h2>
-          <div class="post-meta">Apr 13, 2009</div>
-          <p>In my first shot at MARC-in-JSON, which I appropriately (and prematurely) named <a href="http://code.google.com/p/marc-json/">MARC-JSON</a>, I made a point of losing round-tripability (to and from MARC) in order to end up with a nice, easy-to-work-with data structure based mostly on hashes. “Who really cares what order the subfields come in?” I asked myself.</p> <p>Well, of course, it turns out some people do. Some even care about the order of the tags. “Only in the 500s…usually” I... <a class="morepost" href="/2009/04/marc-hash-a-proposed-format-for-jsonyamlwhatever-compatible-marc-records/">&lt;more&gt;</a>
         </div>
       </li>
     

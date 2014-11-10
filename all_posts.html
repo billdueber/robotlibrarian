@@ -9,9 +9,9 @@ permalink: /all_posts/
 
   <table class="all-posts-table">
     {% for post in site.posts %}
-      <tr>
+       <tr>
         <td class="date">{{ post.date | date: "%b %-d, %Y" }}</td>
-        <td><a  style="display:block" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
+        <td><a  style="display:block" href="{{post.url}}">{{ post.title }}</a></td>
       </tr>
     {% endfor %}
   </table>

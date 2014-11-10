@@ -828,7 +828,8 @@ header.post-header h1 {
   .post-text ul {
     margin-left: 2em; }
     .post-text ul li {
-      list-style-type: disc; }
+      list-style-type: disc;
+      margin-top: 0.5em; }
   .post-text .morepost {
     padding-left: 3em;
     color: black; }

@@ -6,9 +6,126 @@
 </description>
     <link>http://robotlibrarian.billdueber.com/</link>
     <atom:link href="http://robotlibrarian.billdueber.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 09 Oct 2014 12:58:59 -0400</pubDate>
-    <lastBuildDate>Thu, 09 Oct 2014 12:58:59 -0400</lastBuildDate>
+    <pubDate>Mon, 10 Nov 2014 11:14:00 -0500</pubDate>
+    <lastBuildDate>Mon, 10 Nov 2014 11:14:00 -0500</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>How good/bad is MARC data? The case of place-of-publication</title>
+        <description>&lt;p&gt;I complain a lot about &lt;a href=&quot;/2010/04/data-structures-and-serializations/&quot;&gt;the MARC format&lt;/a&gt;,
+&lt;a href=&quot;/2011/04/why-programmers-hate-free-text-in-marc-records/&quot;&gt;the way people put data in MARC records&lt;/a&gt;
+the &lt;a href=&quot;/2011/04/isbn-parenthetical-notes-bad-marc-data-1/&quot;&gt;actual data themselves I find in MARC records&lt;/a&gt;,
+the &lt;a href=&quot;/yet-another-lc-callnumber-parser/&quot;&gt;inexplicably complex syntax for identifiers&lt;/a&gt; and, ironically, 
+&lt;a href=&quot;/2010/04/why-rda-is-doomed-to-failure/&quot;&gt;attempts to replace MARC with something else&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One nice little beacon of hope was when I found that only roughly 0.26% of the ISBNs in the UMich catalog 
+have invalid checksums. That’s not bad at all, and it’s worth digging into other things about which
+I might be likely to complain before I make a fool of myself.&lt;/p&gt;
+
+&lt;p&gt;[Note: there &lt;em&gt;will&lt;/em&gt; be some complaining at the end. I promise.]&lt;/p&gt;
+
+&lt;p&gt;One of my recent charges was to try to put in place a better place-of-publication filter in the catalog.
+&lt;em&gt;Place of Publication&lt;/em&gt; is most formally dictated by the (poorly-named, since it includes states/provinces) &lt;a href=&quot;http://www.oclc.org/bibformats/en/fixedfield/ctry.html&quot;&gt;Country of Publication&lt;/a&gt;
+code in the 008 fixed field. This one-, two- or three-letter code that is then translated into a place name 
+via a &lt;a href=&quot;http://www.loc.gov/standards/codelists/countries.xml&quot;&gt;mapping provided by the LoC&lt;/a&gt;. Like most important pieces of data,
+the place of publication can appear in a few different places in a valid MARC record – because the searching is half the fun! –
+but we decided to just stick with the
+008 for the catalog search.&lt;/p&gt;
+
+&lt;p&gt;Of course, the name of a place of publication may have changed since the actual publication. 
+Historically speaking, borders have been remakably consistent over the last half of a century
+or so, but there are still changes (fall of the Soviet Union), splits (the former Czechoslovakia)
+and merges (Germany). &lt;/p&gt;
+
+&lt;h2 id=&quot;focus-on-validity&quot;&gt;Focus on validity&lt;/h2&gt;
+
+&lt;p&gt;So, there are roughly a bazillion ways one could try to slice and dice the data to figure out what the most
+accurate textual representation of a place name should be for a given record. More cut-and-dry is a simple question: 
+how many of the 008s have a valid (current or obsolete) place-of-publication code in them?&lt;/p&gt;
+
+&lt;p&gt;I ran an analysis of all the 008s in all the records in the [University of Michigan catalog(]http://mirlyn.lib.umich.edu/),
+which helpfully includes all the HathiTrust holdings as well, so we’re getting a nice cross-section of institutional records.&lt;/p&gt;
+
+&lt;p&gt;Here’s what I found, in round numbers&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Pct. of Total&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;All records&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;12M&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;100%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Invalid 008&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1900&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;0.15%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Valid code&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;11.6M&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;96.6%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Unknown place-of-pub&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;381k&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3.1%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Invalid code&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;27k&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;0.2%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;[“No place-of-pub” includes both records with no data in the 008 and those with the code ‘  x’ which explicitly indicates “Unknown”]&lt;/p&gt;
+
+&lt;h2 id=&quot;results-pretty-good&quot;&gt;Results: pretty good!&lt;/h2&gt;
+
+&lt;p&gt;Given much of the data I’ve worked with over the years, this strikes me a stunningly good. Of course, in the case of a place as 
+big as UMich, that means we’ve still got about 408k items about which we have no good place-of-publication information, but 
+as a percentage, it’s small enough that I’m happy to live with it. &lt;/p&gt;
+
+&lt;p&gt;I was, admittedly, a little put out by the fact that we have records in which the 008 fixed field – which is pretty important, as these things go – was 
+just plain invalid (including 176 just plain &lt;em&gt;missing&lt;/em&gt;). You’d think that the ILS software would reject things like that, but,
+as in almost all cases when you think the ILS should do something smart, you’d be wrong.&lt;/p&gt;
+
+&lt;h2 id=&quot;and-now-the-complaints&quot;&gt;And now, the complaints&lt;/h2&gt;
+
+&lt;p&gt;Of course, all we know is that the codes are (or were) valid – not whether or not they’re &lt;em&gt;accurate&lt;/em&gt;. &lt;/p&gt;
+
+&lt;p&gt;There are two obvious problems:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Some rocket scientists at some point decided that the code ‘ai’, which had been used to represent Anguilla, should now be
+used to represent the Republic of Armenia. As if that weren’t enough to make you slam your head into a brick wall,
+the change is based on the date of &lt;em&gt;cataloging&lt;/em&gt;, not the date of publication, so there’s no way for me to know which
+country is supposed to be indicated. It looks like this was to try to keep the first two letters of codes from the old Soviet Union
+the same one it fell apart, but c’&lt;em&gt;mon&lt;/em&gt;, people! (Note that Anguilla is now ‘am’, because of the …ummmm….”m” in it’s…er…nevermind.) We don’t have
+many records with that code, but this is the sort of blatent disregard for simple data integrity that drives me &lt;em&gt;crazy&lt;/em&gt;. &lt;/li&gt;
+  &lt;li&gt;A presumably different set of rocket scientists (once NASA downsized, those folks were &lt;em&gt;everywhere&lt;/em&gt;) at various points in time and 
+at various locations decided that the place of publication on a reproduction (say, a microfilm) should be the place the &lt;em&gt;reproduction&lt;/em&gt;
+was created. So, a microfilm of &lt;em&gt;The New York Times&lt;/em&gt; that happened to be created in Ann Arbor, MI is coded as ‘miu’, for Michigan. &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The latter, of course, is designed to serve those people studying where microfilms were created at the expense of people who
+want to, you know, find things actually published in a particular location. I’m sure &lt;em&gt;all three&lt;/em&gt; of the people in the country who want to know the
+former are forever grateful. &lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 10 Nov 2014 11:09:00 -0500</pubDate>
+        <link>http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/</link>
+        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Ruby MARC serialization/deserialization revisited</title>
@@ -412,8 +529,8 @@ Finally, we have our default: a stored, unindexed string. (Note that when Solr s
 &lt;p&gt;[Code for the app itself is &lt;a href=&quot;https://github.com/billdueber/lccparser&quot;&gt;on github&lt;/a&gt;; pull requests for both the app and the gem joyously received]&lt;/p&gt;
 </description>
         <pubDate>Thu, 30 Jan 2014 00:00:00 -0500</pubDate>
-        <link>http://robotlibrarian.billdueber.com/2014/01/yet-another-lc-callnumber-parser.html/</link>
-        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2014/01/yet-another-lc-callnumber-parser.html/</guid>
+        <link>http://robotlibrarian.billdueber.com/2014/01/yet-another-lc-callnumber-parser/</link>
+        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2014/01/yet-another-lc-callnumber-parser/</guid>
         
         
       </item>
@@ -433,8 +550,8 @@ Finally, we have our default: a stored, unindexed string. (Note that when Solr s
 &lt;p&gt;Feel free to tell me how ugly it is and suggest improvements. I have the design skills of a one-eyed poodle.&lt;/p&gt;
 </description>
         <pubDate>Tue, 17 Dec 2013 00:00:00 -0500</pubDate>
-        <link>http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end.html/</link>
-        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end.html/</guid>
+        <link>http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end/</link>
+        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end/</guid>
         
         
       </item>
@@ -2279,108 +2396,6 @@ ins = dbh.prepare(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&qu
         <category>librarian</category>
         
         <category>code,</category>
-        
-        <category>ruby</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>A short ruby diversion: cost of flow control under Ruby</title>
-        <description>&lt;p&gt;A couple days ago I decided to finally get back to working on &lt;a href=&quot;https://github.com/billdueber/threach&quot;&gt;&lt;code&gt;threach&lt;/code&gt;&lt;/a&gt; to try to deal with problems it had – essentially, it didn’t deal well with non-local exits due to calls to &lt;code&gt;break&lt;/code&gt; or even something simple like a &lt;code&gt;NoMethodError&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;[BTW, I think I managed it. As near as I can tell, &lt;code&gt;threach&lt;/code&gt; version 0.4 won’t deadlock anymore]&lt;/p&gt;
-
-&lt;p&gt;Along the way, while trying to figure out how threads affect the behavior of different non-local exits, I noticed that in some cases there was still work being done by one or more threads long after there was an exception raised.&lt;/p&gt;
-
-&lt;p&gt;I re-discovered something that a lot of people already know: &lt;code&gt;raise&lt;/code&gt;/&lt;code&gt;rescue&lt;/code&gt; under MRI is slow, and under JRuby can be &lt;em&gt;unbearably&lt;/em&gt; slow. How slow?&lt;/p&gt;
-
-&lt;p&gt;Let’s look at four simple blocks that exercise four different block exit strategies: &lt;code&gt;break&lt;/code&gt;, &lt;code&gt;catch&lt;/code&gt; and &lt;code&gt;throw&lt;/code&gt;, &lt;code&gt;raise&lt;/code&gt; with the normal single (or zero) arguments, as well as the three-argument version of &lt;code&gt;raise&lt;/code&gt;.&lt;/p&gt;
-
-&lt;table class=&quot;data&quot;&gt;
-  &lt;tr&gt;
-    &lt;th&gt;Simple break&lt;/th&gt;&lt;th&gt;Catch/Throw&lt;/th&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;
-      &lt;pre lang=&quot;ruby&quot;&gt;
-range.each do |i|
-  break
-end
-      &lt;/pre&gt;
-    &lt;/td&gt;
-    &lt;td&gt;
-      &lt;pre lang=&quot;ruby&quot;&gt;
-catch(:benchmarking) do  
- range.each do |i|
-   throw(:benchmarking)
- end
-end
-      &lt;/pre&gt;
-    &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;th&gt;Raise (1 arg)&lt;/th&gt;&lt;th&gt;Raise (3 args)&lt;/th&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;
-      &lt;pre lang=&quot;ruby&quot;&gt;
- begin
-   range.each do |i|
-     raise StandardError
-   end
- rescue
-  # do nothing
- end
-     &lt;/pre&gt;
-    &lt;/td&gt;
-    &lt;td&gt;
-      &lt;pre lang=&quot;ruby&quot;&gt;
-begin
-  range.each do |i|
-    raise StandardError, :hi, nil
-  end
-rescue
- # do nothing
-end
-      &lt;/pre&gt;
-    &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;In each case, we immediately exit the block without doing any work; the idea is to measure how long it takes to break out for each case.&lt;/p&gt;
-
-&lt;p&gt;So….let’s run them each 100K times and see what happens, shall we? Times are in seconds, averaged over two runs.&lt;/p&gt;
-
-&lt;table class=&quot;data&quot; id=&quot;t&quot;&gt;
-  &lt;tr&gt;
-    &lt;th&gt;&lt;/th&gt;&lt;th&gt;Ruby 1.8&lt;/th&gt;&lt;th&gt;Ruby 1.9&lt;/th&gt;&lt;th&gt;JRuby&lt;/th&gt;&lt;th&gt;JRuby --1.9&lt;/th&gt;
-  &lt;/tr&gt;  
-  &lt;tr&gt;&lt;th&gt;break&lt;/th&gt;        &lt;td&gt;0.12&lt;/td&gt;&lt;td&gt;0.07&lt;/td&gt;&lt;td&gt;0.29&lt;/td&gt; &lt;td&gt;0.21&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;th&gt;catch/throw&lt;/th&gt;  &lt;td&gt;0.35&lt;/td&gt;&lt;td&gt;0.28&lt;/td&gt;&lt;td&gt;0.64&lt;/td&gt; &lt;td&gt;0.48&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;th&gt;raise (1 arg)&lt;/th&gt;&lt;td&gt;1.78&lt;/td&gt;&lt;td&gt;2.10&lt;/td&gt;&lt;td class=&quot;bad&quot;&gt;26.60&lt;/td&gt;&lt;td class=&quot;bad&quot;&gt;22.06&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;th&gt;raise (3 arg)&lt;/th&gt;&lt;td&gt;1.85&lt;/td&gt;&lt;td&gt;2.13&lt;/td&gt;&lt;td&gt;0.45&lt;/td&gt; &lt;td&gt;0.45&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;The first thing to note is that this is 100K iterations. Three of the strategies are fast enough that you’d have to work really, really hard to notice them.&lt;/p&gt;
-
-&lt;p&gt;In terms of speed, &lt;code&gt;raise (3 args)&lt;/code&gt;, &lt;code&gt;catch/throw&lt;/code&gt;, and &lt;code&gt;break&lt;/code&gt; are fast enough that you shouldn’t bother worrying about them (although you &lt;em&gt;should&lt;/em&gt; choose the method that makes your code easy to understand).&lt;/p&gt;
-
-&lt;p&gt;The second things to note is &lt;em&gt;Holy Camoli!&lt;/em&gt; JRuby is slow there!&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://jira.codehaus.org/browse/JRUBY-5534&quot;&gt;This Jira ticket&lt;/a&gt; tells the tale: The creation of the backtrace is very, very expensive for JRuby. That &lt;code&gt;nil&lt;/code&gt; at the end of the &lt;code&gt;raise (3 args)&lt;/code&gt; call suppresses the creation of that backtrace, so the speed is fine.&lt;/p&gt;
-
-&lt;p&gt;Three things worth saying here:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;If you’re using &lt;code&gt;raise/rescue&lt;/code&gt; for flow control, &lt;em&gt;you’re already doing it wrong.&lt;/em&gt; Reserve exceptions for, well, exceptional conditions that are only going to be raised once or twice, not all the time.&lt;/li&gt;
-  &lt;li&gt;If you’re writing code that, for some ungodly reason, is planning on raising a crapload of exceptions, use the three-arg version. I’m looking at you, gem authors.&lt;/li&gt;
-  &lt;li&gt;If you’re writing your code without worrying about how it will work under multiple threads, well, please don’t do that. Everyone has multi-core systems these days, and it’s silly to not be able to use them. Plus, counting on Matz to never move to a VM with real threads is a big gamble.&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 03 May 2011 00:00:00 -0400</pubDate>
-        <link>http://robotlibrarian.billdueber.com/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/</link>
-        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/</guid>
         
         <category>ruby</category>
         

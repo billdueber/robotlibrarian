@@ -90,6 +90,18 @@
 
         <div class="post-text">
           <h2 class="post-title">
+            <a class="post-link" href="/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/">A short ruby diversion: cost of flow control under Ruby</a>
+          </h2>
+          <div class="post-meta">May 3, 2011</div>
+          <p>A couple days ago I decided to finally get back to working on <a href="https://github.com/billdueber/threach"><code>threach</code></a> to try to deal with problems it had – essentially, it didn’t deal well with non-local exits due to calls to <code>break</code> or even something simple like a <code>NoMethodError</code>.</p> <p>[BTW, I think I managed it. As near as I can tell, <code>threach</code> version 0.4 won’t deadlock anymore]</p> <p>Along the way, while trying to figure out how threads affect the behavior... <a class="morepost" href="/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
             <a class="post-link" href="/2011/04/isbn-parenthetical-notes-bad-marc-data-1/">ISBN parenthetical notes: Bad MARC data #1</a>
           </h2>
           <div class="post-meta">Apr 12, 2011</div>
@@ -190,18 +202,6 @@
           </h2>
           <div class="post-meta">Sep 13, 2010</div>
           <p>I needed some code to deal with ISBN10-&gt;ISBN13 conversion, so I put in a few other functions and wrapped it all up in a <a href="http://rubygems.org/gems/library_stdnums">gem called library_stdnums</a>.</p> <p>It’s only 100 lines of code or so and some specs, but I put it out there in case others want to use it or add to it. Pull requests at the <a href="http://github.com/billdueber/library_stdnums">github repo</a> are welcome.</p> <p>Functionality is all as module functions, as follows:</p> <h3 id="isbn">ISBN</h3>... <a class="morepost" href="/2010/09/simple-ruby-gem-for-dealing-with-isbnissnlccn/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2010/08/solr-forcing-items-with-all-query-terms-to-the-top-of-a-solr-search/">Solr: Forcing items with all query terms to the top of a Solr search</a>
-          </h2>
-          <div class="post-meta">Aug 18, 2010</div>
-          <p>[Note: I’ve since made a <a href="http://robotlibrarian.billdueber.com/using-localparams-in-solr-sst-2/">better explanation of, and solution for, this problem</a>.]</p> <p>Here at <a href="http://lib.umich.edu/">UMich</a>, we’re apparently in the minority in that we have <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>, our catalog discovery interface (a very hacked version of <a href="http://vufind.org/">VuFind</a>), set up to find records that match only a subset of the query terms.</p> <p>Put more succinctly: everyone else seem to join all terms with ‘AND’, whereas we do a <a href="http://www.lucidimagination.com/blog/2010/05/23/whats-a-dismax/">DisMax</a> variant on ‘OR’.</p>... <a class="morepost" href="/2010/08/solr-forcing-items-with-all-query-terms-to-the-top-of-a-solr-search/">&lt;more&gt;</a>
         </div>
       </li>
     

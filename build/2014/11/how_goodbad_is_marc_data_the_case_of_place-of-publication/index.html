@@ -10,12 +10,12 @@
 
     <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
 
-    <title>New blog front- and back-end</title>
+    <title>How good/bad is MARC data? The case of place-of-publication</title>
     <meta name="description" content="Stuff about computers in libraries, and libraries in computers
 ">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end.html/">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/">
 </head>
 
 
@@ -84,22 +84,118 @@
           <div class="post post-text">
 
   <header class="post-header">
-    <h1 class="post-title">New blog front- and back-end</h1>
-    <p class="post-meta">Dec 17, 2013</p>
+    <h1 class="post-title">How good/bad is MARC data? The case of place-of-publication</h1>
+    <p class="post-meta">Nov 10, 2014</p>
   </header>
 
   <article class="post-content">
-    <p>A while back, <a href="http://dreamhost.com/">Dreamhost</a> had some problems and my blog and assorted other websites I help keep track of went down.</p>
+    <p>I complain a lot about <a href="/2010/04/data-structures-and-serializations/">the MARC format</a>,
+<a href="/2011/04/why-programmers-hate-free-text-in-marc-records/">the way people put data in MARC records</a>
+the <a href="/2011/04/isbn-parenthetical-notes-bad-marc-data-1/">actual data themselves I find in MARC records</a>,
+the <a href="/yet-another-lc-callnumber-parser/">inexplicably complex syntax for identifiers</a> and, ironically, 
+<a href="/2010/04/why-rda-is-doomed-to-failure/">attempts to replace MARC with something else</a>.</p>
 
-<p>For more than two weeks.</p>
+<p>One nice little beacon of hope was when I found that only roughly 0.26% of the ISBNs in the UMich catalog 
+have invalid checksums. That’s not bad at all, and it’s worth digging into other things about which
+I might be likely to complain before I make a fool of myself.</p>
 
-<p>Now, I understand that crap happens. And I understand that sometimes lots of things happen at once. But fundamentally, their infrastructure is such that they could lose everything on a machine and be unable to get it back for more than two weeks. I’m not a mathematician, but that’s not “five-nine” service.</p>
+<p>[Note: there <em>will</em> be some complaining at the end. I promise.]</p>
 
-<p>So, I decided to start hunting around for another provider. And then I got distracted by the idea that maybe having my blog in <a href="http://wordpress.org">Wordpress</a> was more trouble than it was worth. There’s something to be said for simplicity, especially since all I really wanted to do is throw up posts written in markdown with code samples.</p>
+<p>One of my recent charges was to try to put in place a better place-of-publication filter in the catalog.
+<em>Place of Publication</em> is most formally dictated by the (poorly-named, since it includes states/provinces) <a href="http://www.oclc.org/bibformats/en/fixedfield/ctry.html">Country of Publication</a>
+code in the 008 fixed field. This one-, two- or three-letter code that is then translated into a place name 
+via a <a href="http://www.loc.gov/standards/codelists/countries.xml">mapping provided by the LoC</a>. Like most important pieces of data,
+the place of publication can appear in a few different places in a valid MARC record – because the searching is half the fun! –
+but we decided to just stick with the
+008 for the catalog search.</p>
 
-<p>I got a few pointers toward using <a href="http://middlemanapp.com/">middleman</a>, a pre-processor that takes in almost anything and produces regular css/html. Between that and <a href="http://disqus.com/">Disqus</a> for the comments, well, this just seems easier. And now that I’ve put in the effort, it’ll be easier to actually get blog posts up, most importantly, move it over when I find a new hosting provider.</p>
+<p>Of course, the name of a place of publication may have changed since the actual publication. 
+Historically speaking, borders have been remakably consistent over the last half of a century
+or so, but there are still changes (fall of the Soviet Union), splits (the former Czechoslovakia)
+and merges (Germany). </p>
 
-<p>Feel free to tell me how ugly it is and suggest improvements. I have the design skills of a one-eyed poodle.</p>
+<h2 id="focus-on-validity">Focus on validity</h2>
+
+<p>So, there are roughly a bazillion ways one could try to slice and dice the data to figure out what the most
+accurate textual representation of a place name should be for a given record. More cut-and-dry is a simple question: 
+how many of the 008s have a valid (current or obsolete) place-of-publication code in them?</p>
+
+<p>I ran an analysis of all the 008s in all the records in the [University of Michigan catalog(]http://mirlyn.lib.umich.edu/),
+which helpfully includes all the HathiTrust holdings as well, so we’re getting a nice cross-section of institutional records.</p>
+
+<p>Here’s what I found, in round numbers</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: right">Total</th>
+      <th style="text-align: right">Pct. of Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">All records</td>
+      <td style="text-align: right">12M</td>
+      <td style="text-align: right">100%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Invalid 008</td>
+      <td style="text-align: right">1900</td>
+      <td style="text-align: right">0.15%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Valid code</td>
+      <td style="text-align: right">11.6M</td>
+      <td style="text-align: right">96.6%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Unknown place-of-pub</td>
+      <td style="text-align: right">381k</td>
+      <td style="text-align: right">3.1%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Invalid code</td>
+      <td style="text-align: right">27k</td>
+      <td style="text-align: right">0.2%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>[“No place-of-pub” includes both records with no data in the 008 and those with the code ‘  x’ which explicitly indicates “Unknown”]</p>
+
+<h2 id="results-pretty-good">Results: pretty good!</h2>
+
+<p>Given much of the data I’ve worked with over the years, this strikes me a stunningly good. Of course, in the case of a place as 
+big as UMich, that means we’ve still got about 408k items about which we have no good place-of-publication information, but 
+as a percentage, it’s small enough that I’m happy to live with it. </p>
+
+<p>I was, admittedly, a little put out by the fact that we have records in which the 008 fixed field – which is pretty important, as these things go – was 
+just plain invalid (including 176 just plain <em>missing</em>). You’d think that the ILS software would reject things like that, but,
+as in almost all cases when you think the ILS should do something smart, you’d be wrong.</p>
+
+<h2 id="and-now-the-complaints">And now, the complaints</h2>
+
+<p>Of course, all we know is that the codes are (or were) valid – not whether or not they’re <em>accurate</em>. </p>
+
+<p>There are two obvious problems:</p>
+
+<ul>
+  <li>Some rocket scientists at some point decided that the code ‘ai’, which had been used to represent Anguilla, should now be
+used to represent the Republic of Armenia. As if that weren’t enough to make you slam your head into a brick wall,
+the change is based on the date of <em>cataloging</em>, not the date of publication, so there’s no way for me to know which
+country is supposed to be indicated. It looks like this was to try to keep the first two letters of codes from the old Soviet Union
+the same one it fell apart, but c’<em>mon</em>, people! (Note that Anguilla is now ‘am’, because of the …ummmm….”m” in it’s…er…nevermind.) We don’t have
+many records with that code, but this is the sort of blatent disregard for simple data integrity that drives me <em>crazy</em>. </li>
+  <li>A presumably different set of rocket scientists (once NASA downsized, those folks were <em>everywhere</em>) at various points in time and 
+at various locations decided that the place of publication on a reproduction (say, a microfilm) should be the place the <em>reproduction</em>
+was created. So, a microfilm of <em>The New York Times</em> that happened to be created in Ann Arbor, MI is coded as ‘miu’, for Michigan. </li>
+</ul>
+
+<p>The latter, of course, is designed to serve those people studying where microfilms were created at the expense of people who
+want to, you know, find things actually published in a particular location. I’m sure <em>all three</em> of the people in the country who want to know the
+former are forever grateful. </p>
+
 
   </article>
 
@@ -109,12 +205,12 @@
     var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
 
     var disqus_url;
-    var year_of_pub = 2013
+    var year_of_pub = 2014
 
     if (year_of_pub < 2014) {
-      disqus_url = "http://robotlibrarian.billdueber.com/new-blog-front-and-back-end.html/"
+      disqus_url = "http://robotlibrarian.billdueber.com//"
     } else {
-      disqus_url = "http://robotlibrarian.billdueber.com/2013/12/new-blog-front-and-back-end.html/";
+      disqus_url = "http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/";
     }
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {

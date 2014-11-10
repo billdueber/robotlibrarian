@@ -23,6 +23,8 @@ defaults:
 
 # source and dest
 destination: build
+exclude: ['robotlibrarian.iml']
+
 
 # Build settings
 markdown: kramdown

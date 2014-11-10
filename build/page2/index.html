@@ -90,6 +90,18 @@
 
         <div class="post-text">
           <h2 class="post-title">
+            <a class="post-link" href="/2012/03/using-localparams-in-solr-sst-2/">Using localparams in Solr (or, how to boost records that contain all terms) (SST #2)</a>
+          </h2>
+          <div class="post-meta">Mar 6, 2012</div>
+          <p>[Note: this isn’t so much a <em>Stupid Solr Trick</em> as a <em>Thing You Should Probably Know</em>; consider it required reading for the next SST. If you’re just joining us, check out the <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a>]</p> <h3 id="what-the-heck-is-a-localparams-query">What the heck is a localparams query?</h3> <p>A garden-variety Solr query URL looks something like this:</p> <pre><code> http://localhost:8983/solr/select? defType=dismax &amp;amp;qf=name^2 place^1 &amp;amp;q=Dueber </code></pre> <p>Which is fine, as far as it goes. But it’s easy... <a class="morepost" href="/2012/03/using-localparams-in-solr-sst-2/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
             <a class="post-link" href="/2012/03/solr-field-type-for-numericish-ids/">Solr Field Type for numeric(ish) IDs (SST #1)</a>
           </h2>
           <div class="post-meta">Mar 1, 2012</div>
@@ -201,18 +213,6 @@
           </h2>
           <div class="post-meta">May 6, 2011</div>
           <p>I just released another (this time pretty good) version of my gem for normalizing/validating library standard numbers, <code>library_stdnums</code> (<a href="https://github.com/billdueber/library_stdnums">github source</a> / <a href="http://rubydoc.info/github/billdueber/library_stdnums/master/frames">docs</a>).</p> <p>The short version of the functions available:</p> <ul> <li><strong>ISBN</strong>: get checkdigit, validate, convert isbn10 to/from isbn13, normalize (to 13-digit)</li> <li><strong>ISSN</strong>: get checkdigit, validate, normalize</li> <li><strong>LCCN</strong>: validate, normalize</li> </ul> <p>Validation of LCCNs doesn’t involve a checkdigit; I basically just normalize whatever is sent in and then see if the result is syntactically... <a class="morepost" href="/2011/05/ruby-gem-library_stdnums-goes-to-version-1-0/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/">A short ruby diversion: cost of flow control under Ruby</a>
-          </h2>
-          <div class="post-meta">May 3, 2011</div>
-          <p>A couple days ago I decided to finally get back to working on <a href="https://github.com/billdueber/threach"><code>threach</code></a> to try to deal with problems it had – essentially, it didn’t deal well with non-local exits due to calls to <code>break</code> or even something simple like a <code>NoMethodError</code>.</p> <p>[BTW, I think I managed it. As near as I can tell, <code>threach</code> version 0.4 won’t deadlock anymore]</p> <p>Along the way, while trying to figure out how threads affect the behavior... <a class="morepost" href="/2011/05/a-short-ruby-diversion-cost-of-flow-control-under-ruby/">&lt;more&gt;</a>
         </div>
       </li>
     
