@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Robot Librarian</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/page4/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="home">
+
+  <ul class="post-list">
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/08/solr-forcing-items-with-all-query-terms-to-the-top-of-a-solr-search/">Solr: Forcing items with all query terms to the top of a Solr search</a>
+          </h2>
+          <div class="post-meta">Aug 18, 2010</div>
+          <p>[Note: I’ve since made a <a href="http://robotlibrarian.billdueber.com/using-localparams-in-solr-sst-2/">better explanation of, and solution for, this problem</a>.]</p> <p>Here at <a href="http://lib.umich.edu/">UMich</a>, we’re apparently in the minority in that we have <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>, our catalog discovery interface (a very hacked version of <a href="http://vufind.org/">VuFind</a>), set up to find records that match only a subset of the query terms.</p> <p>Put more succinctly: everyone else seem to join all terms with ‘AND’, whereas we do a <a href="http://www.lucidimagination.com/blog/2010/05/23/whats-a-dismax/">DisMax</a> variant on ‘OR’.</p>... <a class="morepost" href="/2010/08/solr-forcing-items-with-all-query-terms-to-the-top-of-a-solr-search/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/04/why-rda-is-doomed-to-failure/">Why RDA is doomed to failure</a>
+          </h2>
+          <div class="post-meta">Apr 23, 2010</div>
+          <p>[Note: edited for clarity thanks to rsinger’s comment, below]</p> <p>Doomed, I say! DOOOOOOOOOOMMMMMMMED!</p> <p>My reasoning is simple: RDA will fail because it’s not “better enough.”</p> <p>Now, those of you who know me might be saying to yourselves, “Waitjustaminute. Bill doesn’t know anything at all about cataloging, or semantic representations, or the relative merits of various encapsulations of bibliographic metadata. I mean, sure, he knows a lot about…err….hmmm…well, in any case, he’s <em>definitely</em> talking out of... <a class="morepost" href="/2010/04/why-rda-is-doomed-to-failure/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/04/data-structures-and-serializations/">Data structures and Serializations</a>
+          </h2>
+          <div class="post-meta">Apr 20, 2010</div>
+          <p>Jonathan Rochkind, in response to a long (and, IMHO, mostly ridiculous) thread on NGC4Lib, has been exploring the boundaries between a data model and its expression/serialization ( see <a href="http://bibwild.wordpress.com/2010/04/19/of-marc-serialization-formats-and-element-schemata/">here</a>, <a href="http://bibwild.wordpress.com/2010/04/19/and-more-on-software-data-formats/">here</a>, and <a href="http://bibwild.wordpress.com/2010/04/20/serialization-vs-metadata-schemavocabulary/">here</a> ) and I thought I’d jump in.</p> <h3 id="what-this-post-is-not">What this post is <em>not</em></h3> <p>There’s a lot to be said about a good domain model for bibliographic data. I’m <em>so</em> not the guy to say it. I know there are arguments... <a class="morepost" href="/2010/04/data-structures-and-serializations/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/04/stupid-catalog-tricks-subject-headings-and-the-long-tail/">Stupid catalog tricks: Subject Headings and the Long Tail</a>
+          </h2>
+          <div class="post-meta">Apr 13, 2010</div>
+          <p>Library of Congress Subject Headings (LCSH) in particular.</p> <p>I’ve always been down on LCSH because I don’t understand them. They kinda look like a hierarchy, but they’re not really. Things get modifiers. Geography is inline and …weird.</p> <p>And, of course, in our faceting catalog when you click on a linked LCSH to do an automatic search, you often get nothing but the record you started from. Which is super-annoying.</p> <p>So, just for kicks, I ran... <a class="morepost" href="/2010/04/stupid-catalog-tricks-subject-headings-and-the-long-tail/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/03/why-bother-with-threading-in-jruby-because-its-easy/">Why bother with threading in jruby? Because it's easy.</a>
+          </h2>
+          <div class="post-meta">Mar 12, 2010</div>
+          <p>[<strong>Edit 2011-July-1</strong>: I’ve written a jruby_specific threach that takes advantage of better underlying java libraries called <a href="http://robotlibrarian.billdueber.com/even-better-even-simpler-multithreading-with-jruby/">jruby_threach</a> that is a much better option if you’re running jruby]</p> <p>Lately on the #code4lib IRC channel, several of us have been knocking around different versions (in several programming languages) of programs to read in a ginormous file and do some processing on each line. I noted some speedups related to multi-threading, and someone (maybe <em>rsinger</em>?) said, basically,... <a class="morepost" href="/2010/03/why-bother-with-threading-in-jruby-because-its-easy/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/03/pushing-marc-to-solr-processing-times-and-threading-and-such/">Pushing MARC to Solr; processing times and threading and such</a>
+          </h2>
+          <div class="post-meta">Mar 4, 2010</div>
+          <p>[This is in response to a <a href="http://groups.google.com/group/blacklight-development/browse_thread/thread/672b7269ada16a61?hl=en">thread on the blacklight mailing</a> list about getting MARC data into Solr.]</p> <h3 id="whats-the-question">What’s the question?</h3> <p>The question came up, “How much time do we spend processing the MARC vs trying to push it into Solr?”. Bob Haschart found that even with a pretty damn complicated processing stage, pushing the data to solr was still, at best, taking at least as long as the processing stage.</p> <p>I’m interested... <a class="morepost" href="/2010/03/pushing-marc-to-solr-processing-times-and-threading-and-such/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/03/ruby-marc-with-pluggable-readers/">ruby-marc with pluggable readers</a>
+          </h2>
+          <div class="post-meta">Mar 2, 2010</div>
+          <p>I’ve been messing with easier ways of adding parsers to ruby-marc’s MARC::Reader object. The idea is that you can do this:</p> <div><div class="CodeRay"> <div class="code"><pre> require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">marc</span><span style="color:#710">'</span></span> require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">my_marc_stuff</span><span style="color:#710">'</span></span> mbreader = <span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">Reader</span>.new(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">test.mrc</span><span style="color:#710">'</span></span>) <span style="color:#777"># =&gt; Stock marc binary reader</span> mbreader = <span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">Reader</span>.new(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">test.mrc</span><span style="color:#710">'</span></span> <span style="color:#A60">:readertype</span>=&gt;<span style="color:#A60">:marcstrict</span>) <span style="color:#777"># =&gt; ditto</span> <span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">Reader</span>.register_parser(<span style="color:#036;font-weight:bold">My</span>::<span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">Parser</span>,... <a class="morepost" href="/2010/03/ruby-marc-with-pluggable-readers/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/02/new-interest-in-marc-hash-json/">New interest in MARC-HASH / JSON</a>
+          </h2>
+          <div class="post-meta">Feb 26, 2010</div>
+          <blockquote>EDIT: This is historical -- the recommended serialization for marc in json is now Ross Singer's <a href="http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/">marc-in-json</a>. The marc-in-json serialization has implementations in the core marc libraries for <a href="https://rubygems.org/gems/marc">Ruby</a> and <a href="http://pear.php.net/package/File_MARC/">PHP</a>, and add-ons for <a href="http://search.cpan.org/~bbaxter/MARC-Utils-MARC2MARC_in_JSON/">Perl</a> and <a href="https://github.com/billdueber/marc4j_extra_reader_writers">Java</a>. C'mon, Python people!</blockquote> <p>For reasons I’m still not entirely clear on (I wasn’t there), the Code4Lib 2010 conference this week inspired renewed interest in a JSON-based format for MARC data.</p> <p>When I initially... <a class="morepost" href="/2010/02/new-interest-in-marc-hash-json/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/02/oclc-still-not-normalizing-their-lccns/">OCLC still not (NO! They are!) normalizing their LCCNs</a>
+          </h2>
+          <div class="post-meta">Feb 18, 2010</div>
+          <blockquote>NOTE 2: It turns out that I did find a minor bug in the system, but that in general LCCN normalization is working correctly. I just happened to hit a weirdness with a bad LCCN and a little bug in the parser on their end. Which is getting fixed. So...good news all around, and huge kudos to Xiaoming Liu for his quick response! </blockquote> <blockquote>**NOTE** It strikes me that I haven't seen a case where... <a class="morepost" href="/2010/02/oclc-still-not-normalizing-their-lccns/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2010/02/indexing-data-into-solr-via-jruby-with-threads/">Indexing data into Solr via JRuby (with threads!)</a>
+          </h2>
+          <div class="post-meta">Feb 16, 2010</div>
+          <p>[Note: in this post I’m just going to focus on the “get stuff into Solr” part. My normal focus – MARC data – will make an appearance in the next post when I talk about using this in addition to / instead of solrmarc.]</p> <h3 id="working-with-solr">Working with Solr</h3> <p>I love me the Solr. I love everything about it except that the best way to interact with it is via Java. I don’t so much love... <a class="morepost" href="/2010/02/indexing-data-into-solr-via-jruby-with-threads/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+  </ul>
+
+
+<div id="pagination">
+  
+    <a href="/page3">&laquo; Prev</a>
+  
+
+  
+    <span class="pagenumber">
+      
+        <a href="/index.html">1</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page2">2</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page3">3</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <em>4</em>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page5">5</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page6">6</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page7">7</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page8">8</a>
+      
+    </span>
+  
+
+  
+    <a href="/page5">Next &raquo;</a>
+  
+</div>
+
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+<p><a href="/all_posts/">All posts</a></p>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>

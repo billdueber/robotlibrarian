@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Robot Librarian</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="home">
+
+  <ul class="post-list">
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/">How good/bad is MARC data? The case of place-of-publication</a>
+          </h2>
+          <div class="post-meta">Nov 10, 2014</div>
+          <p>I complain a lot about <a href="/2010/04/data-structures-and-serializations/">the MARC format</a>, <a href="/2011/04/why-programmers-hate-free-text-in-marc-records/">the way people put data in MARC records</a>, the <a href="/2011/04/isbn-parenthetical-notes-bad-marc-data-1/">actual data themselves I find in MARC records</a>, the <a href="/yet-another-lc-callnumber-parser/">inexplicably complex syntax for identifiers</a> and, ironically, <a href="/2010/04/why-rda-is-doomed-to-failure/">attempts to replace MARC with something else</a>.</p> <p>One nice little beacon of hope was when I found that only roughly 0.26% of the ISBNs in the UMich catalog have invalid checksums. That’s not bad at all, and... <a class="morepost" href="/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2014/10/marc_serialization_revisited/">Ruby MARC serialization/deserialization revisited</a>
+          </h2>
+          <div class="post-meta">Oct 9, 2014</div>
+          <p>A few years ago, I <a href="http://robotlibrarian.billdueber.com/2010/09/sizespeed-of-various-marc-serializations-using-ruby-marc/">benchmarked</a> various methods of serializing/deserialzing MARC data using the <a href="http://github.com/ruby-marc/ruby-marc/">ruby-marc</a> gem. Given that I’m planning on starting fresh with my catalog setup, I thought I’d take a moment to revisit them.</p> <p>The biggest changes since that time have been (a) the continued speed improvements in JRuby, (b) the introduction of the <a href="https://github.com/ohler55/oj">Oj</a> json parser for MRI ruby, and (c) wider availability of msgpack code in the wild.</p>... <a class="morepost" href="/2014/10/marc_serialization_revisited/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2014/10/schemaless-solr-with-dynamicfield-and-copyfield/">"Schemaless" solr with dynamicField and copyField</a>
+          </h2>
+          <div class="post-meta">Oct 2, 2014</div>
+          <p>[Holy Kamoly, it’s been a long time since I blogged!]</p> <p>Recent versions of <a href="https://lucene.apache.org/solr/">solr</a> have the option to run in what they call <a href="https://cwiki.apache.org/confluence/display/solr/Schemaless+Mode">“schemaless mode”</a>, wherein fields that aren’t recognized are actually added, automatically, to the schema as real named fields.</p> <p>I find this intruguing, but it’s not what I’m after right now.</p> <p>The problem I’m in the first stages of addressing is that my <code>schema.xml</code> is huge mess – very little consistency,... <a class="morepost" href="/2014/10/schemaless-solr-with-dynamicfield-and-copyfield/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2014/01/yet-another-lc-callnumber-parser/">Help me test yet another LC Callnumber parser</a>
+          </h2>
+          <div class="post-meta">Jan 30, 2014</div>
+          <p>Those who have followed this blog and my code for a while know that I have a <a href="http://robotlibrarian.billdueber.com/normalizing-loc-call-numbers-for-sorting/">long</a>, slightly <a href="http://robotlibrarian.billdueber.com/enough-with-the-freakin-lc-call-number-normalization/">sad</a>, and borderline <a href="https://github.com/billdueber/lib.umich.edu-solr-stuff">abusive</a> relationship with Library of Congress call numbers.</p> <p>They’re a freakin’ nightmare. They just are.</p> <p>But, based on the premise that Sisyphus was a quitter, I took another stab at it, this time writing a real (PEG-) parser instead of trying to futz with extended regular expressions.</p> <p>The results, so... <a class="morepost" href="/2014/01/yet-another-lc-callnumber-parser/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2013/12/new-blog-front-and-back-end/">New blog front- and back-end</a>
+          </h2>
+          <div class="post-meta">Dec 17, 2013</div>
+          <p>A while back, <a href="http://dreamhost.com/">Dreamhost</a> had some problems and my blog and assorted other websites I help keep track of went down.</p> <p>For more than two weeks.</p> <p>Now, I understand that crap happens. And I understand that sometimes lots of things happen at once. But fundamentally, their infrastructure is such that they could lose everything on a machine and be unable to get it back for more than two weeks. I’m not a mathematician, but... <a class="morepost" href="/2013/12/new-blog-front-and-back-end/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2013/10/announcing-traject-indexing-software/">Announcing "traject" indexing software</a>
+          </h2>
+          <div class="post-meta">Oct 14, 2013</div>
+          <p>[Over the next few days I’ll be writing a series of posts that highlight a new indexing solution by Jonathan Rochkind and myself called <code>traject</code> that we’re using to index MARC data into Solr. This is the introduction.]</p> <p>Wow. Six months since I posted here. What have I been doing?</p> <p>Well, mostly parenting, but in the last few weeks I was lucky enough to get on board with a project started by <a href="http://bibwild.wordpress.com/">Jonathan Rochkind</a>... <a class="morepost" href="/2013/10/announcing-traject-indexing-software/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2013/04/come-work-at-the-university-of-michigan/">Come work at the University of Michigan</a>
+          </h2>
+          <div class="post-meta">Apr 18, 2013</div>
+          <p>The Library has three UX positions available right now – interface designer, interface developer, and a web content strategist.</p>
+
+<p>Come join me at what is easily the best place I’ve ever worked! <a href="http://userslib.com/2013/04/16/ux-and-web-systems-job-postings-at-the-university-of-michigan-library/">Full details are over at Suz’s blog</a>.</p>
+ <a class="morepost" href="/2013/04/come-work-at-the-university-of-michigan/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2013/02/please-dont-return-your-books/">Please: don't return your books</a>
+          </h2>
+          <div class="post-meta">Feb 12, 2013</div>
+          <p>So, I’m at <a href="http://code4lib.org/conference/2013">code4lib 2013</a> right now, where side conversations and informal exchanges tend to be the most interesting part.</p> <p>Last night I had an conversation with the inimitable <a href="https://twitter.com/mbklein">Michael B. Klein</a>, and after complaining about faculty members that keep books out for <em>decades</em> at a time, we ended up asking a simple question:</p> <blockquote> <p>How much more shelving would we need if everyone returned their books?</p> </blockquote> <p>Assuming we could get them... <a class="morepost" href="/2013/02/please-dont-return-your-books/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">Boosting on Exactish (anchored) phrase matching in Solr: (SST #4)</a>
+          </h2>
+          <div class="post-meta">Mar 19, 2012</div>
+          <blockquote> <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p> </blockquote> <p><em>Exact</em> matching in Solr is easy. Use the default <em>string</em> type: all it does is, essentially, exact phrase matching. <em>string</em> is a great type for faceted values, where the only way we expect to search the index is via text pulled from the index itself. Query the index to get a value: use that value to re-query the... <a class="morepost" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2012/03/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/">Requiring/Preferring searches that don't span multiple values (SST #3)</a>
+          </h2>
+          <div class="post-meta">Mar 9, 2012</div>
+          <blockquote> <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p> </blockquote> <h3 id="solr-and-multivalued-fields">Solr and multiValued fields</h3> <p>Here’s another thing you need to understand about Solr: it doesn’t really have fields that can take multiple values.</p> <p>“But Bill,” you’re saying, “sure it does. I mean, hell, it even has a ‘multiValued’ parameter.”</p> <p>First off: watch your language.</p> <p>Second off: are you <em>sure</em>?</p> <p>Let’s do a quick test. Look at the... <a class="morepost" href="/2012/03/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+  </ul>
+
+
+<div id="pagination">
+  
+    <span>&laquo; Prev</span>
+  
+
+  
+    <span class="pagenumber">
+      
+        <em>1</em>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page2">2</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page3">3</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page4">4</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page5">5</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page6">6</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page7">7</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page8">8</a>
+      
+    </span>
+  
+
+  
+    <a href="/page2">Next &raquo;</a>
+  
+</div>
+
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+<p><a href="/all_posts/">All posts</a></p>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>

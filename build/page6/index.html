@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>Robot Librarian</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/page6/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="home">
+
+  <ul class="post-list">
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/09/more-marc-benchmars-adding-in-marc-xml/">More Ruby MARC Benchmarks: Adding in MARC-XML</a>
+          </h2>
+          <div class="post-meta">Sep 18, 2009</div>
+          <p>It turns out that UVA’s reluctance to use the raw MARC data on the search results screen is driven more by processing time than parsing time. Even if they were to start with a fully-parsed MARC object, they’re doing enough screwing around with that data that the bottleneck on their end appears to be all the regex and string processing, not the parsing. Their specs for what gets displayed are complex enough that they want... <a class="morepost" href="/2009/09/more-marc-benchmars-adding-in-marc-xml/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/09/benchmarking-marc-record-parsing-in-ruby/">Benchmarking MARC record parsing in Ruby</a>
+          </h2>
+          <div class="post-meta">Sep 17, 2009</div>
+          <p>[Note: since I started writing this, I found out Bess &amp; Co. store MARC-XML. That makes a difference, since XML in Ruby can be really, really slow]</p> <p>[<strong>UPADTE</strong> It turns out they <em>don’t</em> use MARC-XML. They use MARC-Binary just like the rest of us. Oops. ]</p> <p>[<strong>UP-UPDATE</strong> Well, no, they <em>do</em> use MARC-XML. I’m not afraid to constantly change my story. This is why I’m the best investigative reporter in the business]</p> <p>The other day... <a class="morepost" href="/2009/09/benchmarking-marc-record-parsing-in-ruby/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/08/building-a-solr-text-filter-for-normalizing-data/">Building a solr text filter for normalizing data</a>
+          </h2>
+          <div class="post-meta">Aug 20, 2009</div>
+          <p>[Kind of part of a continuing series on our VUFind implementation; more of a sidebar, really.]</p> <p>In my <a href="http://robotlibrarian.billdueber.com/easy-solr-types-for-library-data/">last post</a> I made the case that you should put as much data normalization into Solr as possible. The built-in text filters will get you a long, long way, but sometimes you want to have specialized code, and then you need to build your own filter.</p> <p><strong>Huge Disclaimer</strong>: <em>I’m putting this up not because I’m the... <a class="morepost" href="/2009/08/building-a-solr-text-filter-for-normalizing-data/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/08/going-with-and-forking-vufind/">Going with and "forking" VUFind</a>
+          </h2>
+          <div class="post-meta">Aug 19, 2009</div>
+          <p><em>Note: This is the second in a series I’m doing about our VUFind installation, <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>. Here I talk about how we got to where we are. Next I’ll start looking at specific technologies, how we solved various problems, and generally more nerd-centered stuff.</em></p> <p>When the <a href="http://www.lib.umich.edu/">University Library</a> decided to go down the path of an open-source, solr-based OPAC, there were (and are, I guess) two big players: <a href="http://vufind.org/">VUFind</a> and <a href="http://projectblacklight.org/">Blacklight</a>.</p> <p>I... <a class="morepost" href="/2009/08/going-with-and-forking-vufind/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/08/easy-solr-types-for-library-data/">Easy Solr types for library data</a>
+          </h2>
+          <div class="post-meta">Aug 19, 2009</div>
+          <p>[Yet another bit in a series about our Vufind installation]</p> <p>While I’m no longer shocked at the terrible state of our data <em>every single day</em>, I’m still shocked pretty often. We figured out pretty quickly that anything we could do to normalize data as it went into the Solr index (and, in fact, as queries were produced) would be a huge win.</p> <p>There’s a continuum of attitudes about how much “business logic” belongs in the... <a class="morepost" href="/2009/08/easy-solr-types-for-library-data/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/08/sending-unicode-email-headers-in-php/">Sending unicode email headers in PHP</a>
+          </h2>
+          <div class="post-meta">Aug 17, 2009</div>
+          <p>I’m probably the last guy on earth to know this, but I’m recording it here just in case. I’m sending record titles in the subject line of emails, and of course they may be unicode. The body takes care of itself, but you need to explicitly encode a header like “Subject.”</p> <div><div class="CodeRay"> <div class="code"><pre> <span style="color:#950">$headers</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">To</span><span style="color:#710">'</span></span>] = <span style="color:#950">$to</span>; <span style="color:#950">$headers</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">From</span><span style="color:#710">'</span></span>] = <span style="color:#950">$from</span>; <span style="color:#950">$headers</span>[<span... <a class="morepost" href="/2009/08/sending-unicode-email-headers-in-php/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/08/rolling-out-umichs-vufind-introduction-and-new-features/">Rolling out UMich's "VUFind": Introduction and New Features</a>
+          </h2>
+          <div class="post-meta">Aug 14, 2009</div>
+          <p>For the last few months, I've been working on rolling out a ridiculous-modified version of <a href="http://vufind.org/">Vufind</a>, which we just launched as our primary OPAC, <a href="http://mirlyn.lib.umich.edu/">Mirlyn</a>, with a slightly-different version powering <a href="http://catalog.hathitrust.org/">catalog.hathitrust.org</a>, a temporary metadata search on the HathiTrust data until the OCLC takes it over at some undetermined date.</p> <p>(Yeah, the HathiTrust site is a lot better looking.)</p> <p>[Our Aleph-based catalog lives on at <a href="http://mirlyn-classic.lib.umich.edu">mirlyn-classic</a>) -- I'll be interested to see... <a class="morepost" href="/2009/08/rolling-out-umichs-vufind-introduction-and-new-features/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/05/sending-marcish-data-to-refworks/">Sending MARC(ish) data to Refworks</a>
+          </h2>
+          <div class="post-meta">May 11, 2009</div>
+          <p>Refworks has some <a href="http://www.refworks.com/DirectExport.htm">okish documentation</a> about how to deal with its callback import procedure, but I thought I’d put down how I’m doing it for our <a href="http://vufind.org/">vufind</a> install (<a href="http://mirlyn2-beta.lib.umich.edu/">mirlyn2-beta.lib.umich.edu</a>) in case other folks are interested.</p> <p>The basic procedure is:</p> <ul> <li>Send your user to a specific refworks URL along with a callback URL that can enumerate the record(s) you want to import in a supported form</li> <li>Your user logs in (if need... <a class="morepost" href="/2009/05/sending-marcish-data-to-refworks/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/04/marc-hash-the-saga-continues-now-with-even-less-structure/">MARC-HASH: The saga continues (now with even less structure)</a>
+          </h2>
+          <div class="post-meta">Apr 15, 2009</div>
+          <p>After a medium-sized discussion on #code4lib, we’ve collectively decided that…well, ok, no one really cares all that much, but a few people weighed in.</p> <p>The new format is: A list of arrays. If it’s got two elements, it’s a control field; if it’s got four, it’s a data field.</p> <p>SO….it’s like this now.</p> <div><div class="CodeRay"> <div class="code"><pre> { <span style="color:#606"><span style="color:#404">&quot;</span><span>type</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">marc-hash</span><span style="color:#710">&quot;</span></span>, <span style="color:#606"><span style="color:#404">&quot;</span><span>version</span><span style="color:#404">&quot;</span></span> : [<span style="color:#00D">1</span>,... <a class="morepost" href="/2009/04/marc-hash-the-saga-continues-now-with-even-less-structure/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2009/04/marc-hash-control-field-now-with-less-structure/">MARC-HASH control field, now with less structure</a>
+          </h2>
+          <div class="post-meta">Apr 15, 2009</div>
+          <p>Why do I ever, ever think that MARC might not rely on order? I don’t know.</p> <p>In any case, control fields will now be just an array of duples:</p> <div><div class="CodeRay"> <div class="code"><pre> control: [ [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">001</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">value of the 001</span><span style="color:#710">'</span></span>], [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">006</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">value of the 006</span><span style="color:#710">'</span></span>] [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">006</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">another 006</span><span style="color:#710">'</span></span>] } </pre></div> </div>... <a class="morepost" href="/2009/04/marc-hash-control-field-now-with-less-structure/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+  </ul>
+
+
+<div id="pagination">
+  
+    <a href="/page5">&laquo; Prev</a>
+  
+
+  
+    <span class="pagenumber">
+      
+        <a href="/index.html">1</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page2">2</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page3">3</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page4">4</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page5">5</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <em>6</em>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page7">7</a>
+      
+    </span>
+  
+    <span class="pagenumber">
+      
+        <a href="page8">8</a>
+      
+    </span>
+  
+
+  
+    <a href="/page7">Next &raquo;</a>
+  
+</div>
+
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+<p><a href="/all_posts/">All posts</a></p>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>

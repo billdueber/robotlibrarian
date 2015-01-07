@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <link href="http://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet" type="text/css">
+
+    <link href="http://fonts.googleapis.com/css?family=Pontano+Sans" rel="stylesheet" type="text/css">
+
+    <title>How good/bad is MARC data? The case of place-of-publication</title>
+    <meta name="description" content="Stuff about computers in libraries, and libraries in computers
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+
+  <div class="wrapper">
+<div style="float:left;"><img src="/images/robot_alpha.png"></div>
+
+    <a class="site-title" href="/">Robot Librarian<br><span class="site-subtitle">Disclaimer: I'm not actually a robot.</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Bill</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/code/">My code</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div id="main">
+        <div class="wrapper">
+          <div class="post post-text">
+
+  <header class="post-header">
+    <h1 class="post-title">How good/bad is MARC data? The case of place-of-publication</h1>
+    <p class="post-meta">Nov 10, 2014</p>
+  </header>
+
+  <article class="post-content">
+    <p>I complain a lot about <a href="/2010/04/data-structures-and-serializations/">the MARC format</a>,
+<a href="/2011/04/why-programmers-hate-free-text-in-marc-records/">the way people put data in MARC records</a>,
+the <a href="/2011/04/isbn-parenthetical-notes-bad-marc-data-1/">actual data themselves I find in MARC records</a>,
+the <a href="/yet-another-lc-callnumber-parser/">inexplicably complex syntax for identifiers</a> and, ironically, 
+<a href="/2010/04/why-rda-is-doomed-to-failure/">attempts to replace MARC with something else</a>.</p>
+
+<p>One nice little beacon of hope was when I found that only roughly 0.26% of the ISBNs in the UMich catalog 
+have invalid checksums. That’s not bad at all, and it’s worth digging into other things about which
+I might be likely to complain before I make a fool of myself.</p>
+
+<p>[Note: there <em>will</em> be some complaining at the end. I promise.]</p>
+
+<p>One of my recent charges was to try to put in place a better place-of-publication filter in the catalog.
+<em>Place of Publication</em> is most formally dictated by the (poorly-named, since it includes states/provinces) <a href="http://www.oclc.org/bibformats/en/fixedfield/ctry.html">Country of Publication</a>
+code in the 008 fixed field. This one-, two- or three-letter code that is then translated into a place name 
+via a <a href="http://www.loc.gov/standards/codelists/countries.xml">mapping provided by the LoC</a>. Like most important pieces of data,
+the place of publication can appear in a few different places in a valid MARC record – because the searching is half the fun! –
+but we decided to just stick with the
+008 for the catalog search.</p>
+
+<p>Of course, the name of a place of publication may have changed since the actual publication. 
+Historically speaking, borders have been remakably consistent over the last half of a century
+or so, but there are still changes (fall of the Soviet Union), splits (the former Czechoslovakia)
+and merges (Germany). </p>
+
+<h2 id="focus-on-validity">Focus on validity</h2>
+
+<p>So, there are roughly a bazillion ways one could try to slice and dice the data to figure out what the most
+accurate textual representation of a place name should be for a given record. More cut-and-dry is a simple question: 
+how many of the 008s have a valid (current or obsolete) place-of-publication code in them?</p>
+
+<p>I ran an analysis of all the 008s in all the records in the <a href="http://mirlyn.lib.umich.edu/">University of Michigan catalog</a>,
+which helpfully includes all the HathiTrust holdings as well, so we’re getting a nice cross-section of institutional records.</p>
+
+<p>Here’s what I found, in round numbers</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: right">Total</th>
+      <th style="text-align: right">Pct. of Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">All records</td>
+      <td style="text-align: right">12M</td>
+      <td style="text-align: right">100%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Invalid 008</td>
+      <td style="text-align: right">1900</td>
+      <td style="text-align: right">0.15%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Valid code</td>
+      <td style="text-align: right">11.6M</td>
+      <td style="text-align: right">96.6%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Unknown place-of-pub</td>
+      <td style="text-align: right">381k</td>
+      <td style="text-align: right">3.1%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Invalid code</td>
+      <td style="text-align: right">27k</td>
+      <td style="text-align: right">0.2%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>[“No place-of-pub” includes both records with no data in the 008 and those with the code ‘  x’ which explicitly indicates “Unknown”]</p>
+
+<h2 id="results-pretty-good">Results: pretty good!</h2>
+
+<p>Given much of the data I’ve worked with over the years, this strikes me a stunningly good. Of course, in the case of a place as 
+big as UMich, that means we’ve still got about 408k items about which we have no good place-of-publication information, but 
+as a percentage, it’s small enough that I’m happy to live with it. </p>
+
+<p>I was, admittedly, a little put out by the fact that we have records in which the 008 fixed field – which is pretty important, as these things go – was 
+just plain invalid (including 176 just plain <em>missing</em>). You’d think that the ILS software would reject things like that, but,
+as in almost all cases when you think the ILS should do something smart, you’d be wrong.</p>
+
+<h2 id="and-now-the-complaints">And now, the complaints</h2>
+
+<p>Of course, all we know is that the codes are (or were) valid – not whether or not they’re <em>accurate</em>. </p>
+
+<p>There are two obvious problems:</p>
+
+<ul>
+  <li>Some rocket scientists at some point decided that the code ‘ai’, which had been used to represent Anguilla, should now be
+used to represent the Republic of Armenia. As if that weren’t enough to make you slam your head into a brick wall,
+the change is based on the date of <em>cataloging</em>, not the date of publication, so there’s no way for me to know which
+country is supposed to be indicated. It looks like this was to try to keep the first two letters of codes from the old Soviet Union
+the same one it fell apart, but c’<em>mon</em>, people! (Note that Anguilla is now ‘am’, because of the …ummmm….”m” in it’s…er…nevermind.) We don’t have
+many records with that code, but this is the sort of blatent disregard for simple data integrity that drives me <em>crazy</em>. </li>
+  <li>A presumably different set of rocket scientists (once NASA downsized, those folks were <em>everywhere</em>) at various points in time and 
+at various locations decided that the place of publication on a reproduction (say, a microfilm) should be the place the <em>reproduction</em>
+was created. So, a microfilm of <em>The New York Times</em> that happened to be created in Ann Arbor, MI is coded as ‘miu’, for Michigan. </li>
+</ul>
+
+<p>The latter, of course, is designed to serve those people studying where microfilms were created at the expense of people who
+want to, you know, find things actually published in a particular location. I’m sure <em>all three</em> of the people in the country who want to know the
+former are forever grateful. </p>
+
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'robotlibrarian'; // Required - Replace example with your forum shortname
+
+    var disqus_url;
+    var year_of_pub = 2014
+
+    if (year_of_pub < 2014) {
+      disqus_url = "http://robotlibrarian.billdueber.com//"
+    } else {
+      disqus_url = "http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/";
+    }
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div>
+
+        </div>
+      </div>
+      <div id="sidebar">
+        
+<p><img src="/images/headshot.jpg" alt="alt text" /></p>
+
+<p>Hi. I’m Bill Dueber.</p>
+
+<ul class="social-media-list">
+
+          <li>
+            <a href="https://github.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--github">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on github</span>
+            </a>
+          </li>
+
+
+
+          <li>
+            <a href="https://twitter.com/billdueber" data-ytta-id="-">
+              <span class="icon  icon--twitter">
+                <svg viewbox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+
+              <span class="username">billdueber on twitter</span>
+            </a>
+          </li>
+
+        </ul>
+
+<p><a href="/all_posts/">All posts</a></p>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="footer-col  footer-col-1">
+        <ul class="internal_links">
+          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="/all_posts/">All posts</a></li>
+        </ul>
+      </div>
+
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/billdueber">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/billdueber">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">billdueber</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Copyright 2008-2014, Bill Dueber</p>
+      </div>
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-166456-3"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</footer>
+
+
+  </body>
+
+</html>
