@@ -6,12 +6,12 @@
 </description>
     <link>http://robotlibrarian.billdueber.com/</link>
     <atom:link href="http://robotlibrarian.billdueber.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 19 Feb 2015 01:01:24 -0500</pubDate>
-    <lastBuildDate>Thu, 19 Feb 2015 01:01:24 -0500</lastBuildDate>
+    <pubDate>Thu, 19 Feb 2015 15:57:42 -0500</pubDate>
+    <lastBuildDate>Thu, 19 Feb 2015 15:57:42 -0500</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>Reintroduction Traject: Traject 2.0</title>
+        <title>Reintroducing Traject: Traject 2.0</title>
         <description>&lt;div id=&quot;preamble&quot;&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;div class=&quot;sidebarblock&quot;&gt;
@@ -20,10 +20,12 @@
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;&lt;code&gt;traject&lt;/code&gt; is a ruby gem used most often to extact data from MARC files and
 index them into Solr, generally for discovery systems like VuFind and
-Blacklight/Hydra.&lt;/p&gt;
+Blacklight/Hydra. &lt;code&gt;traject&lt;/code&gt; features easy ways to query MARC records, the abilty to write
+to Solr or several file formats, extensive test coverage and flexible logging,
+and is simple to extend with regular ruby code.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Version 2.0 now optionally runs under MRI (&quot;regular&quot;) ruby, has a faster indexer and more
+&lt;p&gt;Version 2.0 now optionally runs under MRI (&quot;C&quot; or &quot;regular&quot;) ruby, has a new Solr indexer and more
 output types, and goes faster than ever.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -34,7 +36,7 @@ view towards extracting fields from MARC data and writing it out into Solr.  &lt
 frustration using other tools in this space (e.g., &lt;a href=&quot;https://code.google.com/p/solrmarc/&quot;&gt;Solrmarc&lt;/a&gt;, or my own precursor to &lt;code&gt;traject&lt;/code&gt; , &lt;a href=&quot;https://github.com/billdueber/marc2solr&quot;&gt;marc2solr&lt;/a&gt;&lt;span class=&quot;footnote&quot;&gt;[&lt;a id=&quot;_footnoteref_1&quot; class=&quot;footnote&quot; href=&quot;#_footnote_1&quot; title=&quot;View footnote.&quot;&gt;1&lt;/a&gt;]&lt;/span&gt;).&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; had its first release was almost a year and a half ago (at least based on the date of my
+&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; had its first release almost a year and a half ago (at least based on the date of my
 &lt;a href=&quot;http://robotlibrarian.billdueber.com/2013/10/announcing-traject-indexing-software/&quot;&gt;post introducting it&lt;/a&gt;), and I&amp;#8217;ve used it literally every day since then indexing data for the
 &lt;a href=&quot;http://mirlyn.lib.umich.edu&quot;&gt;Univeristy of Michigan&lt;/a&gt; and &lt;a href=&quot;http://catalog.hathitrust.org/&quot;&gt;HathiTrust&lt;/a&gt; library catalogs.&lt;/p&gt;
 &lt;/div&gt;
@@ -81,6 +83,10 @@ to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quo
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;div class=&quot;dlist&quot;&gt;
 &lt;dl&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;How do I get started?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;The best way is likely to look at the &lt;a href=&quot;https://github.com/traject-project/traject_sample&quot;&gt;heavily-documented sample project&lt;/a&gt; we provide, followed by checking out the &lt;code&gt;traject&lt;/code&gt; documentation. And, of course, just ask me for help.&lt;/p&gt;
+&lt;/dd&gt;
 &lt;dt class=&quot;hdlist1&quot;&gt;Do you need to use JRuby?&lt;/dt&gt;
 &lt;dd&gt;
 &lt;p&gt;Not anymore. As of version 2.0.0, &lt;code&gt;traject&lt;/code&gt; runs under MRI (&quot;regular&quot;) ruby, although without
@@ -88,13 +94,13 @@ all the speed-enhancing true threading that JRuby offers.&lt;/p&gt;
 &lt;/dd&gt;
 &lt;dt class=&quot;hdlist1&quot;&gt;How fast is it?&lt;/dt&gt;
 &lt;dd&gt;
-&lt;p&gt;Apple-to-apples comparison is difficult. The &lt;a href=&quot;https://github.com/projectblacklight/blacklight-marc&quot;&gt;stock Blacklight indexing scheme&lt;/a&gt; is about 1.5x as fast under &lt;code&gt;traject&lt;/code&gt; (even using MRI, not JRuby) compared to Solrmarc. I run a &lt;a href=&quot;http://github.com/billdueber/ht_traject/&quot;&gt;hideously complex&lt;/a&gt; indexing scheme using JRuby and a few threads and can average over 900 records/second during a longish run (e.g., I can index all
-11M bib records before lunch). Fast enough.&lt;/p&gt;
+&lt;p&gt;Apple-to-apples comparison is difficult. The &lt;a href=&quot;https://github.com/projectblacklight/blacklight-marc&quot;&gt;stock Blacklight indexing scheme&lt;/a&gt; is reportedly about as fast as Solarmarc when just using single-threaded MRI (JRuby would presumably speed things up). I run a &lt;a href=&quot;http://github.com/billdueber/ht_traject/&quot;&gt;hideously complex&lt;/a&gt; indexing scheme using JRuby and a few threads and can average over 900 records/second during a longish run (e.g., I can index all
+eleven-million bib records before lunch). For me, it&amp;#8217;s fast enough.&lt;/p&gt;
 &lt;/dd&gt;
 &lt;dt class=&quot;hdlist1&quot;&gt;What kinds of data can I throw at it?&lt;/dt&gt;
 &lt;dd&gt;
 &lt;p&gt;In theory, anything you want&amp;#8201;&amp;#8212;&amp;#8201;it&amp;#8217;s pretty easy to write a Traject reader. Out of the box or
-with existing gems, though, we support:&lt;/p&gt;
+with existing gems, though, we support a few kinds of MARC:&lt;/p&gt;
 &lt;div class=&quot;ulist&quot;&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -104,7 +110,7 @@ with existing gems, though, we support:&lt;/p&gt;
 &lt;p&gt;MARC-XML (again, via either ruby-marc or marc4j)&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/&quot;&gt;marc-in-json&lt;/a&gt; in the form of newline-delimited json (a text file with one JSON record per line)&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/&quot;&gt;marc-in-json&lt;/a&gt; in the form of newline-delimited json (a text file with one MARC-in-JSON record per line)&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/traject-project/traject_alephsequential_reader&quot;&gt;Alephsequential&lt;/a&gt;, a human-readable serialization put out by the Aleph ILS from Ex Libris.&lt;/p&gt;
@@ -115,9 +121,9 @@ with existing gems, though, we support:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/dd&gt;
-&lt;dt class=&quot;hdlist1&quot;&gt;What does it offer for dealing with MARC?&lt;/dt&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;How does it make it easier to deal with MARC?&lt;/dt&gt;
 &lt;dd&gt;
-&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; ships with macros for dealing with MARC records and the often-weird data within them. Some of these can:&lt;/p&gt;
+&lt;p&gt;MARC is the bread-and-butter of what &lt;code&gt;traject&lt;/code&gt; is currently used for. &lt;code&gt;traject&lt;/code&gt; ships with macros for reading through MARC records and  transforming the often-weird data within them. Some of these can:&lt;/p&gt;
 &lt;div class=&quot;ulist&quot;&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -133,7 +139,7 @@ with existing gems, though, we support:&lt;/p&gt;
 &lt;p&gt;correctly deal with &quot;filing characters&quot; (e.g., leading articles like &quot;a&quot; or &quot;the&quot;)&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;find a deal with data repeated in other languages (&quot;vernacular&quot; data, usually in 880 fields)&lt;/p&gt;
+&lt;p&gt;find field data repeated in other languages (&quot;vernacular&quot; data, usually in 880 fields)&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;find OCLC numbers, with their myriad of prefixes&lt;/p&gt;
@@ -144,15 +150,16 @@ with existing gems, though, we support:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/dd&gt;
-&lt;dt class=&quot;hdlist1&quot;&gt;What kind of data structures can it produce?&lt;/dt&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;What are the records transformed into?&lt;/dt&gt;
 &lt;dd&gt;
 &lt;p&gt;Given its history focused on indexing data into Solr, the basic result of a
-&lt;code&gt;traject&lt;/code&gt; transformation of a record is a hash (map) of arrays (e.g., &lt;code&gt;key1&amp;#8658;[val1, val2,&amp;#8230;&amp;#8203;]&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;each key/fieldname is mapped to one or more values). If you need to produce more complex hierarchical data, &lt;code&gt;traject&lt;/code&gt; may not be the right tool for you.&lt;/p&gt;
+&lt;code&gt;traject&lt;/code&gt; transformation of a record is a hash (map) of arrays (e.g., &lt;code&gt;key1&amp;#8658;[val1, val2,&amp;#8230;&amp;#8203;]&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;each key/fieldname is mapped to one or more values). This is easily transformed into
+something that you can send to Solr or write to a file. If you need to produce more complex hierarchical data, &lt;code&gt;traject&lt;/code&gt; may not be the right tool for you.&lt;/p&gt;
 &lt;/dd&gt;
 &lt;dt class=&quot;hdlist1&quot;&gt;What kind of output can it produce?&lt;/dt&gt;
 &lt;dd&gt;
-&lt;p&gt;Obviously, the resulting documents can be sent straight to Solr. Additionally, we ship Traject
-writers that produce other formats.&lt;/p&gt;
+&lt;p&gt;Obviously, the resulting documents can be sent to Solr, via &lt;code&gt;Traject::SolrJsonWriter&lt;/code&gt;. Additionally, we ship Traject
+with writers that produce other formats.&lt;/p&gt;
 &lt;div class=&quot;ulist&quot;&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -221,7 +228,7 @@ doing so not only works under any ruby implementation, but in my tests the JSON 
 &lt;a href=&quot;#_footnoteref_1&quot;&gt;1&lt;/a&gt; &lt;a href=&quot;http://search.cpan.org/~nics/Catmandu-0.9210/bin/catmandu&quot;&gt;Catmandu&lt;/a&gt; is another, perl-based system I don&amp;#8217;t have any direct experience with
 &lt;/div&gt;
 &lt;/div&gt;</description>
-        <pubDate>Thu, 19 Feb 2015 01:01:24 -0500</pubDate>
+        <pubDate>Thu, 19 Feb 2015 00:00:00 -0500</pubDate>
         <link>http://robotlibrarian.billdueber.com/2015/02/reintroducing-traject/</link>
         <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2015/02/reintroducing-traject/</guid>
         
@@ -339,6 +346,123 @@ former are forever grateful. &lt;/p&gt;
 
 </description>
         <pubDate>Mon, 10 Nov 2014 11:09:00 -0500</pubDate>
+        <link>http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/</link>
+        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>How good/bad is MARC data? The case of place-of-publication</title>
+        <description>&lt;p&gt;I complain a lot about &lt;a href=&quot;/2010/04/data-structures-and-serializations/&quot;&gt;the MARC format&lt;/a&gt;,
+&lt;a href=&quot;/2011/04/why-programmers-hate-free-text-in-marc-records/&quot;&gt;the way people put data in MARC records&lt;/a&gt;,
+the &lt;a href=&quot;/2011/04/isbn-parenthetical-notes-bad-marc-data-1/&quot;&gt;actual data themselves I find in MARC records&lt;/a&gt;,
+the &lt;a href=&quot;/yet-another-lc-callnumber-parser/&quot;&gt;inexplicably complex syntax for identifiers&lt;/a&gt; and, ironically, 
+&lt;a href=&quot;/2010/04/why-rda-is-doomed-to-failure/&quot;&gt;attempts to replace MARC with something else&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One nice little beacon of hope was when I found that only roughly 0.26% of the ISBNs in the UMich catalog 
+have invalid checksums. That’s not bad at all, and it’s worth digging into other things about which
+I might be likely to complain before I make a fool of myself.&lt;/p&gt;
+
+&lt;p&gt;[Note: there &lt;em&gt;will&lt;/em&gt; be some complaining at the end. I promise.]&lt;/p&gt;
+
+&lt;p&gt;One of my recent charges was to try to put in place a better place-of-publication filter in the catalog.
+&lt;em&gt;Place of Publication&lt;/em&gt; is most formally dictated by the (poorly-named, since it includes states/provinces) &lt;a href=&quot;http://www.oclc.org/bibformats/en/fixedfield/ctry.html&quot;&gt;Country of Publication&lt;/a&gt;
+code in the 008 fixed field. This one-, two- or three-letter code that is then translated into a place name 
+via a &lt;a href=&quot;http://www.loc.gov/standards/codelists/countries.xml&quot;&gt;mapping provided by the LoC&lt;/a&gt;. Like most important pieces of data,
+the place of publication can appear in a few different places in a valid MARC record – because the searching is half the fun! –
+but we decided to just stick with the
+008 for the catalog search.&lt;/p&gt;
+
+&lt;p&gt;Of course, the name of a place of publication may have changed since the actual publication. 
+Historically speaking, borders have been remakably consistent over the last half of a century
+or so, but there are still changes (fall of the Soviet Union), splits (the former Czechoslovakia)
+and merges (Germany). &lt;/p&gt;
+
+&lt;h2 id=&quot;focus-on-validity&quot;&gt;Focus on validity&lt;/h2&gt;
+
+&lt;p&gt;So, there are roughly a bazillion ways one could try to slice and dice the data to figure out what the most
+accurate textual representation of a place name should be for a given record. More cut-and-dry is a simple question: 
+how many of the 008s have a valid (current or obsolete) place-of-publication code in them?&lt;/p&gt;
+
+&lt;p&gt;I ran an analysis of all the 008s in all the records in the &lt;a href=&quot;http://mirlyn.lib.umich.edu/&quot;&gt;University of Michigan catalog&lt;/a&gt;,
+which helpfully includes all the HathiTrust holdings as well, so we’re getting a nice cross-section of institutional records.&lt;/p&gt;
+
+&lt;p&gt;Here’s what I found, in round numbers&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Pct. of Total&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;All records&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;12M&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;100%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Invalid 008&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1900&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;0.15%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Valid code&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;11.6M&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;96.6%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Unknown place-of-pub&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;381k&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3.1%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Invalid code&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;27k&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;0.2%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;[“No place-of-pub” includes both records with no data in the 008 and those with the code ‘  x’ which explicitly indicates “Unknown”]&lt;/p&gt;
+
+&lt;h2 id=&quot;results-pretty-good&quot;&gt;Results: pretty good!&lt;/h2&gt;
+
+&lt;p&gt;Given much of the data I’ve worked with over the years, this strikes me a stunningly good. Of course, in the case of a place as 
+big as UMich, that means we’ve still got about 408k items about which we have no good place-of-publication information, but 
+as a percentage, it’s small enough that I’m happy to live with it. &lt;/p&gt;
+
+&lt;p&gt;I was, admittedly, a little put out by the fact that we have records in which the 008 fixed field – which is pretty important, as these things go – was 
+just plain invalid (including 176 just plain &lt;em&gt;missing&lt;/em&gt;). You’d think that the ILS software would reject things like that, but,
+as in almost all cases when you think the ILS should do something smart, you’d be wrong.&lt;/p&gt;
+
+&lt;h2 id=&quot;and-now-the-complaints&quot;&gt;And now, the complaints&lt;/h2&gt;
+
+&lt;p&gt;Of course, all we know is that the codes are (or were) valid – not whether or not they’re &lt;em&gt;accurate&lt;/em&gt;. &lt;/p&gt;
+
+&lt;p&gt;There are two obvious problems:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Some rocket scientists at some point decided that the code ‘ai’, which had been used to represent Anguilla, should now be
+used to represent the Republic of Armenia. As if that weren’t enough to make you slam your head into a brick wall,
+the change is based on the date of &lt;em&gt;cataloging&lt;/em&gt;, not the date of publication, so there’s no way for me to know which
+country is supposed to be indicated. It looks like this was to try to keep the first two letters of codes from the old Soviet Union
+the same one it fell apart, but c’&lt;em&gt;mon&lt;/em&gt;, people! (Note that Anguilla is now ‘am’, because of the …ummmm….”m” in it’s…er…nevermind.) We don’t have
+many records with that code, but this is the sort of blatent disregard for simple data integrity that drives me &lt;em&gt;crazy&lt;/em&gt;. &lt;/li&gt;
+  &lt;li&gt;A presumably different set of rocket scientists (once NASA downsized, those folks were &lt;em&gt;everywhere&lt;/em&gt;) at various points in time and 
+at various locations decided that the place of publication on a reproduction (say, a microfilm) should be the place the &lt;em&gt;reproduction&lt;/em&gt;
+was created. So, a microfilm of &lt;em&gt;The New York Times&lt;/em&gt; that happened to be created in Ann Arbor, MI is coded as ‘miu’, for Michigan. &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The latter, of course, is designed to serve those people studying where microfilms were created at the expense of people who
+want to, you know, find things actually published in a particular location. I’m sure &lt;em&gt;all three&lt;/em&gt; of the people in the country who want to know the
+former are forever grateful. &lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 10 Nov 2014 00:00:00 -0500</pubDate>
         <link>http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/</link>
         <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/</guid>
         
@@ -2533,60 +2657,6 @@ ins = dbh.prepare(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&qu
         <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/05/using-sqlite3-from-jruby-without-activerecord-2/</guid>
         
         <category>jruby</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>How good is our relevancy ranking?</title>
-        <description>&lt;p&gt;For those of us that spend our days trying to tweak &lt;a title=&quot;Mirlyn -- The University of Michigan Library Catalog&quot; href=&quot;http://mirlyn.lib.umich.edu/&quot;&gt;Mirlyn&lt;/a&gt; to make it better, one of the most important  – and, in many ways, most opaque – questions is, “How good is our relevancy ranking?”&lt;/p&gt;
-
-&lt;p&gt;Research from the UMich Library’s Usability Group (&lt;a href=&quot;http://www.lib.umich.edu/files/services/usability/MirlynSearchSurvey_Feb2011.pdf&quot;&gt;pdf; 600k&lt;/a&gt;) points to the importance of relevancy ranking  for both known-item searches and discovery, but mapping search terms to the “best” results involves crawling deep inside the searcher’s head to know what she’s looking for.&lt;/p&gt;
-
-&lt;p&gt;So, what can we do?&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Record interaction as a way of showing interest&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;One possibility is to look at those records that are somehow “touched” by a user in such a way that we can log it. If a user bothers to interact with an individual record, we’ll assume the record is interesting to her in the context of the current search.&lt;/p&gt;
-
-&lt;p&gt;There are three links associated with an individual record that a user can click on from the search results:&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;(62% of all record interactions) The title&lt;/li&gt;
-	&lt;li&gt;(28%) An external link (HathiTrust, Google Books, or one of our vendors)&lt;/li&gt;
-	&lt;li&gt;(10%) The &quot;see holdings&quot; link for those items that have multiple holdings&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Our first issue arises quickly: only about a quarter of Mirlyn sessions contain any of these actions. For a full 75% of sessions, we have no data about which records users are paying attention to. They get a call number – or determine they have a failed search –  and move on.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Where on the page do users interact with items?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;We don’t know how users that interact with items differ from those that don’t. But for those that do, more than half of all record interactions are with the first record.&lt;/p&gt;
-
-&lt;p&gt;Here are the numbers for the first five records:&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;First record: 54%&lt;/li&gt;
-	&lt;li&gt;Second record: 12%&lt;/li&gt;
-	&lt;li&gt;Third record: 6%&lt;/li&gt;
-	&lt;li&gt;Fouth record: 3.7%&lt;/li&gt;
-	&lt;li&gt;Fifth record: 2.5%&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;More than 75% of all record interactions are with the first four items on the first page of results.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;What does it all mean?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Frustratingly, we don’t know. Several possibilities are obvious:&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;we&#39;re doing a good job with relevancy ranking&lt;/li&gt;
-	&lt;li&gt;people do mostly known-item searches&lt;/li&gt;
-	&lt;li&gt;people don&#39;t bother looking past the first few results&lt;/li&gt;
-	&lt;li&gt;excellent general search engines (e.g., Google) have trained people to believe that the first result is always worth a closer look.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The interactions between these (and unknown other) factors are likely complex.&lt;/p&gt;
-
-&lt;p&gt;In the meantime, though, to the extent these data can be extended to the general case (not at all obvious), we’re not doing too bad of a job.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 25 May 2011 00:00:00 -0400</pubDate>
-        <link>http://robotlibrarian.billdueber.com/2011/05/how-good-is-our-relevancy-ranking/</link>
-        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/05/how-good-is-our-relevancy-ranking/</guid>
         
         
       </item>

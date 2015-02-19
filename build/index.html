@@ -16,6 +16,8 @@
 
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/asciidoctor.css">
+    <link rel="stylesheet" href="/css/coderay.css">
+    
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/">
 </head>
 
@@ -91,10 +93,22 @@
 
         <div class="post-text">
           <h2 class="post-title">
-            <a class="post-link" href="/2015/02/reintroducing-traject/">Reintroduction Traject: Traject 2.0</a>
+            <a class="post-link" href="/2015/02/reintroducing-traject/">Reintroducing Traject: Traject 2.0</a>
           </h2>
           <div class="post-meta">Feb 19, 2015</div>
-          <div id="preamble"> <div class="sectionbody"> <div class="sidebarblock"> <div class="content"> <div class="title">Summary</div> <div class="paragraph"> <p><code>traject</code> is a ruby gem used most often to extact data from MARC files and index them into Solr, generally for discovery systems like VuFind and Blacklight/Hydra.</p> </div> <div class="paragraph"> <p>Version 2.0 now optionally runs under MRI ("regular") ruby, has a faster indexer and more output types, and goes faster than ever.</p> </div> </div> </div> <div class="paragraph"> <p><code>traject</code> is an ETL (extract/transform/load) system... <a class="morepost" href="/2015/02/reintroducing-traject/">&lt;more&gt;</a>
+          <div id="preamble"> <div class="sectionbody"> <div class="sidebarblock"> <div class="content"> <div class="title">Summary</div> <div class="paragraph"> <p><code>traject</code> is a ruby gem used most often to extact data from MARC files and index them into Solr, generally for discovery systems like VuFind and Blacklight/Hydra. <code>traject</code> features easy ways to query MARC records, the abilty to write to Solr or several file formats, extensive test coverage and flexible logging, and is simple to extend with regular ruby code.</p> </div> <div class="paragraph">... <a class="morepost" href="/2015/02/reintroducing-traject/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/">How good/bad is MARC data? The case of place-of-publication</a>
+          </h2>
+          <div class="post-meta">Nov 10, 2014</div>
+          <p>I complain a lot about <a href="/2010/04/data-structures-and-serializations/">the MARC format</a>, <a href="/2011/04/why-programmers-hate-free-text-in-marc-records/">the way people put data in MARC records</a>, the <a href="/2011/04/isbn-parenthetical-notes-bad-marc-data-1/">actual data themselves I find in MARC records</a>, the <a href="/yet-another-lc-callnumber-parser/">inexplicably complex syntax for identifiers</a> and, ironically, <a href="/2010/04/why-rda-is-doomed-to-failure/">attempts to replace MARC with something else</a>.</p> <p>One nice little beacon of hope was when I found that only roughly 0.26% of the ISBNs in the UMich catalog have invalid checksums. That’s not bad at all, and... <a class="morepost" href="/2014/11/how_goodbad_is_marc_data_the_case_of_place-of-publication/">&lt;more&gt;</a>
         </div>
       </li>
     
@@ -194,18 +208,6 @@
           </h2>
           <div class="post-meta">Feb 12, 2013</div>
           <p>So, I’m at <a href="http://code4lib.org/conference/2013">code4lib 2013</a> right now, where side conversations and informal exchanges tend to be the most interesting part.</p> <p>Last night I had an conversation with the inimitable <a href="https://twitter.com/mbklein">Michael B. Klein</a>, and after complaining about faculty members that keep books out for <em>decades</em> at a time, we ended up asking a simple question:</p> <blockquote> <p>How much more shelving would we need if everyone returned their books?</p> </blockquote> <p>Assuming we could get them... <a class="morepost" href="/2013/02/please-dont-return-your-books/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">Boosting on Exactish (anchored) phrase matching in Solr: (SST #4)</a>
-          </h2>
-          <div class="post-meta">Mar 19, 2012</div>
-          <blockquote> <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p> </blockquote> <p><em>Exact</em> matching in Solr is easy. Use the default <em>string</em> type: all it does is, essentially, exact phrase matching. <em>string</em> is a great type for faceted values, where the only way we expect to search the index is via text pulled from the index itself. Query the index to get a value: use that value to re-query the... <a class="morepost" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">&lt;more&gt;</a>
         </div>
       </li>
     

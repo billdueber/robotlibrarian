@@ -16,6 +16,8 @@
 
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/asciidoctor.css">
+    <link rel="stylesheet" href="/css/coderay.css">
+    
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/page2/">
 </head>
 
@@ -85,6 +87,18 @@
           <div class="home">
 
   <ul class="post-list">
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">Boosting on Exactish (anchored) phrase matching in Solr: (SST #4)</a>
+          </h2>
+          <div class="post-meta">Mar 19, 2012</div>
+          <blockquote> <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p> </blockquote> <p><em>Exact</em> matching in Solr is easy. Use the default <em>string</em> type: all it does is, essentially, exact phrase matching. <em>string</em> is a great type for faceted values, where the only way we expect to search the index is via text pulled from the index itself. Query the index to get a value: use that value to re-query the... <a class="morepost" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">&lt;more&gt;</a>
+        </div>
+      </li>
     
       <li>
 
@@ -202,18 +216,6 @@
           </h2>
           <div class="post-meta">May 26, 2011</div>
           <p>I spent way too long asking my friend, The Internet, how to get a normal DBI connection to SQLIte3 using JRuby. Apparently, everyone except me is <a href="http://jruby-extras.rubyforge.org/activerecord-jdbc-adapter/">using ActiveRecord and/or Rails</a> and doesn’t <em>want</em> to just connect to the database.</p> <p>But I do. Here’s how.</p> <p>First, get the gems:</p> <div class="highlighter-coderay"><div class="CodeRay"> <div class="code"><pre> gem install dbi gem install dbd-jdbc gem install jdbc-sqlite3 </pre></div> </div> </div> <p>Then you’re ready to load it up into DBI.</p>... <a class="morepost" href="/2011/05/using-sqlite3-from-jruby-without-activerecord-2/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2011/05/how-good-is-our-relevancy-ranking/">How good is our relevancy ranking?</a>
-          </h2>
-          <div class="post-meta">May 25, 2011</div>
-          <p>For those of us that spend our days trying to tweak <a title="Mirlyn -- The University of Michigan Library Catalog" href="http://mirlyn.lib.umich.edu/">Mirlyn</a> to make it better, one of the most important – and, in many ways, most opaque – questions is, “How good is our relevancy ranking?”</p> <p>Research from the UMich Library’s Usability Group (<a href="http://www.lib.umich.edu/files/services/usability/MirlynSearchSurvey_Feb2011.pdf">pdf; 600k</a>) points to the importance of relevancy ranking  for both known-item searches and discovery, but mapping search terms to the... <a class="morepost" href="/2011/05/how-good-is-our-relevancy-ranking/">&lt;more&gt;</a>
         </div>
       </li>
     
