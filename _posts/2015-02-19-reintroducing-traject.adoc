@@ -7,7 +7,7 @@ date: 2015-02-19
 :layout: post
 :allow-uri-read:
 
-
+Traject 2.0.0 released! Now runs under MRI/RBX!
 
 `traject` is an ETL (extract/transform/load) system written in ruby with a special
 view towards extracting fields from MARC data and writing it out into Solr.  http://bibwild.wordpress.com[Jonathan Rochkind] and I wrote this primarily out of
