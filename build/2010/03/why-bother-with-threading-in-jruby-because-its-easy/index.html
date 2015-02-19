@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2010/03/why-bother-with-threading-in-jruby-because-its-easy/">
 </head>
 
@@ -95,7 +96,7 @@
 
 <p>Well, it turns out I’ve been trying to figure out how to deal with threading in jruby anyway. And I think I have a pretty elegant solution – a generic “threaded each” I’m calling <code>threach</code>.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   enumerable_object.threach(number_of_threads, <span style="color:#A60">:which_iterator</span>) <span style="color:#080;font-weight:bold">do</span> |i|
     do_something_threadsafe(i)
@@ -107,7 +108,7 @@
 
 <h3 id="some-examples">Some examples</h3>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#777"># You like #each? You'll love...err..probably like #threach</span>
   load <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">threach.rb</span><span style="color:#710">'</span></span>
@@ -147,7 +148,7 @@ version of whatever enumerator you throw at it (<code>each</code> by default).</
 
 <p>How about I just put the source here. It’s short.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">thread</span><span style="color:#710">'</span></span>
   <span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">Enumerable</span>
@@ -203,7 +204,7 @@ version of whatever enumerator you throw at it (<code>each</code> by default).</
 
 <p>You can always do something like:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#080;font-weight:bold">if</span> <span style="color:#080;font-weight:bold">defined?</span> <span style="color:#036;font-weight:bold">JRUBY_VERSION</span>
     numthreads = <span style="color:#00D">3</span>

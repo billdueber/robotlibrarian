@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/08/easy-solr-types-for-library-data/">
 </head>
 
@@ -116,7 +117,7 @@
 
 <p>One of the first things we defined was a “stdnum” type, to deal with supposedly-unique identifiers, possibly with embedded dashes and dots and leading/trailing nonsense. Here’s a variant.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stdnum</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">sortMissingLast</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
@@ -165,7 +166,7 @@
 <h2 id="exactmatcher-type">exactmatcher type</h2>
 <p>The name <em>exactmatcher</em> is a red herring, of course, It’s not an exact matcher. It just strips out all the delimiters so we can pretend it’s an exact match.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">exactmatcher</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>

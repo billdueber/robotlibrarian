@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/page6/">
 </head>
 
@@ -90,6 +91,18 @@
 
         <div class="post-text">
           <h2 class="post-title">
+            <a class="post-link" href="/2009/09/the-sad-truths-about-journal-bundle-prices/">The sad truths about journal bundle prices</a>
+          </h2>
+          <div class="post-meta">Sep 23, 2009</div>
+          <p>[Notes taken during a talk today, <em>Ted Bergstrom: “Some Economics of Saying Nix To Big Deals and the Terrible Fix”</em>. My own thoughts are interspersed throughout; please don’t automatically ascribe everything to Dr. Bergstrom.</p> <p>Check out his stuff at <a href="http://www.econ.ucsb.edu/~tedb/">Ted Bergstrom’s home page</a>.]</p> <p>Journals are a weird market – libraries buy as agents of professors, using someone else’s money, in deals of enormous complexity and uncertain value from companies that basically have a monopoly.</p>... <a class="morepost" href="/2009/09/the-sad-truths-about-journal-bundle-prices/">&lt;more&gt;</a>
+        </div>
+      </li>
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
             <a class="post-link" href="/2009/09/more-marc-benchmars-adding-in-marc-xml/">More Ruby MARC Benchmarks: Adding in MARC-XML</a>
           </h2>
           <div class="post-meta">Sep 18, 2009</div>
@@ -153,7 +166,7 @@
             <a class="post-link" href="/2009/08/sending-unicode-email-headers-in-php/">Sending unicode email headers in PHP</a>
           </h2>
           <div class="post-meta">Aug 17, 2009</div>
-          <p>I’m probably the last guy on earth to know this, but I’m recording it here just in case. I’m sending record titles in the subject line of emails, and of course they may be unicode. The body takes care of itself, but you need to explicitly encode a header like “Subject.”</p> <div><div class="CodeRay"> <div class="code"><pre> <span style="color:#950">$headers</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">To</span><span style="color:#710">'</span></span>] = <span style="color:#950">$to</span>; <span style="color:#950">$headers</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">From</span><span style="color:#710">'</span></span>] = <span style="color:#950">$from</span>; <span style="color:#950">$headers</span>[<span... <a class="morepost" href="/2009/08/sending-unicode-email-headers-in-php/">&lt;more&gt;</a>
+          <p>I’m probably the last guy on earth to know this, but I’m recording it here just in case. I’m sending record titles in the subject line of emails, and of course they may be unicode. The body takes care of itself, but you need to explicitly encode a header like “Subject.”</p> <div class="highlighter-coderay"><div class="CodeRay"> <div class="code"><pre> <span style="color:#950">$headers</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">To</span><span style="color:#710">'</span></span>] = <span style="color:#950">$to</span>; <span style="color:#950">$headers</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">From</span><span style="color:#710">'</span></span>] = <span style="color:#950">$from</span>; <span... <a class="morepost" href="/2009/08/sending-unicode-email-headers-in-php/">&lt;more&gt;</a>
         </div>
       </li>
     
@@ -189,19 +202,7 @@
             <a class="post-link" href="/2009/04/marc-hash-the-saga-continues-now-with-even-less-structure/">MARC-HASH: The saga continues (now with even less structure)</a>
           </h2>
           <div class="post-meta">Apr 15, 2009</div>
-          <p>After a medium-sized discussion on #code4lib, we’ve collectively decided that…well, ok, no one really cares all that much, but a few people weighed in.</p> <p>The new format is: A list of arrays. If it’s got two elements, it’s a control field; if it’s got four, it’s a data field.</p> <p>SO….it’s like this now.</p> <div><div class="CodeRay"> <div class="code"><pre> { <span style="color:#606"><span style="color:#404">&quot;</span><span>type</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">marc-hash</span><span style="color:#710">&quot;</span></span>, <span style="color:#606"><span style="color:#404">&quot;</span><span>version</span><span style="color:#404">&quot;</span></span> : [<span style="color:#00D">1</span>,... <a class="morepost" href="/2009/04/marc-hash-the-saga-continues-now-with-even-less-structure/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2009/04/marc-hash-control-field-now-with-less-structure/">MARC-HASH control field, now with less structure</a>
-          </h2>
-          <div class="post-meta">Apr 15, 2009</div>
-          <p>Why do I ever, ever think that MARC might not rely on order? I don’t know.</p> <p>In any case, control fields will now be just an array of duples:</p> <div><div class="CodeRay"> <div class="code"><pre> control: [ [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">001</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">value of the 001</span><span style="color:#710">'</span></span>], [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">006</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">value of the 006</span><span style="color:#710">'</span></span>] [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">006</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">another 006</span><span style="color:#710">'</span></span>] } </pre></div> </div>... <a class="morepost" href="/2009/04/marc-hash-control-field-now-with-less-structure/">&lt;more&gt;</a>
+          <p>After a medium-sized discussion on #code4lib, we’ve collectively decided that…well, ok, no one really cares all that much, but a few people weighed in.</p> <p>The new format is: A list of arrays. If it’s got two elements, it’s a control field; if it’s got four, it’s a data field.</p> <p>SO….it’s like this now.</p> <div class="highlighter-coderay"><div class="CodeRay"> <div class="code"><pre> { <span style="color:#606"><span style="color:#404">&quot;</span><span>type</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">marc-hash</span><span style="color:#710">&quot;</span></span>, <span style="color:#606"><span style="color:#404">&quot;</span><span>version</span><span style="color:#404">&quot;</span></span> : [<span... <a class="morepost" href="/2009/04/marc-hash-the-saga-continues-now-with-even-less-structure/">&lt;more&gt;</a>
         </div>
       </li>
     

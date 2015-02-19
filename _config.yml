@@ -19,6 +19,18 @@ defaults:
       layout: default
 
 
+# gems to load
+gems:
+  - jekyll-asciidoc
+  - jekyll-compose
+  
+asciidoc: asciidoctor
+asciidoc_ext: asciidoc,adoc,ad
+asciidoctor:
+  attributes:
+    - hardbreaks!
+    - source-highlighter=coderay
+    - notitle
 
 
 # source and dest

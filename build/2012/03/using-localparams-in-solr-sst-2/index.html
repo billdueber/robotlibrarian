@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2012/03/using-localparams-in-solr-sst-2/">
 </head>
 
@@ -165,7 +166,7 @@ or
 
 <p>[Presenting the URL parameters as a ruby hash to make it easier to read]</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  {
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">q</span><span style="color:#710">'</span></span>=&gt;<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">_query_:&quot;{!dismax qf=$f1 mm=$mm1 pf=$f1 bq=$bq1 v=$q1}&quot;</span><span style="color:#710">'</span></span>,
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">mm1</span><span style="color:#710">'</span></span>=&gt;<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">0%</span><span style="color:#710">'</span></span>,
@@ -188,7 +189,7 @@ or
 
 <p>By now you know the drill:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  cd solr_stupid_tricks
   git pull origin master
   git fetch origin master
@@ -201,7 +202,7 @@ or
 
 <p>We’ll want to empty out the index and put in some documents to work with. I’m presuming you have <code>curl</code> installed. If not…well, you’re on your own.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  cd exampledocs
   ./reset_and_index_json localparams.json
 </pre></div>
@@ -238,7 +239,7 @@ or
 
 <p>But we can use it to put in our special query defaults that boosts when a document contains all the terms:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 
       10
@@ -276,7 +277,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 <p>By now you know the drill:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  cd solr_stupid_tricks
   git pull origin master
   git fetch origin master
@@ -288,7 +289,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 </div>
 <p>We’ll want to empty out the index and put in some documents to work with. I’m presuming you have <code>curl</code> installed. If not…well, you’re on your own.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  cd exampledocs
   ./reset_and_index_json localparams.json
 </pre></div>
@@ -323,7 +324,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 <p>But we can use it to put in our special query defaults that boosts when a document contains all the terms:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 
       10
@@ -363,7 +364,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 <p>By now you know the drill:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  cd solr_stupid_tricks
   git pull origin master
   git fetch origin master
@@ -375,7 +376,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 </div>
 <p>We’ll want to empty out the index and put in some documents to work with. I’m presuming you have <code>curl</code> installed. If not…well, you’re on your own.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  cd exampledocs
   ./reset_and_index_json localparams.json
 </pre></div>
@@ -410,7 +411,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 <p>But we can use it to put in our special query defaults that boosts when a document contains all the terms:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 
       10

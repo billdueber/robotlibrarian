@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/05/sending-marcish-data-to-refworks/">
 </head>
 
@@ -137,7 +138,7 @@ encoding=65001
 
 <p>Some easy PHP code to produce such a format is as follows. Note that I’m sending it as text (because it’s <em>not MARC</em>) and UTF-8. If you’re got MARC-8, you’ll have to convert it before sending.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
       <span style="color:#950">$m</span> = <span style="color:#950">$this</span>-&gt;marcRecord;
       <span style="color:#369;font-weight:bold">header</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Content-type: text/plain; charset=UTF-8</span><span style="color:#710">'</span></span>);

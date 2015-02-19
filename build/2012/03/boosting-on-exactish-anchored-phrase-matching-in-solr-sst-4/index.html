@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">
 </head>
 
@@ -120,7 +121,7 @@
 
 <p>Go ahead and clone the <a href="https://billdueber@github.com/billdueber/solr_stupid_tricks">github repo</a> I’ve been using  if you haven’t already and let’s dig in.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 cd solr_stupid_tricks
 git pull origin master
@@ -138,7 +139,7 @@ java -jar start.jar &amp;
 
 <p>The recent-nighty of Solr 3.x we’re using has a great tokenizer in ICUTokenizerFactory, which does “the right thing” across a whole host of languages.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">positionIncrementGap</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1000</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
@@ -180,7 +181,7 @@ java -jar start.jar &amp;
 
 <p>Here’s the trick. We’re going to add anchoring text (I chose just ‘AAAA’ at the front and ‘ZZZZ’ at the end) to the normal text type, just by adding a simple charfilter.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text_lr</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">positionIncrementGap</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1000</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
@@ -223,7 +224,7 @@ java -jar start.jar &amp;
 
 <p>Let’s take a small set of new documents:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 [
   {
@@ -250,7 +251,7 @@ java -jar start.jar &amp;
 
 <p>We have copyFields set up to copy the title field to both a fully-anchored field (<code>text_exact</code>) and a left-anchored field (<code>text_l</code>).</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;copyField</span> <span style="color:#b48">source</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">title</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">dest</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">title_exact</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;copyField</span> <span style="color:#b48">source</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">title</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">dest</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">title_l</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
@@ -261,7 +262,7 @@ java -jar start.jar &amp;
 
 <p>If you’re following at home, clear out your solr and index them:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 cd exampledocs
  ./reset_and_index_json.sh exactish.json
@@ -280,7 +281,7 @@ cd exampledocs
 
 <p>You can run all three queries as:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 cd ruby
 ruby browse.rb exactish_query.rb

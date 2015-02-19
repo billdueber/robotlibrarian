@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2012/03/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/">
 </head>
 
@@ -105,7 +106,7 @@
 
 <p>Let’s do a quick test. Look at the following documents</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>exampledocs/names.json
 [
   {
@@ -127,7 +128,7 @@
 
 <p>Question: what do you get when you run this query against those two documents?</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>ruby/names_query.rb
 {
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">fl</span><span style="color:#710">'</span></span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">score, *</span><span style="color:#710">'</span></span>,
@@ -149,7 +150,7 @@
 
 <p>If so, let’s go ahead and index these document and run the query.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>Play along at home
 cd solr_stupid_tricks
 git pull origin master
@@ -168,7 +169,7 @@ cd exampledocs
 
 <p>Here’s the scores that I get:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>Return from Solr
   id,title,name_text,score
   2,Heros of the Wild West,&quot;Buck Jones,Davy Crockett&quot;,0.42039964
@@ -198,7 +199,7 @@ cd exampledocs
 
 <p>One way to do that is to use a phrase query by throwing quotes around the terms</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre><span style="color:#036;font-weight:bold">Put</span> double-quotes around it to make it a phrase query
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">q</span><span style="color:#710">&quot;</span></span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&quot;Davy Jones&quot;</span><span style="color:#710">'</span></span>
 
@@ -212,7 +213,7 @@ cd exampledocs
 
 <p>For that, we’ll tell solr to search against certain fields (<code>pf</code>) treating the query as a phrase, and allow a little slop (<code>ps</code>) as well.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>ruby/names_sloppy_query.rb
   {
     <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">fl</span><span style="color:#710">'</span></span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">score, *</span><span style="color:#710">'</span></span>,
@@ -230,7 +231,7 @@ cd exampledocs
 
 <p>That gets us something more expected.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   id,title,name_text,score
   1,The Monkees,&quot;Peter Tork,Mike Nesmith,Micky Dolenz,Davy Thomas Jones&quot;,0.2806283
@@ -273,7 +274,7 @@ cd exampledocs
 
 <p>The query</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre><span style="color:#036;font-weight:bold">A</span> three-token query
   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">q</span><span style="color:#710">'</span></span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Bill &quot;The Weasel&quot; Dueber</span><span style="color:#710">'</span></span>
 
@@ -303,7 +304,7 @@ cd exampledocs
 
 <p><strong>solr/conf/solrconfig.xml</strong></p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre><span style="color:#070;font-weight:bold">&lt;requestHandler</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">/edismaxplus</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.SearchHandler</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
   <span style="color:#070;font-weight:bold">&lt;lst</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">defaults</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;str</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">rows</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>10<span style="color:#070;font-weight:bold">&lt;/str&gt;</span>

@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2012/03/solr-field-type-for-numericish-ids/">
 </head>
 
@@ -131,7 +132,7 @@
 
 <p>Let’s take a look at the end product and then walk through it.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre><span style="color:#070;font-weight:bold">&lt;fieldtype</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">numericID</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span>
            <span style="color:#b48">positionIncrementGap</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1000</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>
@@ -280,7 +281,7 @@ too basic for any audience that’s likely to show up here, but what the heck.</
 
 <p>If you’re following along at home, get the latest version of the schema and try it!</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   cd solr_stupid_tricks
   git pull origin master

@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/08/building-a-solr-text-filter-for-normalizing-data/">
 </head>
 
@@ -142,7 +143,7 @@ with java and ant. And junit, I think.</p>
 
 <p>Note that I’m not working hard to determine if it’s an ISBN – this isn’t designed to try to pull an ISBN from random text. The hope is that by the time you get this far you’ve already got a pretty good idea that you’ve got an ISBN on your hands. I’m also not checking to see if the incoming ISBN is valid in any way; that’s left as an exercise for the dilligent reader.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#080;font-weight:bold">package</span> <span style="color:#707;font-weight:bold">edu.umich.lib.normalizers</span>;
 <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">java.util.regex</span>.*;
@@ -198,7 +199,7 @@ with java and ant. And junit, I think.</p>
 
 <p>Next is a boilerplate factory object. The only change will be the package you put it in, and the last method’s name and return value.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#080;font-weight:bold">package</span> <span style="color:#707;font-weight:bold">edu.umich.lib.solr.analysis</span>;
 <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">java.util.Map</span>;
@@ -231,7 +232,7 @@ with java and ant. And junit, I think.</p>
 
 <p>And, finally, the filter class. You’ll notice that I’m catching any illegal argument error and just returning the input unchanged. So anything that comes through that <em>isn’t</em> an ISBN just gets passed along.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#080;font-weight:bold">package</span> <span style="color:#707;font-weight:bold">edu.umich.lib.solr.analysis</span>;
 
@@ -280,7 +281,7 @@ with java and ant. And junit, I think.</p>
 
 <p>Assuming you’ve managed to get it built into Solr and then deployed, just define it as a type in your <code>schema.xml</code>:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">isbnlongifier</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;analyzer&gt;</span>

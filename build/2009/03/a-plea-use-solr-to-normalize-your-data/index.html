@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/03/a-plea-use-solr-to-normalize-your-data/">
 </head>
 
@@ -101,7 +102,7 @@
 
 <p>If you’re using a Solr nightly (and, really, you should be – faceting is <em>so</em> much faster than the official 1.3 release) you have access to regexp-based filters as well, which makes stuff like this really, really easy:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
    <span style="color:#777">&lt;!-- Simple type to normalize isbn/issn/other standard numbers --&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;fieldType</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stdnum</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">solr.TextField</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">sortMissingLast</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">omitNorms</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">&gt;</span>

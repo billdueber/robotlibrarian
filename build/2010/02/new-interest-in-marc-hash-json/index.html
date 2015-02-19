@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2010/02/new-interest-in-marc-hash-json/">
 </head>
 
@@ -100,7 +101,7 @@
 <h2>What is MARC-HASH?</h2>
 <p>At some point, we’ll want a real spec, but right now it’s just this:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#777">// A record is a four-pair hash, as follows. UTF-8 is mandatory.</span>
   {
@@ -123,7 +124,7 @@
 
 <p>So, a short example:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  {
     <span style="color:#606"><span style="color:#404">&quot;</span><span>type</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">marc-hash</span><span style="color:#710">&quot;</span></span>,
     <span style="color:#606"><span style="color:#404">&quot;</span><span>version</span><span style="color:#404">&quot;</span></span> : [<span style="color:#00D">1</span>, <span style="color:#00D">0</span>],
@@ -170,7 +171,7 @@ let’s look at JSON performance.</p>
 
 <p>The benchmark code looks like this:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  <span style="color:#777"># Unmarshal</span>
   x.report(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">MARC Binary</span><span style="color:#710">&quot;</span></span>) <span style="color:#080;font-weight:bold">do</span>
     reader = <span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">Reader</span>.new(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">test.mrc</span><span style="color:#710">'</span></span>)

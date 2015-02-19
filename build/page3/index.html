@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/page3/">
 </head>
 
@@ -84,6 +85,18 @@
           <div class="home">
 
   <ul class="post-list">
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2011/05/ruby-gem-library_stdnums-goes-to-version-1-0/">Ruby gem library_stdnums goes to version 1.0</a>
+          </h2>
+          <div class="post-meta">May 6, 2011</div>
+          <p>I just released another (this time pretty good) version of my gem for normalizing/validating library standard numbers, <code>library_stdnums</code> (<a href="https://github.com/billdueber/library_stdnums">github source</a> / <a href="http://rubydoc.info/github/billdueber/library_stdnums/master/frames">docs</a>).</p> <p>The short version of the functions available:</p> <ul> <li><strong>ISBN</strong>: get checkdigit, validate, convert isbn10 to/from isbn13, normalize (to 13-digit)</li> <li><strong>ISSN</strong>: get checkdigit, validate, normalize</li> <li><strong>LCCN</strong>: validate, normalize</li> </ul> <p>Validation of LCCNs doesn’t involve a checkdigit; I basically just normalize whatever is sent in and then see if the result is syntactically... <a class="morepost" href="/2011/05/ruby-gem-library_stdnums-goes-to-version-1-0/">&lt;more&gt;</a>
+        </div>
+      </li>
     
       <li>
 
@@ -190,18 +203,6 @@
           </h2>
           <div class="post-meta">Sep 16, 2010</div>
           <p>A couple weeks ago, representatives from UMich (that’d be me), Purdue, Notre Dame, UChicago, and our hosts at Western Michigan got together in lovely Kalamazoo to talk about our VuFind implementations.</p> <p>Eric Lease Morgan <a href="http://www.catholicresearch.net/blog/2010/09/vufind-midwest-users-group-meeting/">already wrote up his notes</a> about the meeting, and I encourage you to go there for more info, but I’ll add my two cents here.</p> <p>So, in light of that meeting, here’s what I’m thinking about VuFind of late:</p> <ul>... <a class="morepost" href="/2010/09/vufind-midwest-gathering/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2010/09/simple-ruby-gem-for-dealing-with-isbnissnlccn/">Simple Ruby gem for dealing with ISBN/ISSN/LCCN</a>
-          </h2>
-          <div class="post-meta">Sep 13, 2010</div>
-          <p>I needed some code to deal with ISBN10-&gt;ISBN13 conversion, so I put in a few other functions and wrapped it all up in a <a href="http://rubygems.org/gems/library_stdnums">gem called library_stdnums</a>.</p> <p>It’s only 100 lines of code or so and some specs, but I put it out there in case others want to use it or add to it. Pull requests at the <a href="http://github.com/billdueber/library_stdnums">github repo</a> are welcome.</p> <p>Functionality is all as module functions, as follows:</p> <h3 id="isbn">ISBN</h3>... <a class="morepost" href="/2010/09/simple-ruby-gem-for-dealing-with-isbnissnlccn/">&lt;more&gt;</a>
         </div>
       </li>
     

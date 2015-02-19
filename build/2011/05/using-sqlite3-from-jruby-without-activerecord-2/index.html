@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2011/05/using-sqlite3-from-jruby-without-activerecord-2/">
 </head>
 
@@ -95,7 +96,7 @@
 
 <p>First, get the gems:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   gem install dbi
   gem install dbd-jdbc
@@ -107,7 +108,7 @@
 
 <p>Then you’re ready to load it up into DBI.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">rubygems</span><span style="color:#710">'</span></span> <span style="color:#777"># if you're using 1.8 still</span>
 require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">java</span><span style="color:#710">'</span></span>

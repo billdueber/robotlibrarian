@@ -19,7 +19,7 @@
     }
     @else if $gradient != null {
       @if $i == $full-length {
-        $percentage: 100%;
+        $percentage: "100%";
       }
       @else {
         $percentage: ($i - 1) * (100 / ($full-length - 1)) + "%";

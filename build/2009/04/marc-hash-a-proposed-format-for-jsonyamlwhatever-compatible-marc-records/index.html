@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/04/marc-hash-a-proposed-format-for-jsonyamlwhatever-compatible-marc-records/">
 </head>
 
@@ -95,7 +96,7 @@
 
 <p>So…I’m suggesting we try something a little simpler. Something so brain-dead, in fact, that I’m loathe to put it down because it’s pretty much the obvious way to do it. To wit:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 {
   <span style="color:#606"><span style="color:#404">&quot;</span><span>type</span><span style="color:#404">&quot;</span></span> : <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">marc-hash</span><span style="color:#710">&quot;</span></span>,
@@ -164,7 +165,7 @@
 
 <p>A simple run-through (psuedocode ahead):</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   my marchash = getTheMarcHash();
   my kindamarc;
@@ -203,7 +204,7 @@
 
 <p>Basically, this will allow things like this:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>  $leader = $kindamarc{leader};
   $first001 = $kindamarc{control}{&quot;001&quot;}[0];
 

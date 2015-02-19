@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/">
 </head>
 
@@ -84,6 +85,18 @@
           <div class="home">
 
   <ul class="post-list">
+    
+      <li>
+
+
+        <div class="post-text">
+          <h2 class="post-title">
+            <a class="post-link" href="/2015/02/reintroducing-traject/">Reintroduction Traject: Traject 2.0</a>
+          </h2>
+          <div class="post-meta">Feb 19, 2015</div>
+          <div id="preamble"> <div class="sectionbody"> <div class="sidebarblock"> <div class="content"> <div class="title">Summary</div> <div class="paragraph"> <p><code>traject</code> is a ruby gem used most often to extact data from MARC files and index them into Solr, generally for discovery systems like VuFind and Blacklight/Hydra.</p> </div> <div class="paragraph"> <p>Version 2.0 now optionally runs under MRI ("regular") ruby, has a faster indexer and more output types, and goes faster than ever.</p> </div> </div> </div> <div class="paragraph"> <p><code>traject</code> is an ETL (extract/transform/load) system... <a class="morepost" href="/2015/02/reintroducing-traject/">&lt;more&gt;</a>
+        </div>
+      </li>
     
       <li>
 
@@ -193,18 +206,6 @@
           </h2>
           <div class="post-meta">Mar 19, 2012</div>
           <blockquote> <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p> </blockquote> <p><em>Exact</em> matching in Solr is easy. Use the default <em>string</em> type: all it does is, essentially, exact phrase matching. <em>string</em> is a great type for faceted values, where the only way we expect to search the index is via text pulled from the index itself. Query the index to get a value: use that value to re-query the... <a class="morepost" href="/2012/03/boosting-on-exactish-anchored-phrase-matching-in-solr-sst-4/">&lt;more&gt;</a>
-        </div>
-      </li>
-    
-      <li>
-
-
-        <div class="post-text">
-          <h2 class="post-title">
-            <a class="post-link" href="/2012/03/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/">Requiring/Preferring searches that don't span multiple values (SST #3)</a>
-          </h2>
-          <div class="post-meta">Mar 9, 2012</div>
-          <blockquote> <p>Check out <a href="http://robotlibrarian.billdueber.com/stupid-solr-tricks-introduction/">introduction to the Stupid Solr Tricks series</a> if you’re just joining us.]</p> </blockquote> <h3 id="solr-and-multivalued-fields">Solr and multiValued fields</h3> <p>Here’s another thing you need to understand about Solr: it doesn’t really have fields that can take multiple values.</p> <p>“But Bill,” you’re saying, “sure it does. I mean, hell, it even has a ‘multiValued’ parameter.”</p> <p>First off: watch your language.</p> <p>Second off: are you <em>sure</em>?</p> <p>Let’s do a quick test. Look at the... <a class="morepost" href="/2012/03/requiringpreferring-searches-that-dont-span-multiple-values-sst-3/">&lt;more&gt;</a>
         </div>
       </li>
     

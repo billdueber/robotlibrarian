@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2010/02/indexing-data-into-solr-via-jruby-with-threads/">
 </head>
 
@@ -116,7 +117,7 @@ make an appearance in the next post when I talk about using this in addition to 
 
 <p>OK, with the disclaimer out of the way, let’s look at some code.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">rubygems</span><span style="color:#710">'</span></span>
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jruby_streaming_update_solr_server</span><span style="color:#710">'</span></span>
@@ -216,7 +217,7 @@ there’s a lot of <code>#each</code>’s floating around. Keep them straight.</
 
 <p>So…let’s look at some code to work with consumer threads.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#777"># Start off the same as before</span>
   require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">rubygems</span><span style="color:#710">'</span></span>
@@ -264,7 +265,7 @@ there’s a lot of <code>#each</code>’s floating around. Keep them straight.</
   <li><code>ProducerConsumer#threaded_each</code> calls the <code>#each</code> method of the underlying object. You can substitute anything that yields, though, as in this example where I call <code>#each_line</code> instead of the default <code>#each</code></li>
 </ul>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   queuesize = <span style="color:#00D">5</span>
   pc = <span style="color:#036;font-weight:bold">ProducerConsumer</span>.new(<span style="color:#036;font-weight:bold">File</span>.new(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">myfile.txt</span><span style="color:#710">'</span></span>), queuesize, <span style="color:#A60">:each_line</span>)

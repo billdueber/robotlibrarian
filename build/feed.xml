@@ -6,9 +6,227 @@
 </description>
     <link>http://robotlibrarian.billdueber.com/</link>
     <atom:link href="http://robotlibrarian.billdueber.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 06 Jan 2015 22:31:29 -0500</pubDate>
-    <lastBuildDate>Tue, 06 Jan 2015 22:31:29 -0500</lastBuildDate>
-    <generator>Jekyll v2.4.0</generator>
+    <pubDate>Thu, 19 Feb 2015 01:01:24 -0500</pubDate>
+    <lastBuildDate>Thu, 19 Feb 2015 01:01:24 -0500</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Reintroduction Traject: Traject 2.0</title>
+        <description>&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;sidebarblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Summary&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; is a ruby gem used most often to extact data from MARC files and
+index them into Solr, generally for discovery systems like VuFind and
+Blacklight/Hydra.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Version 2.0 now optionally runs under MRI (&quot;regular&quot;) ruby, has a faster indexer and more
+output types, and goes faster than ever.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; is an ETL (extract/transform/load) system written in ruby with a special
+view towards extracting fields from MARC data and writing it out into Solr.  &lt;a href=&quot;http://bibwild.wordpress.com&quot;&gt;Jonathan Rochkind&lt;/a&gt; and I wrote this primarily out of
+frustration using other tools in this space (e.g., &lt;a href=&quot;https://code.google.com/p/solrmarc/&quot;&gt;Solrmarc&lt;/a&gt;, or my own precursor to &lt;code&gt;traject&lt;/code&gt; , &lt;a href=&quot;https://github.com/billdueber/marc2solr&quot;&gt;marc2solr&lt;/a&gt;&lt;span class=&quot;footnote&quot;&gt;[&lt;a id=&quot;_footnoteref_1&quot; class=&quot;footnote&quot; href=&quot;#_footnote_1&quot; title=&quot;View footnote.&quot;&gt;1&lt;/a&gt;]&lt;/span&gt;).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; had its first release was almost a year and a half ago (at least based on the date of my
+&lt;a href=&quot;http://robotlibrarian.billdueber.com/2013/10/announcing-traject-indexing-software/&quot;&gt;post introducting it&lt;/a&gt;), and I&amp;#8217;ve used it literally every day since then indexing data for the
+&lt;a href=&quot;http://mirlyn.lib.umich.edu&quot;&gt;Univeristy of Michigan&lt;/a&gt; and &lt;a href=&quot;http://catalog.hathitrust.org/&quot;&gt;HathiTrust&lt;/a&gt; library catalogs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;how-does-it-work&quot;&gt;How does it work?&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; is packaged as a gem, and ships with a command-line program (&lt;code&gt;traject&lt;/code&gt;) that reads in configuration files or switches and the name of the file to operate on and transforms the incoming records as
+specified.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &quot;configuration&quot; is actually just ruby code, with some macros included to make it simple
+to do the common operations (e.g., get the ISBN) and possible to do &amp;#8230;&amp;#8203;well, anything you can
+do with ruby.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;A partial sample traject configuration file&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code data-lang=&quot;ruby&quot;&gt;require &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;traject/macros/marc21_semantics&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
+extend  &lt;span class=&quot;constant&quot;&gt;Traject&lt;/span&gt;::&lt;span class=&quot;constant&quot;&gt;Macros&lt;/span&gt;::&lt;span class=&quot;constant&quot;&gt;Marc21Semantics&lt;/span&gt;
+require &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;library_stdnums&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;# just a regular ruby gem&lt;/span&gt;
+
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;, extract_marc(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;001&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;:first&lt;/span&gt; =&amp;gt; &lt;span class=&quot;predefined-constant&quot;&gt;true&lt;/span&gt;)
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;marcxml_record&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, serialized_marc(&lt;span class=&quot;symbol&quot;&gt;:format&lt;/span&gt;=&amp;gt;&lt;span class=&quot;symbol&quot;&gt;:xml&lt;/span&gt;)
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;allfields&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;, extract_all_marc_values(&lt;span class=&quot;symbol&quot;&gt;:from&lt;/span&gt;=&amp;gt;&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;:to&lt;/span&gt;=&amp;gt;&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;999&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;)
+
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;oclc&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, oclcnum(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;035a:035z&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;)
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;isbn&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, extract_marc(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;020a&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;) &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt; |rec, acc|
+  acc.map!{|x| &lt;span class=&quot;constant&quot;&gt;StdNum&lt;/span&gt;::&lt;span class=&quot;constant&quot;&gt;ISBN&lt;/span&gt;.normalize(x)}
+&lt;span class=&quot;keyword&quot;&gt;end&lt;/span&gt;
+
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, extract_marc_filing_version(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;245abdefghknp&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;:include_original&lt;/span&gt; =&amp;gt; &lt;span class=&quot;predefined-constant&quot;&gt;true&lt;/span&gt;)
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;vtitle&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, extract_marc(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;245abdefghknp&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;:alternate_script&lt;/span&gt;=&amp;gt;&lt;span class=&quot;symbol&quot;&gt;:only&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;:trim_punctuation&lt;/span&gt; =&amp;gt; &lt;span class=&quot;predefined-constant&quot;&gt;true&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;:first&lt;/span&gt;=&amp;gt;&lt;span class=&quot;predefined-constant&quot;&gt;true&lt;/span&gt;)
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;publisher&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;, extract_marc(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;260b:264|*1|:533c&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;)
+to_field &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;edition&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;, extract_marc(&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt;250a&lt;/span&gt;&lt;span class=&quot;delimiter&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;questions-about-code-traject-code&quot;&gt;Questions about &lt;code&gt;traject&lt;/code&gt;&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;dlist&quot;&gt;
+&lt;dl&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;Do you need to use JRuby?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;Not anymore. As of version 2.0.0, &lt;code&gt;traject&lt;/code&gt; runs under MRI (&quot;regular&quot;) ruby, although without
+all the speed-enhancing true threading that JRuby offers.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;How fast is it?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;Apple-to-apples comparison is difficult. The &lt;a href=&quot;https://github.com/projectblacklight/blacklight-marc&quot;&gt;stock Blacklight indexing scheme&lt;/a&gt; is about 1.5x as fast under &lt;code&gt;traject&lt;/code&gt; (even using MRI, not JRuby) compared to Solrmarc. I run a &lt;a href=&quot;http://github.com/billdueber/ht_traject/&quot;&gt;hideously complex&lt;/a&gt; indexing scheme using JRuby and a few threads and can average over 900 records/second during a longish run (e.g., I can index all
+11M bib records before lunch). Fast enough.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;What kinds of data can I throw at it?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;In theory, anything you want&amp;#8201;&amp;#8212;&amp;#8201;it&amp;#8217;s pretty easy to write a Traject reader. Out of the box or
+with existing gems, though, we support:&lt;/p&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MARC (binary), via either &lt;a href=&quot;http://github.com/ruby-marc/ruby-marc&quot;&gt;ruby-marc&lt;/a&gt; or &lt;a href=&quot;https://github.com/traject-project/traject-marc4j_reader&quot;&gt;marc4j&lt;/a&gt; (the latter requiring JRuby)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MARC-XML (again, via either ruby-marc or marc4j)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/&quot;&gt;marc-in-json&lt;/a&gt; in the form of newline-delimited json (a text file with one JSON record per line)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/traject-project/traject_alephsequential_reader&quot;&gt;Alephsequential&lt;/a&gt;, a human-readable serialization put out by the Aleph ILS from Ex Libris.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jrochkind/traject_horizon&quot;&gt;Direct import from the Horizon ILS&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;What does it offer for dealing with MARC?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;&lt;code&gt;traject&lt;/code&gt; ships with macros for dealing with MARC records and the often-weird data within them. Some of these can:&lt;/p&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;extract data from fields based on tag, indicators, and subfield values&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;trim punctuation from extracted data&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;translate MARC codes into human-readable languages, countries, etc.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;correctly deal with &quot;filing characters&quot; (e.g., leading articles like &quot;a&quot; or &quot;the&quot;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;find a deal with data repeated in other languages (&quot;vernacular&quot; data, usually in 880 fields)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;find OCLC numbers, with their myriad of prefixes&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;#8230;&amp;#8203;and many others. And, if you know a little ruby, it&amp;#8217;s not hard to write your own.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;What kind of data structures can it produce?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;Given its history focused on indexing data into Solr, the basic result of a
+&lt;code&gt;traject&lt;/code&gt; transformation of a record is a hash (map) of arrays (e.g., &lt;code&gt;key1&amp;#8658;[val1, val2,&amp;#8230;&amp;#8203;]&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;each key/fieldname is mapped to one or more values). If you need to produce more complex hierarchical data, &lt;code&gt;traject&lt;/code&gt; may not be the right tool for you.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;What kind of output can it produce?&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;Obviously, the resulting documents can be sent straight to Solr. Additionally, we ship Traject
+writers that produce other formats.&lt;/p&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Traject::DebugWriter&lt;/code&gt; produces a human-readable file with one field and its values per line.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Traject::JsonWriter&lt;/code&gt; produces newline-delimited JSON, one valid JSON record per line.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Traject::YamlWriter&lt;/code&gt; writes a yaml file that contains multiple documents, good for both further processing and human inspection.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Traject::DelimitedWriter&lt;/code&gt;, by default, writes a tab-delimited file suitable for further processing or import into Excel.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Traject::CSVWriter&lt;/code&gt; produces comma-separated value files, as you&amp;#8217;d expect.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;a-2-0-release&quot;&gt;A 2.0 release?&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;So, what&amp;#8217;s changed enough to warrant a 2.0 release?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;dlist&quot;&gt;
+&lt;dl&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;No longer requires JRuby&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;The first release of &lt;code&gt;traject&lt;/code&gt; only ran under JRuby, based on its need to use the
+&lt;code&gt;solrj&lt;/code&gt; java library to efficiently indexing things into Solr. More modern
+versions of Solr (since version 3.2) allow indexing documents via HTTP with JSON;
+doing so not only works under any ruby implementation, but in my tests the JSON indexer goes about 20% faster than the old &lt;code&gt;solrj&lt;/code&gt;-based indexer.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;(Tab-)Delimited and CSV Writers&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;How often are systems librarians asked to do things like &quot;find all the records with publisher string XXX, and give me a list of them with the title, isbn, author, and date of publication&quot;? For me, the answer is &quot;often&quot; and &lt;code&gt;traject&lt;/code&gt; now makes it easy to output something that your user can inspect as text or import into Excel for further processing.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt class=&quot;hdlist1&quot;&gt;Cross-platform threading&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;For most applications of &lt;code&gt;traject&lt;/code&gt; to date, the bottleneck is the transformation process of turning a MARC record into a Solr document. Under JRuby, you can throw as many cores as you have available at that transformation to speed up the indexing process. Even under MRI, which can&amp;#8217;t run multiple threads on ruby code at the same time, we can use a second thread to talk to Solr so indexing on the server doesn&amp;#8217;t slow down processing of MARC records.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;so-give-it-a-whirl&quot;&gt;So&amp;#8230;&amp;#8203;give it a whirl!&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;You can find &lt;code&gt;traject&lt;/code&gt; and its related gems &lt;a href=&quot;https://github.com/traject-project&quot;&gt;on Github&lt;/a&gt;. Besides &lt;code&gt;traject&lt;/code&gt; itself and the associated reader/writers, there&amp;#8217;s a &lt;a href=&quot;https://github.com/traject-project/traject_sample&quot;&gt;heavily-documented sample project&lt;/a&gt; to get you started.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I&amp;#8217;m heavily invested in &lt;code&gt;traject&lt;/code&gt;, and am more than willing to assist folks as they start using it, so don&amp;#8217;t be afraid to contact me (via email or &lt;a href=&quot;https://twitter.com/billdueber&quot;&gt;twitter&lt;/a&gt;) if you want a little advice or a helping hand.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;footnotes&quot;&gt;
+&lt;hr&gt;
+&lt;div class=&quot;footnote&quot; id=&quot;_footnote_1&quot;&gt;
+&lt;a href=&quot;#_footnoteref_1&quot;&gt;1&lt;/a&gt; &lt;a href=&quot;http://search.cpan.org/~nics/Catmandu-0.9210/bin/catmandu&quot;&gt;Catmandu&lt;/a&gt; is another, perl-based system I don&amp;#8217;t have any direct experience with
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        <pubDate>Thu, 19 Feb 2015 01:01:24 -0500</pubDate>
+        <link>http://robotlibrarian.billdueber.com/2015/02/reintroducing-traject/</link>
+        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2015/02/reintroducing-traject/</guid>
+        
+        
+      </item>
     
       <item>
         <title>How good/bad is MARC data? The case of place-of-publication</title>
@@ -391,7 +609,7 @@ over the wire. The speed is great, tool support is outstanding, and having somet
 
 &lt;p&gt;Solr allows one to define dynamic fields – a field whose type is determined by a glob-match on its name. Instead of explicitly naming your field in your schema, you can do something like:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;dynamicField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;*_is&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;type&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;int&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;indexed&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;stored&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;multiValued&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
@@ -401,7 +619,7 @@ over the wire. The speed is great, tool support is outstanding, and having somet
 
 &lt;p&gt;Dynamic Field definitions are processed in order of declaration; first one wins. That allows you to define a “default” as the very last &lt;code&gt;dynamicField&lt;/code&gt; that matches &lt;em&gt;anything&lt;/em&gt; (e.g., &lt;code&gt;*&lt;/code&gt;). The &lt;code&gt;schema.xml&lt;/code&gt; that ships with Solr suggests that you can use this functionality to just ignore unrecognized fields.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;dynamicField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;*&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;type&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;ignored&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;multiValued&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
@@ -413,7 +631,7 @@ over the wire. The speed is great, tool support is outstanding, and having somet
 
 &lt;p&gt;The &lt;code&gt;copyField&lt;/code&gt; directive allows you to index the same text into multiple fields (presumably with different analysis chains). Index data into one field, it automatically gets copied into another.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;field&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;title&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;type&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;text&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;indexed&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;stored&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;field&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;title_l&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;type&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;text_leftanchored&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;indexed&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;stored&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;false&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
@@ -430,7 +648,7 @@ over the wire. The speed is great, tool support is outstanding, and having somet
 
 &lt;p&gt;But it gets better. You can have globs (&lt;code&gt;*&lt;/code&gt;) in your copyField source or destination attributes.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#777&quot;&gt;&amp;lt;!-- Copy all text fields (those that end in &#39;_t&#39;) into &#39;keywords&#39; --&amp;gt;&lt;/span&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;copyField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;source&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;*_t&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;dest&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;keywords&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -453,7 +671,7 @@ over the wire. The speed is great, tool support is outstanding, and having somet
 
 &lt;p&gt;Here’s what I came up with.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;dynamicField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;*_t_s&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;type&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;text&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;indexed&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;false&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;stored&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;false&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;multiValued&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;dynamicField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;*_t&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;type&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;text&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;indexed&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;stored&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;false&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
 
@@ -570,7 +788,7 @@ Finally, we have our default: a stored, unindexed string. (Note that when Solr s
 
 &lt;p&gt;Real quickly, though, here’s a sample configuration file to pull out the ID, title, and authors (if any) out of a file of MARC records and send them to a file as JSON object, one record per line (i.e., newline-delimited JSON)&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 &lt;span style=&quot;color:#777&quot;&gt;# we&#39;ll pretend this file is called &#39;sample.rb&#39;&lt;/span&gt;
 require &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;traject&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
@@ -787,7 +1005,7 @@ to_field &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&l
 
 &lt;p&gt;Go ahead and clone the &lt;a href=&quot;https://billdueber@github.com/billdueber/solr_stupid_tricks&quot;&gt;github repo&lt;/a&gt; I’ve been using  if you haven’t already and let’s dig in.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 cd solr_stupid_tricks
 git pull origin master
@@ -805,7 +1023,7 @@ java -jar start.jar &amp;amp;
 
 &lt;p&gt;The recent-nighty of Solr 3.x we’re using has a great tokenizer in ICUTokenizerFactory, which does “the right thing” across a whole host of languages.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;fieldtype&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;text&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;class&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;solr.TextField&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;positionIncrementGap&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;1000&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;gt;&lt;/span&gt;
   &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;analyzer&amp;gt;&lt;/span&gt;
@@ -847,7 +1065,7 @@ java -jar start.jar &amp;amp;
 
 &lt;p&gt;Here’s the trick. We’re going to add anchoring text (I chose just ‘AAAA’ at the front and ‘ZZZZ’ at the end) to the normal text type, just by adding a simple charfilter.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;fieldtype&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;text_lr&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;class&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;solr.TextField&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;positionIncrementGap&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;1000&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;gt;&lt;/span&gt;
   &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;analyzer&amp;gt;&lt;/span&gt;
@@ -890,7 +1108,7 @@ java -jar start.jar &amp;amp;
 
 &lt;p&gt;Let’s take a small set of new documents:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 [
   {
@@ -917,7 +1135,7 @@ java -jar start.jar &amp;amp;
 
 &lt;p&gt;We have copyFields set up to copy the title field to both a fully-anchored field (&lt;code&gt;text_exact&lt;/code&gt;) and a left-anchored field (&lt;code&gt;text_l&lt;/code&gt;).&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
   &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;copyField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;source&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;title&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;dest&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;title_exact&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
   &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;copyField&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;source&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;title&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;dest&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;title_l&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;/&amp;gt;&lt;/span&gt;
@@ -928,7 +1146,7 @@ java -jar start.jar &amp;amp;
 
 &lt;p&gt;If you’re following at home, clear out your solr and index them:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 cd exampledocs
  ./reset_and_index_json.sh exactish.json
@@ -947,7 +1165,7 @@ cd exampledocs
 
 &lt;p&gt;You can run all three queries as:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 cd ruby
 ruby browse.rb exactish_query.rb
@@ -1008,7 +1226,7 @@ ruby browse.rb exactish_query.rb
 
 &lt;p&gt;Let’s do a quick test. Look at the following documents&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;exampledocs/names.json
 [
   {
@@ -1030,7 +1248,7 @@ ruby browse.rb exactish_query.rb
 
 &lt;p&gt;Question: what do you get when you run this query against those two documents?&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;ruby/names_query.rb
 {
   &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;fl&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;score, *&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;,
@@ -1052,7 +1270,7 @@ ruby browse.rb exactish_query.rb
 
 &lt;p&gt;If so, let’s go ahead and index these document and run the query.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;Play along at home
 cd solr_stupid_tricks
 git pull origin master
@@ -1071,7 +1289,7 @@ cd exampledocs
 
 &lt;p&gt;Here’s the scores that I get:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;Return from Solr
   id,title,name_text,score
   2,Heros of the Wild West,&amp;quot;Buck Jones,Davy Crockett&amp;quot;,0.42039964
@@ -1101,7 +1319,7 @@ cd exampledocs
 
 &lt;p&gt;One way to do that is to use a phrase query by throwing quotes around the terms&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;Put&lt;/span&gt; double-quotes around it to make it a phrase query
   &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;q&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;&amp;quot;Davy Jones&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
 
@@ -1115,7 +1333,7 @@ cd exampledocs
 
 &lt;p&gt;For that, we’ll tell solr to search against certain fields (&lt;code&gt;pf&lt;/code&gt;) treating the query as a phrase, and allow a little slop (&lt;code&gt;ps&lt;/code&gt;) as well.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;ruby/names_sloppy_query.rb
   {
     &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;fl&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;score, *&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;,
@@ -1133,7 +1351,7 @@ cd exampledocs
 
 &lt;p&gt;That gets us something more expected.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
   id,title,name_text,score
   1,The Monkees,&amp;quot;Peter Tork,Mike Nesmith,Micky Dolenz,Davy Thomas Jones&amp;quot;,0.2806283
@@ -1176,7 +1394,7 @@ cd exampledocs
 
 &lt;p&gt;The query&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;A&lt;/span&gt; three-token query
   &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;q&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;Bill &amp;quot;The Weasel&amp;quot; Dueber&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
 
@@ -1206,7 +1424,7 @@ cd exampledocs
 
 &lt;p&gt;&lt;strong&gt;solr/conf/solrconfig.xml&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;requestHandler&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;/edismaxplus&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;class&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;solr.SearchHandler&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;gt;&lt;/span&gt;
   &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;lst&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;defaults&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;str&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;rows&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;gt;&lt;/span&gt;10&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;/str&amp;gt;&lt;/span&gt;
@@ -1371,7 +1589,7 @@ or
 
 &lt;p&gt;[Presenting the URL parameters as a ruby hash to make it easier to read]&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  {
   &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;q&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;=&amp;gt;&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;_query_:&amp;quot;{!dismax qf=$f1 mm=$mm1 pf=$f1 bq=$bq1 v=$q1}&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;,
   &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;mm1&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;=&amp;gt;&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;0%&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;,
@@ -1394,7 +1612,7 @@ or
 
 &lt;p&gt;By now you know the drill:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  cd solr_stupid_tricks
   git pull origin master
   git fetch origin master
@@ -1407,7 +1625,7 @@ or
 
 &lt;p&gt;We’ll want to empty out the index and put in some documents to work with. I’m presuming you have &lt;code&gt;curl&lt;/code&gt; installed. If not…well, you’re on your own.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  cd exampledocs
   ./reset_and_index_json localparams.json
 &lt;/pre&gt;&lt;/div&gt;
@@ -1444,7 +1662,7 @@ or
 
 &lt;p&gt;But we can use it to put in our special query defaults that boosts when a document contains all the terms:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 
       10
@@ -1482,7 +1700,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;By now you know the drill:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  cd solr_stupid_tricks
   git pull origin master
   git fetch origin master
@@ -1494,7 +1712,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 &lt;/div&gt;
 &lt;p&gt;We’ll want to empty out the index and put in some documents to work with. I’m presuming you have &lt;code&gt;curl&lt;/code&gt; installed. If not…well, you’re on your own.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  cd exampledocs
   ./reset_and_index_json localparams.json
 &lt;/pre&gt;&lt;/div&gt;
@@ -1529,7 +1747,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;But we can use it to put in our special query defaults that boosts when a document contains all the terms:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 
       10
@@ -1569,7 +1787,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;By now you know the drill:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  cd solr_stupid_tricks
   git pull origin master
   git fetch origin master
@@ -1581,7 +1799,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 &lt;/div&gt;
 &lt;p&gt;We’ll want to empty out the index and put in some documents to work with. I’m presuming you have &lt;code&gt;curl&lt;/code&gt; installed. If not…well, you’re on your own.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  cd exampledocs
   ./reset_and_index_json localparams.json
 &lt;/pre&gt;&lt;/div&gt;
@@ -1616,7 +1834,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;But we can use it to put in our special query defaults that boosts when a document contains all the terms:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 
       10
@@ -1705,7 +1923,7 @@ What’s nice about this is that I’m reusing the search terms (for the main qu
 
 &lt;p&gt;Let’s take a look at the end product and then walk through it.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;fieldtype&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;name&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;numericID&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;class&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;solr.TextField&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;
            &lt;span style=&quot;color:#b48&quot;&gt;positionIncrementGap&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;1000&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#b48&quot;&gt;omitNorms&lt;/span&gt;=&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;true&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;span style=&quot;color:#070;font-weight:bold&quot;&gt;&amp;lt;analyzer&amp;gt;&lt;/span&gt;
@@ -1854,7 +2072,7 @@ too basic for any audience that’s likely to show up here, but what the heck.&l
 
 &lt;p&gt;If you’re following along at home, get the latest version of the schema and try it!&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
   cd solr_stupid_tricks
   git pull origin master
@@ -1967,7 +2185,7 @@ too basic for any audience that’s likely to show up here, but what the heck.&l
 
 &lt;p&gt;&lt;strong&gt;Warning: the git repo is currently 60MB or so&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;  git clone https://billdueber@github.com/billdueber/solr_stupid_tricks.git
   cd solr_stupid_tricks
   java -jar start.jar
@@ -2146,7 +2364,7 @@ and won’t have any idea how to generate a third, so don’t spend too much tim
 
 &lt;p&gt;Quite a while ago, I released a little gem called &lt;em&gt;&lt;a href=&quot;https://rubygems.org/gems/threach&quot;&gt;threach&lt;/a&gt;&lt;/em&gt; (for “threaded #each”). It allows you to easily process a block with multiple threads.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
   &lt;span style=&quot;color:#777&quot;&gt;# Process a CSV file with three threads&lt;/span&gt;
   &lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;FIle&lt;/span&gt;.open(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;data.csv&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;).threach(&lt;span style=&quot;color:#00D&quot;&gt;3&lt;/span&gt;, &lt;span style=&quot;color:#A60&quot;&gt;:each_line&lt;/span&gt;) {|line| send_to_db(line)}
@@ -2165,7 +2383,7 @@ and won’t have any idea how to generate a third, so don’t spend too much tim
 
 &lt;p&gt;The result is the gem &lt;code&gt;&lt;a href=&quot;https://rubygems.org/gems/jruby_threach&quot;&gt;jruby_threach&lt;/a&gt;&lt;/code&gt;. It works just like &lt;code&gt;threach&lt;/code&gt;, except that, you know, it actually works the way I’d like it to.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 require &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;jruby_threach&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
 &lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;FIle&lt;/span&gt;.open(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;data.csv&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;).threach(&lt;span style=&quot;color:#00D&quot;&gt;3&lt;/span&gt;, &lt;span style=&quot;color:#A60&quot;&gt;:each_line&lt;/span&gt;) {|line| send_to_db(line)}
@@ -2178,7 +2396,7 @@ require &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt
 
 &lt;p&gt;But you can also break out of the loop.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 myarray.threach(&lt;span style=&quot;color:#00D&quot;&gt;2&lt;/span&gt;) &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;do&lt;/span&gt; |item|
   &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;break&lt;/span&gt; &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;if&lt;/span&gt; item_indicates_to_break(item)
@@ -2194,7 +2412,7 @@ myarray.threach(&lt;span style=&quot;color:#00D&quot;&gt;2&lt;/span&gt;) &lt;spa
 
 &lt;p&gt;Any exceptions that are &lt;code&gt;rescue&lt;/code&gt;d within the block are handled internally and don’t cause processing to stop. Any that are &lt;em&gt;not&lt;/em&gt; handled within the block are noticed by &lt;code&gt;threach&lt;/code&gt;, cause the processing to stop, and the re-raised so you can deal with them outside of &lt;code&gt;threach&lt;/code&gt;&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 
 reader = &lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;SpecializedFileReader&lt;/span&gt;.new(filename)
@@ -2216,7 +2434,7 @@ reader = &lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;SpecializedFi
 
 &lt;p&gt;Dealing with the underlying Java data structures makes life a lot easier. To the point that I added an enhancement – threading production as well.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
   &lt;span style=&quot;color:#777&quot;&gt;# Use two threads to read lines from files, and another three threads&lt;/span&gt;
   &lt;span style=&quot;color:#777&quot;&gt;# to process the data that comes out of those files.&lt;/span&gt;
@@ -2232,7 +2450,7 @@ reader = &lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;SpecializedFi
 
 &lt;p&gt;You can also access the underlying class that aggregates multiple enumerables directly.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 require &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;jruby_threach&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
 me = &lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;Threach&lt;/span&gt;::&lt;span style=&quot;color:#036;font-weight:bold&quot;&gt;MultiEnum&lt;/span&gt;.new(
@@ -2269,7 +2487,7 @@ me.each {|item| process_item(item)}
 
 &lt;p&gt;First, get the gems:&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
   gem install dbi
   gem install dbd-jdbc
@@ -2281,7 +2499,7 @@ me.each {|item| process_item(item)}
 
 &lt;p&gt;Then you’re ready to load it up into DBI.&lt;/p&gt;
 
-&lt;div&gt;&lt;div class=&quot;CodeRay&quot;&gt;
+&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
   &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;
 require &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;rubygems&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#777&quot;&gt;# if you&#39;re using 1.8 still&lt;/span&gt;
 require &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;java&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;
@@ -2369,35 +2587,6 @@ ins = dbh.prepare(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&qu
         <pubDate>Wed, 25 May 2011 00:00:00 -0400</pubDate>
         <link>http://robotlibrarian.billdueber.com/2011/05/how-good-is-our-relevancy-ranking/</link>
         <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/05/how-good-is-our-relevancy-ranking/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Ruby gem library_stdnums goes to version 1.0</title>
-        <description>&lt;p&gt;I just released another (this time pretty good) version of my gem for normalizing/validating library standard numbers, &lt;code&gt;library_stdnums&lt;/code&gt; (&lt;a href=&quot;https://github.com/billdueber/library_stdnums&quot;&gt;github source&lt;/a&gt; / &lt;a href=&quot;http://rubydoc.info/github/billdueber/library_stdnums/master/frames&quot;&gt;docs&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;The short version of the functions available:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;ISBN&lt;/strong&gt;: get checkdigit, validate, convert isbn10 to/from isbn13, normalize (to 13-digit)&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ISSN&lt;/strong&gt;: get checkdigit, validate, normalize&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;LCCN&lt;/strong&gt;: validate, normalize&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Validation of LCCNs doesn’t involve a checkdigit; I basically just normalize whatever is sent in and then see if the result is syntactically valid.&lt;/p&gt;
-
-&lt;p&gt;My plan in my Copious Free Time is to do a Java version of these as well and then stick them into a new-style Solr v.3 filter so I (and, by extension, you, if you’re interested) can have Solr do normalization during both index and search time.&lt;/p&gt;
-</description>
-        <pubDate>Fri, 06 May 2011 00:00:00 -0400</pubDate>
-        <link>http://robotlibrarian.billdueber.com/2011/05/ruby-gem-library_stdnums-goes-to-version-1-0/</link>
-        <guid isPermaLink="true">http://robotlibrarian.billdueber.com/2011/05/ruby-gem-library_stdnums-goes-to-version-1-0/</guid>
-        
-        <category>librarian</category>
-        
-        <category>code,</category>
-        
-        <category>ruby</category>
         
         
       </item>

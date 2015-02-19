@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/11/thinking-through-a-simple-api-for-hathitrust-item-metadata/">
 </head>
 
@@ -125,7 +126,7 @@
 
 <p>…complete with JSON-illegal comments embedded</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   {
     <span style="color:#606"><span style="color:#404">&quot;</span><span>records</span><span style="color:#404">&quot;</span></span>:
@@ -202,7 +203,7 @@
 
 <p>Here’s the simplest possible case: a single matched record with a single item</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   {
     <span style="color:#606"><span style="color:#404">&quot;</span><span>records</span><span style="color:#404">&quot;</span></span>:
@@ -268,7 +269,7 @@ http://catalog.hathitrust.org/api/volumes/isbn/0835221792.json
 
 <p>The return format would look like this:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   {
     <span style="color:#606"><span style="color:#404">&quot;</span><span>yourID1</span><span style="color:#404">&quot;</span></span> : &lt;proposed <span style="color:#080;font-weight:bold">return</span> structure&gt;,

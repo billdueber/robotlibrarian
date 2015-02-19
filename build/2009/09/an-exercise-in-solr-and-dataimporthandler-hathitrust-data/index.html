@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/09/an-exercise-in-solr-and-dataimporthandler-hathitrust-data/">
 </head>
 
@@ -135,7 +136,7 @@
 <p>This is the easy part. Set up the handler, give it a semi-meaningful name, and
 call out to a config file.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;requestHandler</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">/hathiimport</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">org.apache.solr.handler.dataimport.DataImportHandler</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
       <span style="color:#070;font-weight:bold">&lt;lst</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">defaults</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
@@ -159,7 +160,7 @@ call out to a config file.</p>
   <li><em>lccnnormalizer</em>: Custom code to normalize an LCCN as per <a href="http://www.loc.gov/marc/lccn-namespace.html#syntax">this page at the LoC</a>.</li>
 </ul>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#070;font-weight:bold">&lt;types&gt;</span>
   <span style="color:#777">&lt;!-- lowercases the entire field value, keeping it as a single token.  --&gt;</span>
@@ -237,7 +238,7 @@ call out to a config file.</p>
 
 <p>This is pretty straight-forward: just set it up.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">htid</span><span style="color:#710">&quot;</span></span>        <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">genericID</span><span style="color:#710">&quot;</span></span>          <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">multiValued</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;field</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">bibnum</span><span style="color:#710">&quot;</span></span>       <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">genericID</span><span style="color:#710">&quot;</span></span>         <span style="color:#b48">indexed</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">stored</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">true</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>
@@ -294,7 +295,7 @@ call out to a config file.</p>
 
 <p>[If you never went to look at it, this might be a good time to check out the <a href="http://www.hathitrust.org/hathifiles_metadata/">description of the tab-delimited metadata files</a>.]</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;dataConfig&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;dataSource</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fds</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">encoding</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">UTF-8</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">type</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">FileDataSource</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">/&gt;</span>
@@ -344,7 +345,7 @@ call out to a config file.</p>
 
 <p>For the moment, though, we’ll change that line to:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#070;font-weight:bold">&lt;entity</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hathifile</span><span style="color:#710">&quot;</span></span>
           <span style="color:#b48">processor</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">FileListEntityProcessor</span><span style="color:#710">&quot;</span></span>

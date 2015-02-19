@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2009/10/adding-libxml-and-java-stax-support-to-ruby-marc-with-pluggable-xml-parsers-2/">
 </head>
 
@@ -123,7 +124,7 @@
 
 <p>The test was to open it up, loop through the records, and pull the 245 out of each. Each segment looks something like this:</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   reader = <span style="color:#036;font-weight:bold">MARC</span>::<span style="color:#036;font-weight:bold">XMLReader</span>.new(filename, <span style="color:#A60">:parser</span>=&gt;<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jstax</span><span style="color:#710">'</span></span>)
   reader.each <span style="color:#080;font-weight:bold">do</span> |record|

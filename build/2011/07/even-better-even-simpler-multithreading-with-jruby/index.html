@@ -15,6 +15,7 @@
 ">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/asciidoctor.css">
     <link rel="canonical" href="http://robotlibrarian.billdueber.com/2011/07/even-better-even-simpler-multithreading-with-jruby/">
 </head>
 
@@ -93,7 +94,7 @@
 
 <p>Quite a while ago, I released a little gem called <em><a href="https://rubygems.org/gems/threach">threach</a></em> (for “threaded #each”). It allows you to easily process a block with multiple threads.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#777"># Process a CSV file with three threads</span>
   <span style="color:#036;font-weight:bold">FIle</span>.open(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">data.csv</span><span style="color:#710">'</span></span>).threach(<span style="color:#00D">3</span>, <span style="color:#A60">:each_line</span>) {|line| send_to_db(line)}
@@ -112,7 +113,7 @@
 
 <p>The result is the gem <code><a href="https://rubygems.org/gems/jruby_threach">jruby_threach</a></code>. It works just like <code>threach</code>, except that, you know, it actually works the way I’d like it to.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jruby_threach</span><span style="color:#710">'</span></span>
 <span style="color:#036;font-weight:bold">FIle</span>.open(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">data.csv</span><span style="color:#710">'</span></span>).threach(<span style="color:#00D">3</span>, <span style="color:#A60">:each_line</span>) {|line| send_to_db(line)}
@@ -125,7 +126,7 @@ require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:
 
 <p>But you can also break out of the loop.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 myarray.threach(<span style="color:#00D">2</span>) <span style="color:#080;font-weight:bold">do</span> |item|
   <span style="color:#080;font-weight:bold">break</span> <span style="color:#080;font-weight:bold">if</span> item_indicates_to_break(item)
@@ -141,7 +142,7 @@ myarray.threach(<span style="color:#00D">2</span>) <span style="color:#080;font-
 
 <p>Any exceptions that are <code>rescue</code>d within the block are handled internally and don’t cause processing to stop. Any that are <em>not</em> handled within the block are noticed by <code>threach</code>, cause the processing to stop, and the re-raised so you can deal with them outside of <code>threach</code></p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 
 reader = <span style="color:#036;font-weight:bold">SpecializedFileReader</span>.new(filename)
@@ -163,7 +164,7 @@ reader = <span style="color:#036;font-weight:bold">SpecializedFileReader</span>.
 
 <p>Dealing with the underlying Java data structures makes life a lot easier. To the point that I added an enhancement – threading production as well.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
   <span style="color:#777"># Use two threads to read lines from files, and another three threads</span>
   <span style="color:#777"># to process the data that comes out of those files.</span>
@@ -179,7 +180,7 @@ reader = <span style="color:#036;font-weight:bold">SpecializedFileReader</span>.
 
 <p>You can also access the underlying class that aggregates multiple enumerables directly.</p>
 
-<div><div class="CodeRay">
+<div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre>
 require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">jruby_threach</span><span style="color:#710">'</span></span>
 me = <span style="color:#036;font-weight:bold">Threach</span>::<span style="color:#036;font-weight:bold">MultiEnum</span>.new(
