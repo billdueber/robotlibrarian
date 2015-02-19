@@ -69,7 +69,7 @@ Not anymore. As of version 2.0.0, `traject` runs under MRI ("regular") ruby, alt
 all the speed-enhancing true threading that JRuby offers. 
 
 How fast is it?::
-Apple-to-apples comparison is difficult. The https://github.com/projectblacklight/blacklight-marc[stock Blacklight indexing scheme] is about as fast under `traject` (using single-threaded MRI, not JRuby) as Solrmarc. I run a http://github.com/billdueber/ht_traject/[hideously complex] indexing scheme using JRuby and a few threads and can average over 900 records/second during a longish run (e.g., I can index all
+Apple-to-apples comparison is difficult. The https://github.com/projectblacklight/blacklight-marc[stock Blacklight indexing scheme] is reportedly about as fast as Solarmarc when just using single-threaded MRI (JRuby would presumably speed things up). I run a http://github.com/billdueber/ht_traject/[hideously complex] indexing scheme using JRuby and a few threads and can average over 900 records/second during a longish run (e.g., I can index all
 eleven-million bib records before lunch). For me, it's fast enough.
 
 What kinds of data can I throw at it?::
